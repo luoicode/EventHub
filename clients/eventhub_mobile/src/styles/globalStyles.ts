@@ -81,43 +81,4 @@ export const globalStyles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
   },
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  inputContainer: {
-    flex: 1,
-    marginLeft: 10,
-    marginBottom: 30,
-    backgroundColor: 'white',
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: 'grey',
-    height: 50,
-    marginHorizontal: 10,
-    justifyContent: 'center',
-  },
-  textInput: {
-    flex: 1,
-    borderRadius: 30,
-    paddingLeft: 10,
-    color: 'black',
-    // placeholderTextColor: 'gray',
-  },
-  sendButton: {
-    backgroundColor: '#67C6E3',
-    padding: 16,
-    width: 50,
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 99999,
-    marginHorizontal: 10,
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
-export const giftedChatStyles = {
-  inputToolbar: {display: 'none'},
-};

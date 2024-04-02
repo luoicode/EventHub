@@ -1,12 +1,12 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 
-const ForgeottenPassword = () => {
+const EventsScreen = () => {
   return (
     <View>
-      <Text>ForgeottenPassword</Text>
+      <Text>EventsScreen</Text>
     </View>
   );
 };
 
-export default ForgeottenPassword;
+export default EventsScreen;

@@ -1,3 +1,3 @@
-// import LoadingModal from './LoadingModal';
+import LoadingModal from './LoadingModal';
 
-// export {LoadingModal};
+export {LoadingModal};
