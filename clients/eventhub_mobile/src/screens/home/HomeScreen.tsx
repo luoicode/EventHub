@@ -32,13 +32,18 @@ import { fontFamilies } from '../../constants/fontFamilies';
 import { AddressModel } from '../../models/AddressModel';
 import { authSelector } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(process.env.MAP_API_KEY as string);
 
 const HomeScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<AddressModel>();
 
+
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+
 
   useEffect(() => {
     Geolocation.getCurrentPosition(position => {
@@ -68,7 +73,7 @@ const HomeScreen = ({ navigation }: any) => {
   const itemEvent = {
     title: 'International Band Music Concert',
     description:
-      'Enjoy your favorite dishe and a lovely your friends and family and have a great time. Food from local food trucks will be available for purchase.',
+      'Get ready to immerse yourself in an electrifying musical journey as The Weeknd prepares to grace the stage with his mesmerizing performance. As anticipation builds for this highly awaited event, fans from all corners are buzzing with excitement, eager to experience his soulful voice and captivating presence firsthand. With his unique blend of R&B, pop, and electronic sounds, The Weeknd has carved a distinct niche in the music scene, captivating audiences worldwide. His dynamic performances and chart-topping hits have reshaped the landscape of US-UK music, infusing it with a fresh, innovative energy. From the pulsating beats of "Blinding Lights" to the haunting melodies of "Save Your Tears," his music transcends boundaries, resonating with listeners of all ages. As the stage lights illuminate and the crowd roars with anticipation, prepare to be transported to a world where rhythm and melody collide, leaving you spellbound and craving for more. The upcoming event promises to be a spectacle of epic proportions, a testament to the enduring power of The Weeknd is music to unite and inspire. So, mark your calendars and get ready to witness a performance that will leave you breathless and wanting to dance the night away.',
     location: {
       title: 'Gala Convention Center',
       address: '36 Guild Street London, UK ',
@@ -210,7 +215,7 @@ const HomeScreen = ({ navigation }: any) => {
             )}
           />
         </SectionComponent>
-        <SectionComponent>
+        <SectionComponent >
           <ImageBackground
             source={require('./../../assets/images/invite-image.png')}
             style={{ flex: 1, padding: 16, minHeight: 127 }}
@@ -227,7 +232,7 @@ const HomeScreen = ({ navigation }: any) => {
                   globalStyles.button,
                   {
                     marginTop: 12,
-                    backgroundColor: '#00F8FF',
+                    backgroundColor: appColors.primary3,
                     paddingHorizontal: 28,
                   },
                 ]}>

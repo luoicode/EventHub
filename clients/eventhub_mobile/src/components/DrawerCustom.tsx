@@ -141,11 +141,11 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: '#DFF5FF', height: 'auto' },
+                        { backgroundColor: appColors.primary4, height: 'auto' },
                     ]}>
                     <MaterialCommunityIcons name="crown" size={28} color={'#FFC700'} />
                     <SpaceComponent width={8} />
-                    <TextComponent color="#378CE7" size={20} font={fontFamilies.bold} text="Upgrade Pro" />
+                    <TextComponent color={appColors.primary3} size={20} font={fontFamilies.bold} text="Upgrade Pro" />
                 </TouchableOpacity>
             </RowComponent>
         </View>

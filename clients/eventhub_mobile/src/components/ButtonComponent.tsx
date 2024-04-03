@@ -6,12 +6,12 @@ import {
   TextStyle,
   TouchableOpacity,
 } from 'react-native';
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 
-import {globalStyles} from '../styles/globalStyles';
-import {TextComponent} from '.';
-import {appColors} from '../constants/appColors';
-import {fontFamilies} from '../constants/fontFamilies';
+import { globalStyles } from '../styles/globalStyles';
+import { TextComponent } from '.';
+import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
   text: string;
@@ -42,7 +42,7 @@ const ButtonComponent = (props: Props) => {
     disabled,
   } = props;
   return type === 'primary' ? (
-    <View style={{alignItems: 'center'}}>
+    <View style={{ alignItems: 'center' }}>
       <TouchableOpacity
         disabled={disabled}
         onPress={onPress}
@@ -53,8 +53,8 @@ const ButtonComponent = (props: Props) => {
             backgroundColor: color
               ? color
               : disabled
-              ? appColors.gray4
-              : appColors.primary,
+                ? appColors.gray4
+                : appColors.primary,
             marginBottom: 17,
             width: '80%',
           },

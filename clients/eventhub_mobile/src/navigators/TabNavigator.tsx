@@ -71,7 +71,6 @@ const TabNavigator = () => {
             />
           );
         },
-        tabBarVisible: route.name !== 'ChatGPT',
       })}>
       <Tab.Screen name="Explore" component={ExploreNavigator} />
       <Tab.Screen name="Events" component={EventNavigator} />
