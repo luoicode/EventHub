@@ -13,6 +13,7 @@ import {
 } from '../components';
 import { authSelector } from '../redux/reducers/authReducer';
 import { useSelector } from 'react-redux';
+import userAPI from '../apis/userApi';
 
 const initValues = {
   title: '',
@@ -46,7 +47,7 @@ const AddNewScreen = () => {
   };
 
   const handlerAddEvent = async () => {
-    console.log(eventData);
+    const res = await userAPI.HandlerUser('/')
   };
 
   return (
@@ -104,6 +105,7 @@ const AddNewScreen = () => {
             handlerChangeValue('location', { ...eventData.location, title: val });
           }}
         />
+        <ChoiceLocation />
       </SectionComponent>
       <SectionComponent>
         <ButtonComponent
