@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -6,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   ButtonComponent,
   InputComponent,
@@ -15,27 +16,67 @@ import {
   TextComponent,
 } from '../components';
 import { appColors } from '../constants/appColors';
-import { SearchNormal1 } from 'iconsax-react-native';
-import axios from 'axios';
 import { LocationModel } from '../models/LocationModel';
+import MapView from 'react-native-maps';
+import { appInfo } from '../constants/appInfos';
+import { AddressModel } from '../models/AddressModel';
+import Geolocation from '@react-native-community/geolocation';
+import GeoCoder from 'react-native-geocoding';
+import { Marker } from 'react-native-svg';
+
+GeoCoder.init(process.env.MAP_API_KEY as string);
 
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onSelect: (val: string) => void;
+  onSelect: (val: {
+    address: string;
+    position?: {
+      lat: number;
+      long: number;
+    };
+  }) => void;
 }
 
 const ModalLocation = (props: Props) => {
   const { visible, onClose, onSelect } = props;
   const [searchKey, setSearchKey] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [locations, setLocations] = useState < LocationModel[] > ([]);
+  const [locations, setLocations] = useState<LocationModel[]>([]);
+  const [addressSelected, setAddressSelected] = useState('');
+
+  const [currentLocation, setCurrentLocation] = useState<{
+    lat: number;
+    long: number;
+  }>();
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(position => {
+      if (position.coords) {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    GeoCoder.from(addressSelected).then(res => {
+      const position = res.results[0].geometry.location;
+
+      setCurrentLocation({
+        lat: position.lat,
+        long: position.lng,
+      });
+    });
+  }, [addressSelected]);
 
   useEffect(() => {
     if (!searchKey) {
-      setLocations([])
+      setLocations([]);
     }
-  }, [searchKey])
+  }, [searchKey]);
 
   const handlerClose = () => {
     onClose();
@@ -58,8 +99,10 @@ const ModalLocation = (props: Props) => {
 
   return (
     <Modal animationType="slide" visible={visible} style={{ flex: 1 }}>
-      <View style={{ paddingVertical: 42, paddingHorizontal: 20 }}>
-        <RowComponent justify="flex-end" styles={{ marginVertical: 20 }}>
+      <View style={{ paddingVertical: 42 }}>
+        <RowComponent
+          justify="flex-end"
+          styles={{ marginVertical: 20, paddingHorizontal: 20 }}>
           <View style={{ flex: 1 }}>
             <InputComponent
               styles={{ marginBottom: 0 }}
@@ -71,27 +114,78 @@ const ModalLocation = (props: Props) => {
               onEnd={handlerSearchLocation}
             />
           </View>
+          <View
+            style={{
+              position: 'absolute',
+              top: 80,
+              right: 10,
+              left: 10,
+              backgroundColor: appColors.white,
+              zIndex: 5,
+            }}>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : locations.length > 0 ? (
+              <FlatList
+                data={locations}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={{ marginBottom: 12 }}
+                    onPress={() => {
+                      setAddressSelected(item.address.label);
+                      setSearchKey('');
+                    }}>
+                    <TextComponent text={item.address.label} />
+                  </TouchableOpacity>
+                )}
+              />
+            ) : (
+              <View>
+                <TextComponent text={searchKey ? '' : ' '} />
+              </View>
+            )}
+          </View>
           <SpaceComponent width={12} />
           <ButtonComponent text="Cancel" type="link" onPress={handlerClose} />
         </RowComponent>
-        <View >
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : locations.length > 0 ? (
-            <FlatList
-              data={locations}
-              renderItem={({ item }) => (
-                <>
-                  <TextComponent text={item.address.label} />
-                </>
-              )}
-            />
-          ) : (
-            <View>
-              <TextComponent text={searchKey ? "Location not found" : " "} />
-            </View>
-          )}
-        </View>
+        {currentLocation && (
+          <MapView
+            style={{
+              width: appInfo.sizes.WIDTH,
+              height: 500,
+              marginVertical: 40,
+              zIndex: -1,
+            }}
+            showsMyLocationButton
+            showsUserLocation
+            initialRegion={{
+              latitude: currentLocation.lat,
+              longitude: currentLocation.long,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            region={{
+              latitude: currentLocation.lat,
+              longitude: currentLocation.long,
+              latitudeDelta: 0.001,
+              longitudeDelta: 0.015,
+            }}
+            mapType="standard"
+          />
+        )}
+        <ButtonComponent
+          styles={{ width: '30%' }}
+          text="Confirm"
+          onPress={() => {
+
+            onSelect({
+              address: addressSelected,
+              position: currentLocation,
+            });
+            onClose();
+          }}
+          type="primary"
+        />
       </View>
     </Modal>
   );

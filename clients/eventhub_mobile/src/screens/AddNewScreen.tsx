@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text } from 'react-native';
+import React, { useState } from 'react';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -8,8 +8,8 @@ import {
   TextComponent,
   ChoiceLocation,
 } from '../components';
-import {authSelector} from '../redux/reducers/authReducer';
-import {useSelector} from 'react-redux';
+import { authSelector } from '../redux/reducers/authReducer';
+import { useSelector } from 'react-redux';
 
 const initValues = {
   title: '',
@@ -36,7 +36,7 @@ const AddNewScreen = () => {
   });
 
   const handlerChangeValue = (key: string, value: string) => {
-    const items = {...eventData};
+    const items = { ...eventData };
     items[`${key}`] = value;
 
     setEventData(items);
@@ -68,6 +68,16 @@ const AddNewScreen = () => {
           value={eventData.description}
           onChange={val => {
             handlerChangeValue('description', val);
+          }}
+        />
+        <InputComponent
+          placeholder="Title Address"
+          multiline
+          numberOfLine={3}
+          allowClear
+          value={eventData.location.title}
+          onChange={val => {
+            handlerChangeValue('location', { ...eventData.location, title: val });
           }}
         />
         <ChoiceLocation />
