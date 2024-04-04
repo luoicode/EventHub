@@ -8,11 +8,11 @@ import { ModalLocation } from '../modals';
 const ChoiceLocation = () => {
     const [isVisibleModalLocation, setisVisibleModalLocation] = useState(false);
     const [addressSelected, setAddressSelected] = useState<{
-        address: string,
+        address: string;
         position?: {
-            lat: number,
-            long: number,
-        }
+            lat: number;
+            long: number;
+        };
     }>();
 
     return (
@@ -34,12 +34,18 @@ const ChoiceLocation = () => {
                 </CardComponent>
                 <SpaceComponent width={12} />
 
-                <TextComponent numberOfLine={1} text={addressSelected ? addressSelected.address : 'Choice'} flex={1} />
+                <TextComponent
+                    numberOfLine={1}
+                    text={addressSelected ? addressSelected.address : 'Choice location'}
+                    flex={1}
+                />
                 <ArrowRight2 size={22} color={appColors.primary} />
             </RowComponent>
-            <ModalLocation visible={isVisibleModalLocation}
+            <ModalLocation
+                visible={isVisibleModalLocation}
                 onClose={() => setisVisibleModalLocation(false)}
-                onSelect={val => setAddressSelected(val)} />
+                onSelect={val => setAddressSelected(val)}
+            />
         </>
     );
 };

@@ -7,6 +7,9 @@ import {
   SectionComponent,
   TextComponent,
   ChoiceLocation,
+  RowComponent,
+  DateTimePicker,
+  SpaceComponent,
 } from '../components';
 import { authSelector } from '../redux/reducers/authReducer';
 import { useSelector } from 'react-redux';
@@ -35,7 +38,7 @@ const AddNewScreen = () => {
     authorID: auth.id,
   });
 
-  const handlerChangeValue = (key: string, value: string) => {
+  const handlerChangeValue = (key: string, value: string | Date) => {
     const items = { ...eventData };
     items[`${key}`] = value;
 
@@ -70,17 +73,37 @@ const AddNewScreen = () => {
             handlerChangeValue('description', val);
           }}
         />
+        <RowComponent>
+          <DateTimePicker
+            label='Start at:'
+            type="time"
+            onSelect={val => handlerChangeValue('startAt', val)}
+            selected={eventData.startAt}
+          />
+          <SpaceComponent width={20} />
+          <DateTimePicker
+            label='End at:'
+            type="time"
+            onSelect={val => handlerChangeValue('endAt', val)}
+            selected={eventData.endAt}
+          />
+
+        </RowComponent>
+        <DateTimePicker
+          label='Date :'
+          type="date"
+          onSelect={val => handlerChangeValue('date', val)}
+          selected={eventData.date}
+        />
         <InputComponent
           placeholder="Title Address"
-          multiline
-          numberOfLine={3}
+          styles={{ height: 56 }}
           allowClear
           value={eventData.location.title}
           onChange={val => {
             handlerChangeValue('location', { ...eventData.location, title: val });
           }}
         />
-        <ChoiceLocation />
       </SectionComponent>
       <SectionComponent>
         <ButtonComponent
