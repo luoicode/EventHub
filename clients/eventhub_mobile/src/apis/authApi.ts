@@ -1,4 +1,3 @@
-import {appInfo} from '../constants/appInfos';
 import axiosClient from './axiosClient';
 
 class AuthAPI {

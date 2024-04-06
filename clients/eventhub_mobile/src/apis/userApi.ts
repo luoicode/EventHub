@@ -1,4 +1,3 @@
-import {appInfo} from '../constants/appInfos';
 import axiosClient from './axiosClient';
 
 class UserAPI {
@@ -7,7 +6,7 @@ class UserAPI {
     data?: any,
     method?: 'get' | 'post' | 'put' | 'delete',
   ) => {
-    return await axiosClient(`/user${url}`, {
+    return await axiosClient(`/users${url}`, {
       method: method ?? 'get',
       data,
     });

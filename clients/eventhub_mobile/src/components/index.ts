@@ -6,6 +6,7 @@ import ChoiceLocation from './ChoiceLocation';
 import CircleComponent from './CircleComponent';
 import ContainerComponent from './ContainerComponent';
 import DateTimePicker from './DateTimePicker';
+import DropdownPicker from './DropdownPicker';
 import EventItem from './EventItem';
 import InputComponent from './InputComponent';
 import RowComponent from './RowComponent';
@@ -14,6 +15,7 @@ import SpaceComponent from './SpaceComponent';
 import TabBarComponent from './TabBarComponent';
 import TagComponent from './TagComponent';
 import TextComponent from './TextComponent';
+import UploadImagePicker from './UploadImagePicker';
 
 export {
   SpaceComponent,
@@ -32,4 +34,6 @@ export {
   AvatarGroup,
   ChoiceLocation,
   DateTimePicker,
+  DropdownPicker,
+  UploadImagePicker,
 };
