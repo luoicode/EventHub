@@ -5,7 +5,12 @@ import { appColors } from '../constants/appColors';
 import { globalStyles } from '../styles/globalStyles';
 import { ModalLocation } from '../modals';
 
-const ChoiceLocation = () => {
+interface Props {
+    onSelect: (val: any) => void;
+}
+
+const ChoiceLocation = (props: Props) => {
+    const { onSelect } = props;
     const [isVisibleModalLocation, setisVisibleModalLocation] = useState(false);
     const [addressSelected, setAddressSelected] = useState<{
         address: string;
@@ -44,7 +49,10 @@ const ChoiceLocation = () => {
             <ModalLocation
                 visible={isVisibleModalLocation}
                 onClose={() => setisVisibleModalLocation(false)}
-                onSelect={val => setAddressSelected(val)}
+                onSelect={val => {
+                    setAddressSelected(val);
+                    onSelect(val);
+                }}
             />
         </>
     );

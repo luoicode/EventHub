@@ -1,37 +1,46 @@
-import { View, Text, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import {
-  ButtonComponent,
-  ContainerComponent,
-  InputComponent,
-  SectionComponent,
-  TextComponent,
-  ChoiceLocation,
-  RowComponent,
-  DateTimePicker,
-  SpaceComponent,
-  DropdownPicker,
-  UploadImagePicker,
-} from '../components';
-import { authSelector } from '../redux/reducers/authReducer';
+import { Image } from 'react-native';
+import { ImageOrVideo } from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import userAPI from '../apis/userApi';
+import {
+  ButtonComponent,
+  ChoiceLocation,
+  ContainerComponent,
+  DateTimePicker,
+  DropdownPicker,
+  InputComponent,
+  RowComponent,
+  SectionComponent,
+  SpaceComponent,
+  TextComponent,
+  UploadImagePicker,
+} from '../components';
 import { SelectModel } from '../models/SelectModel';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { authSelector } from '../redux/reducers/authReducer';
+import { Validate } from '../utils/validate';
+import { appColors } from '../constants/appColors';
+import storage from '@react-native-firebase/storage';
+import { EventModel } from '../models/EventModel';
+import eventAPI from '../apis/eventApi';
 
 const initValues = {
   title: '',
   description: '',
-  location: {
-    title: '',
-    address: '',
+  locationTitle: '',
+  locationAddress: '',
+  position: {
+    lat: '',
+    long: '',
   },
+  photoUrl: '',
   users: [],
-  imageUrl: '',
   authorID: '',
   startAt: Date.now(),
   endAt: Date.now(),
   date: Date.now(),
+  price: '',
+  category: '',
 };
 
 const AddNewScreen = () => {
@@ -41,19 +50,25 @@ const AddNewScreen = () => {
     authorID: auth.id,
   });
   const [usersSelects, setUsersSelects] = useState<SelectModel[]>([]);
+
+  const [fileSelected, setFileSelected] = useState<any>();
+  const [errorMess, setErrorMess] = useState<string[]>([]);
+
+  useEffect(() => {
+    handlerGetAllUsers();
+  }, []);
+
+  useEffect(() => {
+    const mess = Validate.EventValidation(eventData);
+    setErrorMess(mess);
+  }, [eventData]);
+
   const handlerChangeValue = (key: string, value: string | Date | string[]) => {
     const items = { ...eventData };
     items[`${key}`] = value;
 
     setEventData(items);
   };
-
-  const [fileSelected, setFileSelected] = useState<any>();
-
-  useEffect(() => {
-    handlerGetAllUsers();
-  }, []);
-
   const handlerGetAllUsers = async () => {
     const api = `/get-all`;
 
@@ -79,12 +94,59 @@ const AddNewScreen = () => {
     }
   };
   const handlerAddEvent = async () => {
-    console.log(eventData);
+    if (fileSelected) {
+      const filename = `${fileSelected.filename ?? `image-${Date.now()}`}.${fileSelected.path.split('.')[1]
+        }`;
+      const path = `images/${filename}`;
+
+      const res = storage().ref(path).putFile(fileSelected.path);
+
+      res.on(
+        'state_changed',
+        snap => {
+          console.log(snap.bytesTransferred);
+        },
+        error => {
+          console.log(error);
+        },
+        () => {
+          storage()
+            .ref(path)
+            .getDownloadURL()
+            .then(url => {
+              eventData.photoUrl = url;
+
+              handlePustEvent(eventData);
+            });
+        },
+      );
+    } else {
+      handlePustEvent(eventData);
+    }
+  };
+
+  const handlePustEvent = async (event: EventModel) => {
+    const api = `/add-new`;
+    try {
+      const res = await eventAPI.HandlerEvent(api, event, 'post');
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlerFileSelected = (val: ImageOrVideo) => {
     setFileSelected(val);
     handlerChangeValue('photoUrl', val.path);
+  };
+
+  const handlerLocation = (val: any) => {
+    const items = { ...eventData };
+    items.position = val.position;
+    items.locationAddress = val.address;
+
+    setEventData(items);
   };
 
   return (
@@ -115,9 +177,7 @@ const AddNewScreen = () => {
           placeholder="Title"
           value={eventData.title}
           allowClear
-          onChange={val => {
-            handlerChangeValue('title', val);
-          }}
+          onChange={val => handlerChangeValue('title', val)}
         />
         <InputComponent
           placeholder="Description"
@@ -147,10 +207,6 @@ const AddNewScreen = () => {
             {
               label: 'Music',
               value: 'music',
-            },
-            {
-              label: 'Game',
-              value: 'game',
             },
           ]}
           onSelect={val => handlerChangeValue('category', val)}
@@ -189,12 +245,16 @@ const AddNewScreen = () => {
           placeholder="Title Address"
           styles={{ height: 56 }}
           allowClear
-          value={eventData.location.title}
+          value={eventData.locationTitle}
           onChange={val => {
-            handlerChangeValue('location', { ...eventData.location, title: val });
+            handlerChangeValue('locationTitle', val);
           }}
         />
-        <ChoiceLocation />
+        <ChoiceLocation
+          onSelect={val => {
+            handlerLocation(val);
+          }}
+        />
         <InputComponent
           placeholder="Price"
           allowClear
@@ -205,8 +265,21 @@ const AddNewScreen = () => {
           }}
         />
       </SectionComponent>
+      {errorMess.length > 0 && (
+        <SectionComponent>
+          {errorMess.map(mess => (
+            <TextComponent
+              styles={{ marginBottom: 12 }}
+              text={mess}
+              key={mess}
+              color={appColors.danger}
+            />
+          ))}
+        </SectionComponent>
+      )}
       <SectionComponent>
         <ButtonComponent
+          disabled={errorMess.length > 0}
           text="Add New"
           type="primary"
           onPress={handlerAddEvent}

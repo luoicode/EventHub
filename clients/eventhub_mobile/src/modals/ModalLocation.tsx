@@ -117,11 +117,12 @@ const ModalLocation = (props: Props) => {
           <View
             style={{
               position: 'absolute',
-              top: 80,
+              top: 56,
               right: 10,
               left: 10,
               backgroundColor: appColors.white,
               zIndex: 5,
+              padding: 20,
             }}>
             {isLoading ? (
               <ActivityIndicator />
@@ -141,7 +142,9 @@ const ModalLocation = (props: Props) => {
               />
             ) : (
               <View>
-                <TextComponent text={searchKey ? '' : ' '} />
+                <TextComponent
+                  text={searchKey ? 'Location not found' : 'Search location'}
+                />
               </View>
             )}
           </View>
@@ -152,7 +155,7 @@ const ModalLocation = (props: Props) => {
           <MapView
             style={{
               width: appInfo.sizes.WIDTH,
-              height: 500,
+              height: appInfo.sizes.HEIGHT - 220,
               marginVertical: 40,
               zIndex: -1,
             }}
@@ -173,19 +176,27 @@ const ModalLocation = (props: Props) => {
             mapType="standard"
           />
         )}
-        <ButtonComponent
-          styles={{ width: '30%' }}
-          text="Confirm"
-          onPress={() => {
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            left: 0,
+            right: 0,
+          }}>
+          <ButtonComponent
+            styles={{ marginBottom: 40 }}
+            text="Confirm"
+            onPress={() => {
+              onSelect({
+                address: addressSelected,
+                position: currentLocation,
+              });
 
-            onSelect({
-              address: addressSelected,
-              position: currentLocation,
-            });
-            onClose();
-          }}
-          type="primary"
-        />
+              onClose();
+            }}
+            type="primary"
+          />
+        </View>
       </View>
     </Modal>
   );
