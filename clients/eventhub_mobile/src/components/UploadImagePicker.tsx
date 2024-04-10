@@ -1,21 +1,21 @@
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
-import React, { ReactNode, useRef, useState } from 'react';
-import ButtonComponent from './ButtonComponent';
-import { Modalize } from 'react-native-modalize';
-import { Portal } from 'react-native-portalize';
-import TextComponent from './TextComponent';
 import { Camera, Image, Link } from 'iconsax-react-native';
-import { appColors } from '../constants/appColors';
-import RowComponent from './RowComponent';
-import SpaceComponent from './SpaceComponent';
-import { fontFamilies } from '../constants/fontFamilies';
+import React, { ReactNode, useRef, useState } from 'react';
+import { Modal, TouchableOpacity, View } from 'react-native';
 import ImageCropPicker, {
   ImageOrVideo,
   Options,
 } from 'react-native-image-crop-picker';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
 import { globalStyles } from '../styles/globalStyles';
-import AntDesgin from 'react-native-vector-icons/AntDesign';
+import ButtonComponent from './ButtonComponent';
 import InputComponent from './InputComponent';
+import RowComponent from './RowComponent';
+import SpaceComponent from './SpaceComponent';
+import TextComponent from './TextComponent';
 interface Props {
   onSelect: (val: { type: 'url' | 'file'; value: string | ImageOrVideo }) => void;
 }
@@ -49,7 +49,7 @@ const UploadImagePicker = (props: Props) => {
     },
   ];
 
-  const handleChoiceImage = (key: string) => {
+  const handlerChoiceImage = (key: string) => {
     switch (key) {
       case 'library':
         ImageCropPicker.openPicker(options).then(res => {
@@ -75,7 +75,7 @@ const UploadImagePicker = (props: Props) => {
     <RowComponent
       styles={{ marginBottom: 20 }}
       key={item.key}
-      onPress={() => handleChoiceImage(item.key)}>
+      onPress={() => handlerChoiceImage(item.key)}>
       {item.icon}
       <SpaceComponent width={12} />
       <TextComponent text={item.title} flex={1} font={fontFamilies.medium} />
@@ -125,6 +125,15 @@ const UploadImagePicker = (props: Props) => {
                 padding: 20,
               },
             ]}>
+            <RowComponent justify="flex-end">
+              <TouchableOpacity
+                onPress={() => {
+                  setImageUrl('');
+                  setIsVisibleModalAddUr(false);
+                }}>
+                <AntDesign name="close" size={24} color={appColors.text} />
+              </TouchableOpacity>
+            </RowComponent>
 
             <TextComponent text="Image URL" title size={18} />
             <InputComponent
@@ -134,15 +143,6 @@ const UploadImagePicker = (props: Props) => {
               allowClear
             />
             <RowComponent justify="flex-end">
-              <ButtonComponent
-                text="Cancel"
-                type="primary"
-                color="#EE4266"
-                onPress={() => {
-                  setImageUrl('')
-                  setIsVisibleModalAddUr(false)
-                }}
-              />
               <ButtonComponent
                 text="Agree"
                 type="primary"

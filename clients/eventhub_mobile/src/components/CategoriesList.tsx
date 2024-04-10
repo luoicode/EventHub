@@ -1,12 +1,12 @@
-import { View, Text, FlatList } from 'react-native';
 import React, { ReactNode } from 'react';
+import { FlatList } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import { TagComponent } from '.';
 import { appColors } from '../constants/appColors';
-import { RowComponent, SpaceComponent, TagComponent, TextComponent } from '.';
-import { ChefFork } from '../assets/svgs';
-import { globalStyles } from '../styles/globalStyles';
 interface Props {
     isColor?: boolean;
 }
@@ -48,7 +48,11 @@ const CategoriesList = (props: Props) => {
         {
             key: 'food',
             label: 'Food',
-            icon: <ChefFork color={isColor ? appColors.white : '#29D697'} />,
+            icon: <FontAwesome6
+                name="bowl-food"
+                size={22}
+                color={isColor ? appColors.white : '#29D697'}
+            />,
             color: '#29D697',
         },
         {
@@ -93,6 +97,7 @@ const CategoriesList = (props: Props) => {
                     onPress={() => { }}
                     icon={item.icon}
                     label={item.label}
+                    textColor={isColor ? appColors.white : appColors.text2}
                 />
             )}
         />

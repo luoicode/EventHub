@@ -7,6 +7,7 @@ const errorMiddlewareHandler = require("./src/middlewares/errorMiddleware");
 const userRouter = require("./src/routers/userRouter");
 const { verification } = require("./src/controllers/authController");
 const verifyToken = require("./src/middlewares/verifyMidlleware");
+const eventRouter = require('./src/routers/eventRouter');
 const app = express();
 require("dotenv").config;
 

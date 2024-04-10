@@ -1,7 +1,9 @@
+import storage from '@react-native-firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { ImageOrVideo } from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
+import eventAPI from '../apis/eventApi';
 import userAPI from '../apis/userApi';
 import {
   ButtonComponent,
@@ -16,13 +18,11 @@ import {
   TextComponent,
   UploadImagePicker,
 } from '../components';
+import { appColors } from '../constants/appColors';
+import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { Validate } from '../utils/validate';
-import { appColors } from '../constants/appColors';
-import storage from '@react-native-firebase/storage';
-import { EventModel } from '../models/EventModel';
-import eventAPI from '../apis/eventApi';
 
 const initValues = {
   title: '',
@@ -35,7 +35,7 @@ const initValues = {
   },
   photoUrl: '',
   users: [],
-  authorID: '',
+  authorId: '',
   startAt: Date.now(),
   endAt: Date.now(),
   date: Date.now(),
@@ -43,11 +43,11 @@ const initValues = {
   category: '',
 };
 
-const AddNewScreen = () => {
+const AddNewScreen = ({ navigation }: any) => {
   const auth = useSelector(authSelector);
   const [eventData, setEventData] = useState<any>({
     ...initValues,
-    authorID: auth.id,
+    authorId: auth.id,
   });
   const [usersSelects, setUsersSelects] = useState<SelectModel[]>([]);
 
@@ -130,7 +130,9 @@ const AddNewScreen = () => {
     try {
       const res = await eventAPI.HandlerEvent(api, event, 'post');
 
-      console.log(res);
+      navigation.navigate('Explore', {
+        screen: 'HomeScreen',
+      });
     } catch (error) {
       console.log(error);
     }

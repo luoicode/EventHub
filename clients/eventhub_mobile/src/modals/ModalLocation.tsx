@@ -1,3 +1,4 @@
+import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
@@ -8,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import GeoCoder from 'react-native-geocoding';
+import MapView from 'react-native-maps';
 import {
   ButtonComponent,
   InputComponent,
@@ -16,13 +19,9 @@ import {
   TextComponent,
 } from '../components';
 import { appColors } from '../constants/appColors';
-import { LocationModel } from '../models/LocationModel';
-import MapView from 'react-native-maps';
 import { appInfo } from '../constants/appInfos';
-import { AddressModel } from '../models/AddressModel';
-import Geolocation from '@react-native-community/geolocation';
-import GeoCoder from 'react-native-geocoding';
-import { Marker } from 'react-native-svg';
+import { fontFamilies } from '../constants/fontFamilies';
+import { LocationModel } from '../models/LocationModel';
 
 GeoCoder.init(process.env.MAP_API_KEY as string);
 
@@ -58,7 +57,9 @@ const ModalLocation = (props: Props) => {
           long: position.coords.longitude,
         });
       }
-    });
+    }, error => {
+      console.log(error);
+    }, {},);
   }, []);
 
   useEffect(() => {
@@ -69,7 +70,7 @@ const ModalLocation = (props: Props) => {
         lat: position.lat,
         long: position.lng,
       });
-    });
+    }).catch(error => console.log(error));
   }, [addressSelected]);
 
   useEffect(() => {
@@ -97,9 +98,28 @@ const ModalLocation = (props: Props) => {
     }
   };
 
+  const handlerGetAddressFromPosition =
+    ({ latitude, longitude }: { latitude: number, longitude: number }) => {
+      onSelect({
+        address: 'This is demo address',
+        position: {
+          lat: latitude,
+          long: longitude,
+        },
+      });
+      onClose();
+      GeoCoder.from(latitude, longitude).then(data => {
+        console.log(data);
+        console.log(data.results[0].address_components[0]);
+
+      }).catch(error => console.log(error));
+    };
+
+
   return (
     <Modal animationType="slide" visible={visible} style={{ flex: 1 }}>
       <View style={{ paddingVertical: 42 }}>
+        <TextComponent styles={{ paddingLeft: 20 }} title font={fontFamilies.medium} text='Search Location' />
         <RowComponent
           justify="flex-end"
           styles={{ marginVertical: 20, paddingHorizontal: 20 }}>
@@ -143,7 +163,7 @@ const ModalLocation = (props: Props) => {
             ) : (
               <View>
                 <TextComponent
-                  text={searchKey ? 'Location not found' : 'Search location'}
+                  text={searchKey ? 'Location not found' : ' '}
                 />
               </View>
             )}
@@ -155,7 +175,7 @@ const ModalLocation = (props: Props) => {
           <MapView
             style={{
               width: appInfo.sizes.WIDTH,
-              height: appInfo.sizes.HEIGHT - 220,
+              height: 600,
               marginVertical: 40,
               zIndex: -1,
             }}
@@ -167,6 +187,7 @@ const ModalLocation = (props: Props) => {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            onPress={event => handlerGetAddressFromPosition(event.nativeEvent.coordinate)}
             region={{
               latitude: currentLocation.lat,
               longitude: currentLocation.long,
@@ -184,7 +205,7 @@ const ModalLocation = (props: Props) => {
             right: 0,
           }}>
           <ButtonComponent
-            styles={{ marginBottom: 40 }}
+            styles={{ marginBottom: 10 }}
             text="Confirm"
             onPress={() => {
               onSelect({

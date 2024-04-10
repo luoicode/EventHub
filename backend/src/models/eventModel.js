@@ -61,6 +61,10 @@ const EventSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    // date: {
+    //     type: Number,
+    //     required: true,
+    // },
 });
 
 const EventModel = mongoose.model('events', EventSchema);
