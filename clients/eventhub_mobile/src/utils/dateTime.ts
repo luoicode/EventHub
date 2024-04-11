@@ -17,4 +17,12 @@ export class dateTime {
       appInfo.monthNames[date.getMonth()]
     }, ${date.getFullYear()}`;
   };
+
+  static GetDayString = (num: number) => {
+    const date = new Date(num);
+
+    return `${appInfo.dayNames[date.getDay()]} , ${
+      appInfo.monthNames[date.getMonth()]
+    } ${numberToString(date.getDate())}`;
+  };
 }

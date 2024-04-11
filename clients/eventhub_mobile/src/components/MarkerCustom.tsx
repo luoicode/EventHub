@@ -8,12 +8,11 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-    onPress: () => void;
     type: string;
 }
 
 const MarkerCustom = (props: Props) => {
-    const { type, onPress } = props;
+    const { type } = props;
 
     const renderIcon = (type: string) => {
         let icon;
@@ -32,7 +31,7 @@ const MarkerCustom = (props: Props) => {
                 icon = <Ionicons name="game-controller" size={24} color="#E1AFD1" />;
                 break;
             default:
-                icon = <FontAwesome6 name="bowl-food" size={24} color="#29D697" />;
+                icon = <FontAwesome5 name="music" size={24} color="#F59762" />;
                 break;
         }
 
@@ -40,26 +39,24 @@ const MarkerCustom = (props: Props) => {
     };
 
     return (
-        <TouchableOpacity onPress={onPress}>
-            <ImageBackground
-                source={require('../assets/images/Union.png')}
-                style={[
-                    globalStyles.shadow,
-                    {
-                        width: 56,
-                        height: 56,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    },
-                ]}
-                imageStyle={{
-                    resizeMode: 'contain',
+        <ImageBackground
+            source={require('../assets/images/Union.png')}
+            style={[
+                globalStyles.shadow,
+                {
                     width: 56,
                     height: 56,
-                }}>
-                {renderIcon(type)}
-            </ImageBackground>
-        </TouchableOpacity>
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
+            ]}
+            imageStyle={{
+                resizeMode: 'contain',
+                width: 56,
+                height: 56,
+            }}>
+            {renderIcon(type)}
+        </ImageBackground>
     );
 };
 

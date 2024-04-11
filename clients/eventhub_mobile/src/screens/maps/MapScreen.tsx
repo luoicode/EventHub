@@ -1,16 +1,18 @@
 import Geolocation from '@react-native-community/geolocation';
 import { ArrowLeft2 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
-import { StatusBar, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {
   CardComponent,
   CategoriesList,
+  EventItem,
   InputComponent,
   MarkerCustom,
   RowComponent,
   SpaceComponent,
+  TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { appInfo } from '../../constants/appInfos';
@@ -53,9 +55,7 @@ const MapScreen = ({ navigation }: any) => {
     try {
       const res = await eventAPI.HandlerEvent(api);
 
-
       setEvents(res.data);
-
     } catch (error) {
       console.log(error);
     }
@@ -127,25 +127,41 @@ const MapScreen = ({ navigation }: any) => {
             longitudeDelta: 0.015,
           }}
           mapType="standard">
-          {
-            events.length > 0 && events.map((event, index) =>
-            (<Marker
-              key={`event${index}`}
-              title={event.title}
-              description=""
-              onPress={() => console.log('asdas')}
-              coordinate={{
-                longitude: event.position.long,
-                latitude: event.position.lat,
-              }}>
-              <MarkerCustom type={event.category} onPress={() => { }} />
-            </Marker>))
-          }
+          {events.length > 0 &&
+            events.map((event, index) => (
+              <Marker
+                key={`event${index}`}
+                title={event.title}
+                description=""
+                onPress={() => console.log('asdas')}
+                coordinate={{
+                  longitude: event.position.long,
+                  latitude: event.position.lat,
+                }}>
+                <MarkerCustom type={event.category} />
+              </Marker>
 
+            ))}
         </MapView>
       ) : (
         <></>
       )}
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          right: 0,
+          left: 0,
+        }}>
+        <FlatList
+          initialScrollIndex={0}
+          data={events}
+          renderItem={({ item }) => <EventItem type="list" item={item} />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 };
