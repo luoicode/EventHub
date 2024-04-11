@@ -77,4 +77,34 @@ const getEvents = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { addNewEvent, getEvents };
+const updateFollowers = asyncHandler(async (req, res) => {
+    const body = req.body;
+    const { id, followers } = body;
+
+    await EventModel.findByIdAndUpdate(id, { followers, updatedAt: Date.now() });
+
+    console.log(followers)
+
+    res.status(200).json({
+        mess: 'Update followers successfully! ',
+        data: [],
+    })
+});
+
+const getFollowers = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+
+    const event = await EventModel.findById(id);
+
+    if (event) {
+        res.status(200).json({
+            mess: 'Followers',
+            data: event.followers ?? [],
+        });
+    } else {
+        res.status(401);
+        throw new Error('Event not found');
+    }
+});
+
+module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers };

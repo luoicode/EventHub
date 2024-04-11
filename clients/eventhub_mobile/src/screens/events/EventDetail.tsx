@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, Calendar, Location } from 'iconsax-react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -23,13 +23,72 @@ import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { fontFamilies } from '../../constants/fontFamilies';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../../redux/reducers/authReducer';
+import eventAPI from '../../apis/eventApi';
+import { LoadingModal } from '../../modals';
 
 const EventDetail = ({ navigation, route }: any) => {
   const { item }: { item: EventModel } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
+  const [followers, setFollowers] = useState<string[]>([]);
+
+  const auth = useSelector(authSelector);
+
+  useEffect(() => {
+    item && getFollowersByID();
+
+  }, [item]);
+
+  const getFollowersByID = async () => {
+    const api = `/followers?id=${item._id}`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+      res && res.data && setFollowers(res.data)
+
+    } catch (error) {
+      console.log(`Cann't get followers by event id ${error}`);
+    }
+  }
+
+
+  const handlerFollower = () => {
+    const items = [...followers];
+
+    if (items.includes(auth.id)) {
+      const index = items.findIndex(element => element === auth.id);
+
+      if (index !== -1) {
+        items.splice(index, 1);
+      }
+
+    } else {
+      items.push(auth.id);
+      handlerUpdateFollower(items);
+    }
+    setFollowers(items);
+  };
+
+  const handlerUpdateFollower = async (data: string[]) => {
+    const api = `/update-followers`;
+    setIsLoading(true);
+    try {
+      await eventAPI.HandlerEvent(api, {
+        id: item._id,
+        followers: data,
+      }, 'post');
+      setIsLoading(false);
+    } catch (error) {
+      console.log(`Can not update followers in Event detail line 65, ${error}`);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: appColors.white }}>
       <ImageBackground
-        source={require('../../assets/images/eventDetail.png')}
+        source={{ uri: item.photoUrl }}
         style={{ flex: 1, height: 244, zIndex: -1 }}
         imageStyle={{
           resizeMode: 'cover',
@@ -53,12 +112,14 @@ const EventDetail = ({ navigation, route }: any) => {
                 title
                 color={appColors.white}
               />
-              <CardComponent
+              <CardComponent onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
-                color="#ffffff4D">
+                color={followers.includes(auth.id) ? "#ffffffB3" : "#ffffff4D"}>
                 <MaterialIcons
                   name="bookmark"
-                  color={appColors.white}
+                  color={followers.includes(auth.id)
+                    ? appColors.danger2
+                    : appColors.white}
                   size={28}
                 />
               </CardComponent>
@@ -73,36 +134,41 @@ const EventDetail = ({ navigation, route }: any) => {
             paddingTop: 244 - 130,
           }}>
           <SectionComponent>
-            <View
-              style={{
-                justifyContent: 'center',
-                flex: 1,
-                alignItems: 'center',
-              }}>
-              <RowComponent
-                justify="space-between"
-                styles={[
-                  globalStyles.shadow,
-                  {
-                    backgroundColor: appColors.white,
-                    borderRadius: 100,
-                    paddingHorizontal: 12,
-                    width: '90%',
-                  },
-                ]}>
-                <AvatarGroup size={36} />
-                <TouchableOpacity
-                  style={[
-                    globalStyles.button,
+            {
+              item.users.length > 0 ? (<View
+                style={{
+                  justifyContent: 'center',
+                  flex: 1,
+                  alignItems: 'center',
+                }}>
+                <RowComponent
+                  justify="space-between"
+                  styles={[
+                    globalStyles.shadow,
                     {
-                      backgroundColor: appColors.primary,
-                      paddingVertical: 8,
+                      backgroundColor: appColors.white,
+                      borderRadius: 100,
+                      paddingHorizontal: 12,
+                      width: '90%',
                     },
                   ]}>
-                  <TextComponent text="Invite" color={appColors.white} />
-                </TouchableOpacity>
-              </RowComponent>
-            </View>
+                  <AvatarGroup userIds={item.users} size={36} />
+                  <TouchableOpacity
+                    style={[
+                      globalStyles.button,
+                      {
+                        backgroundColor: appColors.primary,
+                        paddingVertical: 8,
+                      },
+                    ]}>
+                    <TextComponent text="Invite" color={appColors.white} />
+                  </TouchableOpacity>
+                </RowComponent>
+              </View>) : (<>
+                <ButtonComponent text='Invite' styles={{ borderRadius: 100, width: '30%' }} type='primary' />
+              </>)
+            }
+
           </SectionComponent>
           <View style={{ backgroundColor: appColors.white }}>
             <SectionComponent>
@@ -134,12 +200,12 @@ const EventDetail = ({ navigation, route }: any) => {
                   <TextComponent
                     text="14 December, 2021"
                     font={fontFamilies.medium}
-                    size={16}
+                    size={18}
                   />
                   <TextComponent
                     text="Tuesday, 4:00PM - 9:00PM"
                     color={appColors.gray}
-                    size={12}
+                    size={16}
                   />
                 </View>
               </RowComponent>
@@ -162,14 +228,14 @@ const EventDetail = ({ navigation, route }: any) => {
                     justifyContent: 'space-around',
                   }}>
                   <TextComponent
-                    text={item.location.title}
+                    text={item.locationTitle}
                     font={fontFamilies.medium}
-                    size={16}
+                    size={18}
                   />
                   <TextComponent
-                    text={item.location.address}
+                    text={item.locationAddress}
                     color={appColors.gray}
-                    size={12}
+                    size={16}
                   />
                 </View>
               </RowComponent>
@@ -199,12 +265,12 @@ const EventDetail = ({ navigation, route }: any) => {
                   <TextComponent
                     text="The Weeknd"
                     font={fontFamilies.medium}
-                    size={16}
+                    size={18}
                   />
                   <TextComponent
                     text="Organizer"
                     color={appColors.gray}
-                    size={12}
+                    size={16}
                   />
                 </View>
                 <TouchableOpacity
@@ -254,6 +320,8 @@ const EventDetail = ({ navigation, route }: any) => {
           }
         />
       </LinearGradient>
+
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };

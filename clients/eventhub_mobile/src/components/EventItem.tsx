@@ -86,7 +86,7 @@ const EventItem = (props: Props) => {
                             flex={1}
                             numberOfLine={1}
                             text={item.locationAddress}
-                            size={12}
+                            size={16}
                             color={appColors.text2}
                         />
                     </RowComponent>
