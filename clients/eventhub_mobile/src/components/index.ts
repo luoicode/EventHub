@@ -9,6 +9,7 @@ import DateTimePicker from './DateTimePicker';
 import DropdownPicker from './DropdownPicker';
 import EventItem from './EventItem';
 import InputComponent from './InputComponent';
+import LoadingComponent from './LoadingComponent';
 import MarkerCustom from './MarkerCustom';
 import RowComponent from './RowComponent';
 import SectionComponent from './SectionComponent';
@@ -38,4 +39,5 @@ export {
   DropdownPicker,
   UploadImagePicker,
   MarkerCustom,
+  LoadingComponent,
 };

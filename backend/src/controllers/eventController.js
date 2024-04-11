@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const EventModel = require('../models/eventModel');
+const asyncHandler = require("express-async-handler");
+const EventModel = require("../models/eventModel");
 const calcDistanceLocation = ({
     currentLat,
     curentLong,
@@ -28,19 +28,21 @@ const addNewEvent = asyncHandler(async (req, res) => {
         await newEvent.save();
 
         res.status(200).json({
-            message: 'Add new Event successfully!!!',
+            message: "Add new Event successfully!!!",
             data: newEvent,
         });
     } else {
         res.status(401);
-        throw new Error('Event data not found!!!');
+        throw new Error("Event data not found!!!");
     }
 });
 
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance, limit } = req.query;
+    const { lat, long, distance, limit, date } = req.query;
 
-    const events = await EventModel.find({}).sort({ createAt: -1 }).limit(limit ?? 0);
+    const events = await EventModel.find({})
+        .sort({ createAt: -1 })
+        .limit(limit ?? 0);
 
     if (lat && long && distance) {
         const items = [];
@@ -60,13 +62,17 @@ const getEvents = asyncHandler(async (req, res) => {
         }
 
         res.status(200).json({
-            message: 'get events ok',
-            data: items,
+            message: "get events ok",
+            data: date
+                ? items.filter((element) => element.date > new Date(date))
+                : items,
         });
     } else {
         res.status(200).json({
-            message: 'get events ok',
-            data: events,
+            message: "get events ok",
+            data: date
+                ? events.filter((element) => element.date >= new Date(date))
+                : events,
         });
     }
 });
