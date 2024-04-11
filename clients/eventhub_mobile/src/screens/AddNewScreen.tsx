@@ -210,6 +210,10 @@ const AddNewScreen = ({ navigation }: any) => {
               label: 'Music',
               value: 'music',
             },
+            {
+              label: 'Game',
+              value: 'game',
+            },
           ]}
           onSelect={val => handlerChangeValue('category', val)}
         />

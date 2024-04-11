@@ -38,9 +38,9 @@ const addNewEvent = asyncHandler(async (req, res) => {
 });
 
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance } = req.query;
+    const { lat, long, distance, limit } = req.query;
 
-    const events = await EventModel.find({});
+    const events = await EventModel.find({}).sort({ createAt: -1 }).limit(limit ?? 0);
 
     if (lat && long && distance) {
         const items = [];

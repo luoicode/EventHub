@@ -13,7 +13,7 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +25,7 @@ import {
   SectionComponent,
   SpaceComponent,
   TabBarComponent,
-  TextComponent
+  TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
@@ -33,28 +33,39 @@ import { AddressModel } from '../../models/AddressModel';
 import { authSelector } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
 import Geocoder from 'react-native-geocoding';
+import eventAPI from '../../apis/eventApi';
+import { EventModel } from '../../models/EventModel';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
 const HomeScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<AddressModel>();
-
-
-  const dispatch = useDispatch();
-
-  const auth = useSelector(authSelector);
-
+  const [events, setEvents] = useState<EventModel[]>([]);
+  const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
 
   useEffect(() => {
-    Geolocation.getCurrentPosition(position => {
-      if (position.coords) {
-        reverseGeoCode({
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        });
-      }
-    });
+    Geolocation.getCurrentPosition(
+      (position: any) => {
+        if (position.coords) {
+          reverseGeoCode({
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          });
+        }
+      },
+      (error: any) => {
+        console.log(error);
+      },
+    );
+
+    getEvents();
   }, []);
+
+  useEffect(() => {
+    currentLocation &&
+      currentLocation.postion &&
+      getEvents(currentLocation.postion.lat, currentLocation.postion.long);
+  }, [currentLocation]);
 
   const reverseGeoCode = async ({ lat, long }: { lat: number; long: number }) => {
     const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&leng=vi-VI&apiKey=9xtPpCx-_XvOPAIXkPFPAn-fXs2HOa9mvitLme7Mit4`;
@@ -70,23 +81,24 @@ const HomeScreen = ({ navigation }: any) => {
     }
   };
 
-  const itemEvent = {
-    title: 'International Band Music Concert',
-    description:
-      'Get ready to immerse yourself in an electrifying musical journey as The Weeknd prepares to grace the stage with his mesmerizing performance. As anticipation builds for this highly awaited event, fans from all corners are buzzing with excitement, eager to experience his soulful voice and captivating presence firsthand. With his unique blend of R&B, pop, and electronic sounds, The Weeknd has carved a distinct niche in the music scene, captivating audiences worldwide. His dynamic performances and chart-topping hits have reshaped the landscape of US-UK music, infusing it with a fresh, innovative energy. From the pulsating beats of "Blinding Lights" to the haunting melodies of "Save Your Tears," his music transcends boundaries, resonating with listeners of all ages. As the stage lights illuminate and the crowd roars with anticipation, prepare to be transported to a world where rhythm and melody collide, leaving you spellbound and craving for more. The upcoming event promises to be a spectacle of epic proportions, a testament to the enduring power of The Weeknd is music to unite and inspire. So, mark your calendars and get ready to witness a performance that will leave you breathless and wanting to dance the night away.',
-    location: {
-      title: 'Gala Convention Center',
-      address: '36 Guild Street London, UK ',
-    },
-    users: [''],
-    imageUrl: '',
-    authorID: '',
-    startAt: Date.now(),
-    endAt: Date.now(),
-    date: Date.now(),
-    image: '',
-    tags: [],
+  const getEvents = async (lat?: number, long?: number, distance?: number) => {
+    const api =
+      lat && long
+        ? `/get-events?lat=${lat}&long=${long}&distance=${distance ?? 5
+        }&limit=5`
+        : `/get-events?limit=5`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+
+      res &&
+        res.data &&
+        (lat && long ? setNearbyEvents(res.data) : setEvents(res.data));
+    } catch (error) {
+      console.log(`Get event error in home screen line 77 ${error}`);
+    }
   };
+
   return (
     <View style={[globalStyles.container]}>
       <StatusBar barStyle={'light-content'} />
@@ -169,7 +181,12 @@ const HomeScreen = ({ navigation }: any) => {
                   backgroundColor: '#A29EF0',
                 }}
               />
-              <TextComponent size={20} text="Search..." color={`#A29EF0`} flex={1} />
+              <TextComponent
+                size={20}
+                text="Search..."
+                color={`#A29EF0`}
+                flex={1}
+              />
             </RowComponent>
             <RowComponent
               onPress={() =>
@@ -209,13 +226,13 @@ const HomeScreen = ({ navigation }: any) => {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={Array.from({ length: 5 })}
+            data={events}
             renderItem={({ item, index }) => (
-              <EventItem key={`event${index}`} item={itemEvent} type="card" />
+              <EventItem key={`event${index}`} item={item} type="card" />
             )}
           />
         </SectionComponent>
-        <SectionComponent >
+        <SectionComponent>
           <ImageBackground
             source={require('./../../assets/images/invite-image.png')}
             style={{ flex: 1, padding: 16, minHeight: 127 }}
@@ -250,9 +267,9 @@ const HomeScreen = ({ navigation }: any) => {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={Array.from({ length: 5 })}
+            data={nearbyEvents}
             renderItem={({ item, index }) => (
-              <EventItem key={`event${index}`} item={itemEvent} type="card" />
+              <EventItem key={`event${index}`} item={item} type="card" />
             )}
           />
         </SectionComponent>
