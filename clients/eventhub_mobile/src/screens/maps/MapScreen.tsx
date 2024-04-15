@@ -112,7 +112,7 @@ const MapScreen = ({ navigation }: any) => {
             width: appInfo.sizes.WIDTH,
             height: appInfo.sizes.HEIGHT,
           }}
-          showsMyLocationButton
+          // showsMyLocationButton
           showsUserLocation
           initialRegion={{
             latitude: currentLocation.lat,

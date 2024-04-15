@@ -16,7 +16,7 @@ import { EventModel } from '../models/EventModel';
 import { globalStyles } from '../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { dateTime } from '../utils/dateTime';
-import { authSelector } from '../redux/reducers/authReducer';
+import { AuthState, authSelector } from '../redux/reducers/authReducer';
 import { useSelector } from 'react-redux';
 import { numberToString } from '../utils/numberToString';
 
@@ -28,9 +28,9 @@ interface Props {
 const EventItem = (props: Props) => {
     const { item, type } = props;
     const navigation: any = useNavigation();
-    const auth = useSelector(authSelector);
+    const auth: AuthState = useSelector(authSelector);
 
-    console.log(new Date(item.date).toISOString());
+    // console.log(new Date(item.date).toISOString());
 
     return (
         <CardComponent
@@ -64,7 +64,7 @@ const EventItem = (props: Props) => {
                                 />
                             </CardComponent>
                             {
-                                item.followers && item.followers.includes(auth.id) &&
+                                auth.follow_events && auth.follow_events.includes(item._id) &&
                                 (<CardComponent
                                     styles={[globalStyles.noSpaceCard]}
                                     color="#ffffffB3">

@@ -1,30 +1,44 @@
-import AsyncStorage, {
+import {
     useAsyncStorage,
 } from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAuth, authSelector } from '../redux/reducers/authReducer';
+import userAPI from '../apis/userApi';
+import { AuthState, addAuth, addFollowedEvent, authSelector } from '../redux/reducers/authReducer';
+import { SplashScreen } from '../screens';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
-import { SplashScreen } from '../screens';
+import { UserHandler } from '../utils/UserHandlers';
 const AppRouters = () => {
     const [isShowSplash, setIsShowSplash] = useState(true);
     const { getItem } = useAsyncStorage('auth');
-    const auth = useSelector(authSelector);
+    const auth: AuthState = useSelector(authSelector);
+
+
+
     const dispatch = useDispatch();
     useEffect(() => {
-        checkLogin();
-        const timeout = setTimeout(() => {
-            setIsShowSplash(false);
-        }, 1500);
-        return () => clearTimeout(timeout);
+        handlerGetDatas();
+
     }, []);
+
+    useEffect(() => {
+        UserHandler.getFollowersById(auth.id, dispatch);
+    }, [auth.id]);
+
+    const handlerGetDatas = async () => {
+        await checkLogin();
+
+        setIsShowSplash(false);
+    };
 
     const checkLogin = async () => {
         const res = await getItem();
-
         res && dispatch(addAuth(JSON.parse(res)));
     };
+
+
+
     return (
         <>
             {isShowSplash ? (
