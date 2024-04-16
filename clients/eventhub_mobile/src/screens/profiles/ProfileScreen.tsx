@@ -1,61 +1,75 @@
-import { View, Text } from 'react-native';
-import React, { useState } from 'react';
-import { ButtonComponent, ContainerComponent } from '../../components';
+import { View, Text, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  AvatarComponent,
+  ButtonComponent,
+  ContainerComponent,
+  RowComponent,
+  SectionComponent,
+  TextComponent,
+} from '../../components';
 import { LoginManager } from 'react-native-fbsdk-next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthState, authSelector, removeAuth } from '../../redux/reducers/authReducer';
+import {
+  AuthState,
+  authSelector,
+  removeAuth,
+} from '../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HandlerNotification } from '../../utils/handlerNotification';
 import { LoadingModal } from '../../modals';
+import userAPI from '../../apis/userApi';
+import { ProfileModel } from '../../models/ProfileModel';
 
 const ProfileScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [profile, setProfile] = useState<ProfileModel>();
+
   const dispatch = useDispatch();
 
   const auth: AuthState = useSelector(authSelector);
 
-  const handlerLogout = async () => {
+  useEffect(() => {
+    if (auth) {
+      getProfile();
+    }
+  }, []);
+
+  const getProfile = async () => {
+    const api = `/get-profile?uid=${auth.id}`;
+
     setIsLoading(true);
 
-    const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+    try {
+      const res = await userAPI.HandlerUser(api);
+      res && res.data && setProfile(res.data);
 
-    if (fcmtoken) {
-      if (auth.fcmTokens && auth.fcmTokens.length > 0) {
-
-        const items = [...auth.fcmTokens];
-
-        const index = items.findIndex(element => element === fcmtoken);
-
-        if (index !== -1) {
-          items.splice(index, 1);
-        }
-
-        await HandlerNotification.Update(auth.id, items);
-      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-
-    await GoogleSignin.signOut();
-    LoginManager.logOut();
-
-    // clear local storage
-
-    await AsyncStorage.removeItem('auth');
-
-
-    dispatch(removeAuth({}));
-    setIsLoading(false);
-
   };
+
   return (
-    <ContainerComponent back>
-      <Text>ProfileScreen</Text>
-      <ButtonComponent
-        type="primary"
-        text="logout"
-        onPress={handlerLogout}
-      />
-      <LoadingModal visible={isLoading} />
+    <ContainerComponent back title="Profile">
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : profile ? (
+        <>
+          <SectionComponent>
+            <RowComponent>
+              <AvatarComponent
+                photoUrl={profile.photoUrl}
+                name={profile.name ? profile.name : profile.email}
+                size={120}
+              />
+            </RowComponent>
+          </SectionComponent>
+        </>
+      ) : (
+        <TextComponent text="Profile not found" />
+      )}
     </ContainerComponent>
   );
 };

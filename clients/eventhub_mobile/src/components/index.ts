@@ -1,3 +1,4 @@
+import AvatarComponent from './AvatarComponent';
 import AvatarGroup from './AvatarGroup';
 import ButtonComponent from './ButtonComponent';
 import CardComponent from './CardComponent';
@@ -40,4 +41,5 @@ export {
   UploadImagePicker,
   MarkerCustom,
   LoadingComponent,
+  AvatarComponent,
 };

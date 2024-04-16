@@ -100,6 +100,31 @@ const handlerSendNotification = async () => {
         console.log(response.body);
     });
 };
+const getProfile = asyncHandler(async (req, res) => {
+    const { uid } = req.query;
+
+    if (uid) {
+        const profile = await UserModel.findOne({ _id: uid })
+        console.log(profile)
+
+        res.status(200).json({
+            message: 'fafa',
+            data: {
+                createAt: profile.createAt,
+                updateAt: profile.updateAt,
+                name: profile.name ?? '',
+                givename: profile.givename ?? '',
+                familyName: profile.familyName ?? '',
+                email: profile.email ?? '',
+                photURL: profile.photURL ?? '',
+                bio: profile.bio ?? '',
+            },
+        });
+    } else {
+        res.sendStatus(401);
+        throw new Error('Missing uid');
+    }
+});
 
 
-module.exports = { getAllUsers, getEventsFollowed, updateFcmToken };
+module.exports = { getAllUsers, getEventsFollowed, updateFcmToken, getProfile };

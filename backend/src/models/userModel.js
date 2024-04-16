@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
   familyName: {
     type: String,
   },
-  photo: {
+  bio: {
     type: String,
   },
   email: {
@@ -34,7 +34,13 @@ const UserSchema = new mongoose.Schema({
   },
   fcmTokens: {
     type: [String],
-  }
+  },
+  following: {
+    type: [String],
+  },
+  interest: {
+    type: [String],
+  },
 });
 
 const UserModel = mongoose.model("users", UserSchema);

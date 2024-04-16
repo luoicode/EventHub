@@ -17,22 +17,24 @@ import {
     StatusBar,
     StyleSheet,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
 import { LoginManager } from 'react-native-fbsdk-next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { RowComponent, SpaceComponent, TextComponent } from '.';
+import { AvatarComponent, RowComponent, SpaceComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
 import { authSelector, removeAuth } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
-import { fontFamilies } from '../constants/fontFamilies';
+import { HandlerNotification } from '../utils/handlerNotification';
 
 const DrawerCustom = ({ navigation }: any) => {
-    const user = useSelector(authSelector);
+    const auth = useSelector(authSelector);
     const dispatch = useDispatch();
-    const size = 36;
+    const size = 30;
     const color = appColors.gray;
+
     const profileMenu = [
         {
             key: 'MyProfile',
@@ -76,44 +78,60 @@ const DrawerCustom = ({ navigation }: any) => {
         },
     ];
 
-    const handlerSignOut = async () => {
+    const handlerLogout = async () => {
+        const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+
+        if (fcmtoken) {
+            if (auth.fcmTokens && auth.fcmTokens.length > 0) {
+                const items = [...auth.fcmTokens];
+
+                const index = items.findIndex(element => element === fcmtoken);
+
+                if (index !== -1) {
+                    items.splice(index, 1);
+                }
+
+                await HandlerNotification.Update(auth.id, items);
+            }
+        }
+
         await GoogleSignin.signOut();
-        await LoginManager.logOut();
+        LoginManager.logOut();
+
+        // clear local storage
+
+        await AsyncStorage.removeItem('auth');
+
         dispatch(removeAuth({}));
-        await AsyncStorage.clear();
+    };
+
+    const handlerNavigation = (key: string) => {
+        switch (key) {
+            case 'SignOut':
+                handlerLogout();
+                break;
+            case 'MyProfile':
+                navigation.navigate('Profile', {
+                    screen: 'ProfileScreen',
+                });
+                break;
+            default:
+                console.log(key);
+                break;
+        }
+
+        navigation.closeDrawer();
     };
 
     return (
         <View style={[localStyles.container]}>
-            <TouchableOpacity
+            <AvatarComponent
                 onPress={() => {
-                    navigation.closeDrawer();
-
-                    navigation.navigate('Profile', {
-                        screen: 'ProfileScreen',
-                    });
-                }}>
-                {user.photo ? (
-                    <Image source={{ uri: user.photo }} style={[localStyles.avatar]} />
-                ) : (
-                    <View
-                        style={[localStyles.avatar, { backgroundColor: appColors.gray2 }]}>
-                        <TextComponent
-                            title
-                            size={38}
-                            color={appColors.white}
-                            text={
-                                user.name
-                                    ? user.name
-                                        .split(' ')
-                                    [user.name.split(' ').length - 1].substring(0, 1)
-                                    : ''
-                            }
-                        />
-                    </View>
-                )}
-                <TextComponent text={user.name} title size={24} />
-            </TouchableOpacity>
+                    handlerNavigation('MyProfile');
+                }}
+                photoUrl={auth.photoUrl}
+                name={auth.name ? auth.name : auth.email}
+            />
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={profileMenu}
@@ -121,14 +139,7 @@ const DrawerCustom = ({ navigation }: any) => {
                 renderItem={({ item, index }) => (
                     <RowComponent
                         styles={[localStyles.listItem]}
-                        onPress={
-                            item.key === 'SignOut'
-                                ? () => handlerSignOut()
-                                : () => {
-                                    console.log(item.key);
-                                    navigation.closeDrawer();
-                                }
-                        }>
+                        onPress={() => handlerNavigation(item.key)}>
                         {item.icon}
                         <TextComponent
                             text={item.title}
@@ -145,7 +156,12 @@ const DrawerCustom = ({ navigation }: any) => {
                     ]}>
                     <MaterialCommunityIcons name="crown" size={28} color={'#FFC700'} />
                     <SpaceComponent width={8} />
-                    <TextComponent color={appColors.primary3} size={20} font={fontFamilies.bold} text="Upgrade Pro" />
+                    <TextComponent
+                        color={appColors.primary3}
+                        size={20}
+                        font={fontFamilies.bold}
+                        text="Upgrade Pro"
+                    />
                 </TouchableOpacity>
             </RowComponent>
         </View>
