@@ -3,8 +3,10 @@ export interface ProfileModel {
   createAt: string;
   email: string;
   familyName: string;
-  giveName: string;
+  givenName: string;
   name: string;
   photoUrl: string;
   updateAt: string;
+  following: string[];
+  uid: string;
 }

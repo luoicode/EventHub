@@ -105,11 +105,11 @@ const getProfile = asyncHandler(async (req, res) => {
 
     if (uid) {
         const profile = await UserModel.findOne({ _id: uid })
-        console.log(profile)
 
         res.status(200).json({
             message: 'fafa',
             data: {
+                uid: profile._id,
                 createAt: profile.createAt,
                 updateAt: profile.updateAt,
                 name: profile.name ?? '',
@@ -118,6 +118,7 @@ const getProfile = asyncHandler(async (req, res) => {
                 email: profile.email ?? '',
                 photURL: profile.photURL ?? '',
                 bio: profile.bio ?? '',
+                following: profile.following ?? [],
             },
         });
     } else {
@@ -126,5 +127,26 @@ const getProfile = asyncHandler(async (req, res) => {
     }
 });
 
+const getFollowers = asyncHandler(async (req, res) => {
+    const { uid } = req.query;
 
-module.exports = { getAllUsers, getEventsFollowed, updateFcmToken, getProfile };
+    if (uid) {
+        const users = await UserModel.find({ following: { $all: uid } });
+
+        const ids = [];
+
+        if (users.length > 0) {
+            users.forEach((user) => ids.push(user._id));
+        }
+
+        res.status(200).json({
+            message: '',
+            data: ids,
+        });
+    } else {
+        throw new Error('can not find uid');
+        res.sendStatus(404);
+    }
+});
+
+module.exports = { getAllUsers, getEventsFollowed, updateFcmToken, getProfile, getFollowers };

@@ -39,6 +39,8 @@ const EventDetail = ({ navigation, route }: any) => {
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
+  console.log(auth.id)
+
   useEffect(() => {
     item && getFollowersByID();
   }, [item]);
@@ -91,14 +93,14 @@ const EventDetail = ({ navigation, route }: any) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: appColors.white }}>
-      <View style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 3,
-      }}>
-
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          left: 0,
+          zIndex: 3,
+        }}>
         <LinearGradient colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0)']}>
           <RowComponent
             styles={{
@@ -139,7 +141,6 @@ const EventDetail = ({ navigation, route }: any) => {
             </RowComponent>
           </RowComponent>
         </LinearGradient>
-
       </View>
 
       <ScrollView
@@ -147,7 +148,10 @@ const EventDetail = ({ navigation, route }: any) => {
         style={{
           flex: 1,
         }}>
-        <Image source={{ uri: item.photoUrl }} style={{ width: appInfo.sizes.WIDTH, height: 240, resizeMode: 'cover' }} />
+        <Image
+          source={{ uri: item.photoUrl }}
+          style={{ width: appInfo.sizes.WIDTH, height: 240, resizeMode: 'cover' }}
+        />
         <SectionComponent styles={{ marginTop: -20 }}>
           {item.users.length > 0 ? (
             <View
@@ -204,11 +208,7 @@ const EventDetail = ({ navigation, route }: any) => {
               <CardComponent
                 styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
                 color={`${appColors.primary}33`}>
-                <Calendar
-                  variant="Bold"
-                  color={appColors.primary}
-                  size={30}
-                />
+                <Calendar variant="Bold" color={appColors.primary} size={30} />
               </CardComponent>
               <SpaceComponent width={16} />
               <View
@@ -235,11 +235,7 @@ const EventDetail = ({ navigation, route }: any) => {
               <CardComponent
                 styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
                 color={`${appColors.primary}33`}>
-                <Location
-                  variant="Bold"
-                  color={appColors.primary}
-                  size={30}
-                />
+                <Location variant="Bold" color={appColors.primary} size={30} />
               </CardComponent>
               <SpaceComponent width={16} />
               <View
@@ -262,7 +258,16 @@ const EventDetail = ({ navigation, route }: any) => {
               </View>
             </RowComponent>
 
-            <RowComponent styles={{ marginBottom: 20 }}>
+            <RowComponent
+              styles={{ marginBottom: 20 }}
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  screen: 'ProfileScreen',
+                  params: {
+                    id: item.authorId,
+                  },
+                })
+              }>
               <TouchableOpacity>
                 <Image
                   source={{

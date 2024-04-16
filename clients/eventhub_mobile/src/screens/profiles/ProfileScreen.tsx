@@ -1,53 +1,72 @@
-import { View, Text, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import userAPI from '../../apis/userApi';
 import {
   AvatarComponent,
-  ButtonComponent,
   ContainerComponent,
   RowComponent,
   SectionComponent,
-  TextComponent,
+  SpaceComponent,
+  TextComponent
 } from '../../components';
-import { LoginManager } from 'react-native-fbsdk-next';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useDispatch, useSelector } from 'react-redux';
+import { ProfileModel } from '../../models/ProfileModel';
 import {
   AuthState,
-  authSelector,
-  removeAuth,
+  authSelector
 } from '../../redux/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { HandlerNotification } from '../../utils/handlerNotification';
-import { LoadingModal } from '../../modals';
-import userAPI from '../../apis/userApi';
-import { ProfileModel } from '../../models/ProfileModel';
+import { globalStyles } from '../../styles/globalStyles';
+import AboutProfile from './components/AboutProfile';
+import EditProfile from './components/EditProfile';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState<ProfileModel>();
+  const [userFollowers, setUserFollowers] = useState<string[]>([]);
+  const [profileId, setProfileId] = useState('');
 
   const dispatch = useDispatch();
-
   const auth: AuthState = useSelector(authSelector);
 
   useEffect(() => {
-    if (auth) {
-      getProfile();
+    if (route.params) {
+      const { id } = route.params;
+
+      setProfileId(id);
+    } else {
+      setProfileId(auth.id);
     }
-  }, []);
+  }, [route]);
+
+  useEffect(() => {
+    if (profileId) {
+      getProfile();
+      getFollowersByUid();
+    }
+  }, [profileId]);
 
   const getProfile = async () => {
-    const api = `/get-profile?uid=${auth.id}`;
+    const api = `/get-profile?uid=${profileId}`;
 
     setIsLoading(true);
-
     try {
       const res = await userAPI.HandlerUser(api);
       res && res.data && setProfile(res.data);
-
       setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+    }
+  };
+
+  const getFollowersByUid = async () => {
+    const api = `/get-followers?uid=${profileId}`;
+
+    try {
+      const res = await userAPI.HandlerUser(api);
+      setUserFollowers(res.data);
+    } catch (error) {
+      console.log();
     }
   };
 
@@ -57,7 +76,7 @@ const ProfileScreen = () => {
         <ActivityIndicator />
       ) : profile ? (
         <>
-          <SectionComponent>
+          <SectionComponent styles={[globalStyles.center]}>
             <RowComponent>
               <AvatarComponent
                 photoUrl={profile.photoUrl}
@@ -65,10 +84,42 @@ const ProfileScreen = () => {
                 size={120}
               />
             </RowComponent>
+            <SpaceComponent height={16} />
+            <TextComponent
+              text={
+                profile.name
+                  ? profile.name
+                  : profile.familyName && profile.givenName
+                    ? `${profile.familyName} ${profile.givenName}`
+                    : profile.email
+              }
+              title
+              size={24}
+            />
+            <SpaceComponent height={16} />
+            <RowComponent>
+              <View style={[globalStyles.center, { flex: 1 }]}>
+                <TextComponent
+                  title
+                  text={`${profile.following.length}`}
+                  size={20}
+                />
+                <TextComponent text="Following" />
+              </View>
+              <View style={[globalStyles.center, { flex: 1 }]}>
+                <TextComponent
+                  title
+                  text={`${userFollowers.length}`}
+                  size={20}
+                />
+                <TextComponent text="Followers" />
+              </View>
+            </RowComponent>
           </SectionComponent>
+          {auth.id !== profileId ? <AboutProfile /> : <EditProfile />}
         </>
       ) : (
-        <TextComponent text="Profile not found" />
+        <TextComponent text="profile not found!" />
       )}
     </ContainerComponent>
   );
