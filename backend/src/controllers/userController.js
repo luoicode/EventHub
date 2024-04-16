@@ -41,4 +41,20 @@ const getEventsFollowed = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getAllUsers, getEventsFollowed };
+
+const updateFcmToken = asyncHandler(async (req, res) => {
+    const { uid, fcmTokens } = req.body
+
+
+    await UserModel.findByIdAndUpdate(uid, {
+        fcmTokens
+    })
+
+    res.status(200).json({
+        message: 'asdasd',
+        data: [],
+    })
+})
+
+
+module.exports = { getAllUsers, getEventsFollowed, updateFcmToken };

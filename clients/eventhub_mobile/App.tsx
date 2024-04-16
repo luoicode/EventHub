@@ -6,9 +6,13 @@ import AppRouters from './src/navigators/AppRouters';
 import store from './src/redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host } from 'react-native-portalize';
+import { HandlerNotification } from './src/utils/handlerNotification';
 
 const App = () => {
 
+  useEffect(() => {
+    HandlerNotification.checkNotificationPersion();
+  }, []);
 
 
   return (
