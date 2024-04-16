@@ -10,8 +10,10 @@ import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   ImageBackground,
+  Platform,
   ScrollView,
   StatusBar,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -36,6 +38,9 @@ import { globalStyles } from '../../styles/globalStyles';
 import Geocoder from 'react-native-geocoding';
 import eventAPI from '../../apis/eventApi';
 import { EventModel } from '../../models/EventModel';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
@@ -61,6 +66,17 @@ const HomeScreen = ({ navigation }: any) => {
     );
 
     getEvents();
+
+    messaging().onMessage(
+      async (mess: FirebaseMessagingTypes.RemoteMessage) => {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(
+            mess.notification?.title ?? 'asdasds',
+            ToastAndroid.SHORT,
+          );
+        }
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -90,7 +106,6 @@ const HomeScreen = ({ navigation }: any) => {
       : `/get-events?limit=5`
       }`;
     // &date=${new Date().toISOString()}`;
-
 
     setIsLoading(true);
     try {
@@ -241,7 +256,6 @@ const HomeScreen = ({ navigation }: any) => {
           ) : (
             <LoadingComponent isLoading={isLoading} values={events.length} />
           )}
-
         </SectionComponent>
         <SectionComponent>
           <ImageBackground
@@ -256,6 +270,7 @@ const HomeScreen = ({ navigation }: any) => {
 
             <RowComponent justify="flex-start">
               <TouchableOpacity
+                onPress={() => console.log('asdasdasd')}
                 style={[
                   globalStyles.button,
                   {
@@ -275,17 +290,21 @@ const HomeScreen = ({ navigation }: any) => {
         </SectionComponent>
         <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
           <TabBarComponent title="Nearby You" onPress={() => { }} />
-          {
-            nearbyEvents.length > 0 ? (<FlatList
+          {nearbyEvents.length > 0 ? (
+            <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
               data={nearbyEvents}
               renderItem={({ item, index }) => (
                 <EventItem key={`event${index}`} item={item} type="card" />
               )}
-            />) : (<LoadingComponent isLoading={isLoading} values={nearbyEvents.length} />)
-          }
-
+            />
+          ) : (
+            <LoadingComponent
+              isLoading={isLoading}
+              values={nearbyEvents.length}
+            />
+          )}
         </SectionComponent>
       </ScrollView>
     </View>
