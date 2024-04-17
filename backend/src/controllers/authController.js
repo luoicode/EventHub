@@ -116,7 +116,7 @@ const register = asyncHandler(async (req, res) => {
     message: "Register new user successfully",
     data: {
       email: newUser.email,
-      id: newUser.id,
+      id: newUser._id,
       accesstoken: await getJsonWebToken(email, newUser.id),
     },
   });
@@ -244,9 +244,11 @@ const handlerLoginWithGoogle = asyncHandler(async (req, res) => {
     user.accesstoken = await getJsonWebToken(userInfo.email, newUser.id);
   }
 
+  console.log({ ...user, id: existingUser._id })
+
   res.status(200).json({
     message: 'Login with google successfully!!!',
-    data: user,
+    data: { ...user, id: existingUser._id },
   });
 });
 
