@@ -110,13 +110,13 @@ const getProfile = asyncHandler(async (req, res) => {
             message: 'fafa',
             data: {
                 uid: profile._id,
-                createAt: profile.createAt,
-                updateAt: profile.updateAt,
+                createdAt: profile.createAt,
+                updatedAt: profile.updateAt,
                 name: profile.name ?? '',
-                givename: profile.givename ?? '',
+                giveName: profile.givename ?? '',
                 familyName: profile.familyName ?? '',
                 email: profile.email ?? '',
-                photURL: profile.photURL ?? '',
+                photoUrl: profile.photoUrl ?? '',
                 bio: profile.bio ?? '',
                 following: profile.following ?? [],
             },
@@ -149,4 +149,22 @@ const getFollowers = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getAllUsers, getEventsFollowed, updateFcmToken, getProfile, getFollowers };
+const updateProfile = asyncHandler(async (req, res) => {
+    const body = req.body
+    const { uid } = req.query
+
+    if (uid && body) {
+        await UserModel.findByIdAndUpdate(uid, body)
+
+        res.status(200).json({
+            message: 'Update user successfully!!',
+            data: [],
+        })
+    } else {
+        res.sendStatus(401)
+        throw new Error('Missing data')
+    }
+
+
+})
+module.exports = { getAllUsers, getEventsFollowed, updateFcmToken, getProfile, getFollowers, updateProfile };

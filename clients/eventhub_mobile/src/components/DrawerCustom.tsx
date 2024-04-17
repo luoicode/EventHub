@@ -34,7 +34,6 @@ const DrawerCustom = ({ navigation }: any) => {
     const dispatch = useDispatch();
     const size = 30;
     const color = appColors.gray;
-
     const profileMenu = [
         {
             key: 'MyProfile',
@@ -77,34 +76,24 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <Logout size={size} color={color} />,
         },
     ];
-
     const handlerLogout = async () => {
         const fcmtoken = await AsyncStorage.getItem('fcmtoken');
-
         if (fcmtoken) {
             if (auth.fcmTokens && auth.fcmTokens.length > 0) {
                 const items = [...auth.fcmTokens];
-
                 const index = items.findIndex(element => element === fcmtoken);
-
                 if (index !== -1) {
                     items.splice(index, 1);
                 }
-
                 await HandlerNotification.Update(auth.id, items);
             }
         }
-
         await GoogleSignin.signOut();
         LoginManager.logOut();
-
         // clear local storage
-
         await AsyncStorage.removeItem('auth');
-
         dispatch(removeAuth({}));
     };
-
     const handlerNavigation = (key: string) => {
         switch (key) {
             case 'SignOut':
@@ -114,7 +103,7 @@ const DrawerCustom = ({ navigation }: any) => {
                 navigation.navigate('Profile', {
                     screen: 'ProfileScreen',
                     params: {
-                        id: auth.ud,
+                        id: auth.id,
                     },
                 });
                 break;
@@ -122,17 +111,13 @@ const DrawerCustom = ({ navigation }: any) => {
                 console.log(key);
                 break;
         }
-
         navigation.closeDrawer();
     };
-
     return (
         <View style={[localStyles.container]}>
             <AvatarComponent
-                onPress={() => {
-                    handlerNavigation('MyProfile');
-                }}
-                photoUrl={auth.photoUrl}
+                onPress={() => handlerNavigation('MyProfile')}
+                photoUrl={auth.photo}
                 name={auth.name ? auth.name : auth.email}
             />
             <FlatList
@@ -155,16 +140,11 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: appColors.primary4, height: 'auto' },
+                        { backgroundColor: '#00F8FF33', height: 'auto' },
                     ]}>
-                    <MaterialCommunityIcons name="crown" size={28} color={'#FFC700'} />
+                    <MaterialCommunityIcons name="crown" size={22} color={'#00F8FF'} />
                     <SpaceComponent width={8} />
-                    <TextComponent
-                        color={appColors.primary3}
-                        size={20}
-                        font={fontFamilies.bold}
-                        text="Upgrade Pro"
-                    />
+                    <TextComponent color="#00F8FF" text="Upgrade Pro" />
                 </TouchableOpacity>
             </RowComponent>
         </View>

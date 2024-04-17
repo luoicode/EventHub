@@ -33,6 +33,8 @@ const SocialLogin = () => {
   const dispatch = useDispatch();
 
   const handlerLoginWithGoogle = async () => {
+
+    setIsLoading(true)
     await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true,
     });
@@ -45,9 +47,15 @@ const SocialLogin = () => {
         user,
         'post',
       );
+
+      // console.log(res.data)
       dispatch(addAuth(res.data));
       await AsyncStorage.setItem('auth', JSON.stringify(res.data));
+      setIsLoading(false)
+
     } catch (error) {
+      setIsLoading(false)
+
       console.log(error);
     }
   };

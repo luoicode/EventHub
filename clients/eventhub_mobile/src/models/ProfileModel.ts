@@ -3,7 +3,7 @@ export interface ProfileModel {
   createAt: string;
   email: string;
   familyName: string;
-  givenName: string;
+  giveName: string;
   name: string;
   photoUrl: string;
   updateAt: string;

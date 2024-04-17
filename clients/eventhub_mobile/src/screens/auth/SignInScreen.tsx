@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, Switch, Alert } from 'react-native';
+import { View, Text, Button, Image, Switch, Alert, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -19,6 +19,7 @@ import authenticationAPI from '../../apis/authApi';
 import { Validate } from '../../utils/validate';
 import { useDispatch } from 'react-redux';
 import { addAuth } from '../../redux/reducers/authReducer';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const SignInScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -40,6 +41,7 @@ const SignInScreen = ({ navigation }: any) => {
 
   const handlerLogin = async () => {
     const emailValidation = Validate.email(email);
+    setIsLoading(true);
     if (emailValidation) {
       setIsLoading(true);
       try {
@@ -121,7 +123,7 @@ const SignInScreen = ({ navigation }: any) => {
       <SpaceComponent height={16} />
       <SectionComponent>
         <ButtonComponent
-          text="Login"
+          text="Sign In"
           disabled={isLoading || isDissable}
           onPress={handlerLogin}
           type="primary"

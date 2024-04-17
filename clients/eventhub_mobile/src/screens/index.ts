@@ -11,6 +11,7 @@ import SearchEvents from './events/SearchEvents';
 import HomeScreen from './home/HomeScreen';
 import MapScreen from './maps/MapScreen';
 import ProfileScreen from './profiles/ProfileScreen';
+import EditProfileScreen from './profiles/EditProfileScreen';
 
 export {
   HomeScreen,
@@ -26,4 +27,5 @@ export {
   ProfileScreen,
   SearchEvents,
   EventDetail,
+  EditProfileScreen,
 };

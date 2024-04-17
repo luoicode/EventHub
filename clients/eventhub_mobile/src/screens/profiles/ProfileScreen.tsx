@@ -13,6 +13,7 @@ import {
 import { ProfileModel } from '../../models/ProfileModel';
 import {
   AuthState,
+  addAuth,
   authSelector
 } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
@@ -33,6 +34,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
       const { id } = route.params;
 
       setProfileId(id);
+
+      if (route.params.isUpdated) {
+        getProfile();
+
+      }
     } else {
       setProfileId(auth.id);
     }
@@ -71,7 +77,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
   };
 
   return (
-    <ContainerComponent back title="Profile">
+    <ContainerComponent isScroll back title="Profile">
       {isLoading ? (
         <ActivityIndicator />
       ) : profile ? (
@@ -89,8 +95,8 @@ const ProfileScreen = ({ navigation, route }: any) => {
               text={
                 profile.name
                   ? profile.name
-                  : profile.familyName && profile.givenName
-                    ? `${profile.familyName} ${profile.givenName}`
+                  : profile.familyName && profile.giveName
+                    ? `${profile.familyName} ${profile.giveName}`
                     : profile.email
               }
               title
@@ -116,7 +122,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
               </View>
             </RowComponent>
           </SectionComponent>
-          {auth.id !== profileId ? <AboutProfile /> : <EditProfile />}
+          {auth.id !== profileId ? (<AboutProfile />) : (<EditProfile profile={profile} />)}
         </>
       ) : (
         <TextComponent text="profile not found!" />

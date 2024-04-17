@@ -50,7 +50,7 @@ const ContainerComponent = (props: Props) => {
             {title ? (
               <TextComponent
                 text={title}
-                size={16}
+                size={24}
                 font={fontFamilies.medium}
                 flex={1}
               />
