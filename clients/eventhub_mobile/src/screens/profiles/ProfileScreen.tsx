@@ -137,7 +137,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
                   backgroundColor: appColors.gray2,
                   width: 1,
                   height: '100%',
-                }}></View>
+                }} />
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title
@@ -150,7 +150,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
             </RowComponent>
           </SectionComponent>
           {auth.id !== profileId ? (
-            <AboutProfile />
+            <AboutProfile profile={profile} />
           ) : (
             <EditProfile profile={profile} />
           )}

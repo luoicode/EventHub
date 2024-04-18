@@ -6,6 +6,7 @@ export interface AuthState {
   accesstoken: string;
   follow_events: string[];
   fcmTokens?: string[];
+  following?: string[];
 }
 
 const initialState: AuthState = {
