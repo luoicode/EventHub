@@ -94,12 +94,16 @@ const AboutProfile = (props: Props) => {
   return (
     <>
       <SectionComponent>
-        <RowComponent>
-          <TouchableOpacity
+        <RowComponent >
+          <ButtonComponent
+            type='primary'
+            iconFlex='left'
             onPress={handlerToggleFollowing}
-            style={[
+            styles={[
               globalStyles.button,
               {
+                marginLeft: 50,
+                width: 'auto',
                 flex: 1,
                 borderWidth: 1,
                 borderColor:
@@ -111,40 +115,31 @@ const AboutProfile = (props: Props) => {
                     ? appColors.danger
                     : appColors.white,
               },
-            ]}>
-            <Feather
-              name={
-                auth.following && auth.following.includes(profile.uid)
-                  ? 'user-minus'
-                  : 'user-plus'
-              }
-              size={26}
-              color={
-                auth.following && auth.following.includes(profile.uid)
-                  ? appColors.white
-                  : appColors.primary
-              }
-            />
-            <SpaceComponent width={20} />
-            <TextComponent
-              size={20}
-              text={
-                auth.following && auth.following.includes(profile.uid)
-                  ? 'Unfollow'
-                  : 'Follow'
-              }
-              color={
-                auth.following && auth.following.includes(profile.uid)
-                  ? appColors.white
-                  : appColors.primary
-              }
-              font={fontFamilies.medium}
-            />
-          </TouchableOpacity>
+            ]}
+            icon={
+              <Feather
+                name={
+                  auth.following && auth.following.includes(profile.uid)
+                    ? 'user-minus'
+                    : 'user-plus'
+                }
+                size={26}
+                color={
+                  auth.following && auth.following.includes(profile.uid)
+                    ? appColors.white
+                    : appColors.primary
+                }
+              />
+            }
+          />
           <SpaceComponent width={20} />
-
-          <TouchableOpacity
-            style={[
+          <ButtonComponent
+            type='primary'
+            iconFlex='left'
+            text='Message'
+            textColor={appColors.primary}
+            onPress={() => { }}
+            styles={[
               globalStyles.button,
               {
                 flex: 1,
@@ -152,22 +147,21 @@ const AboutProfile = (props: Props) => {
                 borderColor: appColors.primary,
                 backgroundColor: appColors.white,
               },
-            ]}>
-            <Ionicons
-              name="chatbubble-ellipses-outline"
-              size={26}
-              color={appColors.primary}
-            />
-            <SpaceComponent width={20} />
-            <TextComponent
-              size={20}
-              text="Messages"
-              color={appColors.primary}
-              font={fontFamilies.medium}
-            />
-          </TouchableOpacity>
+            ]}
+            icon={
+              <Ionicons
+                name='chatbubbles-outline'
+                size={26}
+                color={appColors.primary}
+              />
+            }
+          />
         </RowComponent>
       </SectionComponent>
+
+
+      {/* Abou event reviews */}
+
       <SectionComponent>
         <RowComponent>
           {tabs.map(item => (

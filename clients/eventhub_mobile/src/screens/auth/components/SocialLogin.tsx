@@ -11,6 +11,7 @@ import authenticationAPI from '../../../apis/authApi';
 import { Facebook, Google } from '../../../assets/svgs';
 import {
   ButtonComponent,
+  RowComponent,
   SectionComponent,
   SpaceComponent,
   TextComponent,
@@ -102,26 +103,23 @@ const SocialLogin = () => {
         font={fontFamilies.medium}
       />
       <SpaceComponent height={16} />
-      <ButtonComponent
-        type="primary"
-        onPress={handlerLoginWithGoogle}
-        color={appColors.white}
-        textColor={appColors.text}
-        text="Login with Google"
-        textFont={fontFamilies.regular}
-        iconFlex="left"
-        icon={<Google />}
-      />
-      <ButtonComponent
-        type="primary"
-        color={appColors.white}
-        textColor={appColors.text}
-        text="Login with Facebook"
-        textFont={fontFamilies.regular}
-        onPress={handlerLoginWithFacebook}
-        iconFlex="left"
-        icon={<Facebook />}
-      />
+      <RowComponent>
+        <ButtonComponent
+          styles={{ width: 'auto', borderRadius: 100 }}
+          onPress={handlerLoginWithGoogle}
+          color={appColors.white}
+          iconFlex="left"
+          icon={<Google />}
+        />
+        <SpaceComponent width={30} />
+        <ButtonComponent
+          styles={{ width: 'auto', borderRadius: 100 }}
+          onPress={handlerLoginWithGoogle}
+          color={appColors.white}
+          iconFlex="left"
+          icon={<Facebook />}
+        />
+      </RowComponent>
       <LoadingModal visible={isLoading} />
     </SectionComponent>
   );
