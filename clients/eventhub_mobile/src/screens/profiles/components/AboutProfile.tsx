@@ -12,10 +12,14 @@ import { appColors } from '../../../constants/appColors';
 import { globalStyles } from '../../../styles/globalStyles';
 import { fontFamilies } from '../../../constants/fontFamilies';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
-import { authSelector } from '../../../redux/reducers/authReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  authSelector,
+  updateFollowing,
+} from '../../../redux/reducers/authReducer';
 import { ProfileModel } from '../../../models/ProfileModel';
 import userAPI from '../../../apis/userApi';
+import { LoadingModal } from '../../../modals';
 
 interface Props {
   profile: ProfileModel;
@@ -24,6 +28,7 @@ interface Props {
 const AboutProfile = (props: Props) => {
   const { profile } = props;
   const [tabSelected, setTabSelected] = useState('about');
+  const [isLoading, setIsLoading] = useState(false);
 
   const tabs = [
     {
@@ -41,7 +46,7 @@ const AboutProfile = (props: Props) => {
   ];
 
   const auth = useSelector(authSelector);
-
+  const dispatch = useDispatch();
 
   const rednerTabContent = (id: string) => {
     let content = <></>;
@@ -64,19 +69,27 @@ const AboutProfile = (props: Props) => {
   };
 
   const handlerToggleFollowing = async () => {
-    const api = `/update-following`
+    const api = `/update-following`;
+    setIsLoading(true);
 
     try {
-      const res = await userAPI.HandlerUser(api, {
-        uid: auth.id,
-        authorId: profile.uid
-      }, 'put')
+      const res = await userAPI.HandlerUser(
+        api,
+        {
+          uid: auth.id,
+          authorId: profile.uid,
+        },
+        'put',
+      );
 
-      console.log(res)
+      dispatch(updateFollowing(res.data));
+      setIsLoading(false);
     } catch (error) {
-      console.log(error)
+      setIsLoading(false);
+
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -89,16 +102,42 @@ const AboutProfile = (props: Props) => {
               {
                 flex: 1,
                 borderWidth: 1,
-                borderColor: appColors.primary,
-                backgroundColor: appColors.white,
+                borderColor:
+                  auth.following && auth.following.includes(profile.uid)
+                    ? appColors.white
+                    : appColors.primary,
+                backgroundColor:
+                  auth.following && auth.following.includes(profile.uid)
+                    ? appColors.danger
+                    : appColors.white,
               },
             ]}>
-            <Feather name="user-plus" size={26} color={appColors.primary} />
+            <Feather
+              name={
+                auth.following && auth.following.includes(profile.uid)
+                  ? 'user-minus'
+                  : 'user-plus'
+              }
+              size={26}
+              color={
+                auth.following && auth.following.includes(profile.uid)
+                  ? appColors.white
+                  : appColors.primary
+              }
+            />
             <SpaceComponent width={20} />
             <TextComponent
               size={20}
-              text="Follow"
-              color={appColors.primary}
+              text={
+                auth.following && auth.following.includes(profile.uid)
+                  ? 'Unfollow'
+                  : 'Follow'
+              }
+              color={
+                auth.following && auth.following.includes(profile.uid)
+                  ? appColors.white
+                  : appColors.primary
+              }
               font={fontFamilies.medium}
             />
           </TouchableOpacity>
@@ -171,6 +210,7 @@ const AboutProfile = (props: Props) => {
         </RowComponent>
         {rednerTabContent(tabSelected)}
       </SectionComponent>
+      <LoadingModal visible={isLoading} />
     </>
   );
 };
