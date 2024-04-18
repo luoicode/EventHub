@@ -14,7 +14,7 @@ import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
-  text: string;
+  text?: string;
   type?: 'primary' | 'text' | 'link';
   styles?: StyleProp<ViewStyle>;
   color?: string;
@@ -61,30 +61,38 @@ const ButtonComponent = (props: Props) => {
           styles,
         ]}>
         {icon && iconFlex === 'left' && icon}
-        <TextComponent
-          text={text}
-          color={textColor ?? appColors.white}
-          styles={[
-            textStyles,
-            {
-              marginLeft: icon ? 12 : 0,
-              fontSize: 16,
-              textAlign: 'center',
-            },
-          ]}
-          flex={icon && iconFlex === 'right' ? 1 : 0}
-          font={textFont ?? fontFamilies.medium}
-        />
+        {
+          text &&
+          <TextComponent
+            text={text}
+            color={textColor ?? appColors.white}
+            styles={[
+              textStyles,
+              {
+                marginLeft: icon ? 12 : 0,
+                fontSize: 16,
+                textAlign: 'center',
+              },
+            ]}
+            flex={icon && iconFlex === 'right' ? 1 : 0}
+            font={textFont ?? fontFamilies.medium}
+          />
+        }
         {icon && iconFlex === 'right' && icon}
       </TouchableOpacity>
     </View>
   ) : (
     <TouchableOpacity onPress={onPress}>
-      <TextComponent
-        flex={0}
-        text={text}
-        color={type === 'link' ? appColors.link : appColors.text}
-      />
+      {
+        icon && icon
+      }
+      {text &&
+        <TextComponent
+          flex={0}
+          text={text}
+          color={type === 'link' ? appColors.link : appColors.text}
+        />
+      }
     </TouchableOpacity>
   );
 };

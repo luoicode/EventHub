@@ -7,19 +7,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { TagComponent } from '.';
 import { appColors } from '../constants/appColors';
+import { Category } from '../models/Category';
 interface Props {
-    isColor?: boolean;
+    isFill?: boolean;
 }
 
-interface Category {
-    icon: ReactNode;
-    color: string;
-    label: string;
-    key: string;
-}
 
 const CategoriesList = (props: Props) => {
-    const { isColor } = props;
+    const { isFill } = props;
     const categories: Category[] = [
         {
             key: 'sports',
@@ -28,7 +23,7 @@ const CategoriesList = (props: Props) => {
                 <FontAwesome5
                     name="basketball-ball"
                     size={22}
-                    color={isColor ? appColors.white : '#F0635A'}
+                    color={isFill ? appColors.white : '#F0635A'}
                 />
             ),
             color: '#F0635A',
@@ -40,7 +35,7 @@ const CategoriesList = (props: Props) => {
                 <FontAwesome5
                     name="music"
                     size={22}
-                    color={isColor ? appColors.white : '#F59762'}
+                    color={isFill ? appColors.white : '#F59762'}
                 />
             ),
             color: '#F59762',
@@ -51,7 +46,7 @@ const CategoriesList = (props: Props) => {
             icon: <FontAwesome6
                 name="bowl-food"
                 size={22}
-                color={isColor ? appColors.white : '#29D697'}
+                color={isFill ? appColors.white : '#29D697'}
             />,
             color: '#29D697',
         },
@@ -62,7 +57,7 @@ const CategoriesList = (props: Props) => {
                 <Ionicons
                     name="color-palette-outline"
                     size={22}
-                    color={isColor ? appColors.white : '#46CDFB'}
+                    color={isFill ? appColors.white : '#46CDFB'}
                 />
             ),
             color: '#46CDFB',
@@ -74,7 +69,7 @@ const CategoriesList = (props: Props) => {
                 <Ionicons
                     name="game-controller"
                     size={22}
-                    color={isColor ? appColors.white : '#E1AFD1'}
+                    color={isFill ? appColors.white : '#E1AFD1'}
                 />
             ),
             color: '#E1AFD1',
@@ -93,11 +88,11 @@ const CategoriesList = (props: Props) => {
                         marginRight: index === categories.length - 1 ? 38 : 12,
                         minWidth: 82,
                     }}
-                    bgColor={isColor ? item.color : appColors.white}
+                    bgColor={isFill ? item.color : appColors.white}
                     onPress={() => { }}
                     icon={item.icon}
                     label={item.label}
-                    textColor={isColor ? appColors.white : appColors.text2}
+                    textColor={isFill ? appColors.white : appColors.text2}
                 />
             )}
         />

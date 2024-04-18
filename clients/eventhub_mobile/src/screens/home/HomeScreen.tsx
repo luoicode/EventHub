@@ -231,7 +231,7 @@ const HomeScreen = ({ navigation }: any) => {
           <SpaceComponent height={30} />
         </View>
         <View style={{ marginBottom: -20 }}>
-          <CategoriesList isColor />
+          <CategoriesList isFill />
         </View>
       </View>
       <ScrollView

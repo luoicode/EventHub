@@ -9,4 +9,5 @@ export interface ProfileModel {
   updateAt: string;
   following: string[];
   uid: string;
+  interest?: string[];
 }

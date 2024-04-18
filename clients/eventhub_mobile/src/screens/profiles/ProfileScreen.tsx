@@ -4,21 +4,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import userAPI from '../../apis/userApi';
 import {
   AvatarComponent,
+  ButtonComponent,
   ContainerComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
-  TextComponent
+  TextComponent,
 } from '../../components';
 import { ProfileModel } from '../../models/ProfileModel';
 import {
   AuthState,
   addAuth,
-  authSelector
+  authSelector,
 } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
 import AboutProfile from './components/AboutProfile';
 import EditProfile from './components/EditProfile';
+import { More } from 'iconsax-react-native';
+import { appColors } from '../../constants/appColors';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,12 +41,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
 
       if (route.params.isUpdated) {
         getProfile();
-
       }
     } else {
       setProfileId(auth.id);
     }
-  }, [route]);
+  }, [route.params]);
 
   useEffect(() => {
     if (profileId) {
@@ -77,7 +80,23 @@ const ProfileScreen = ({ navigation, route }: any) => {
   };
 
   return (
-    <ContainerComponent isScroll back title="Profile">
+    <ContainerComponent
+      isScroll
+      back
+      title={route.params ? ' ' : 'Profile'}
+      right={
+        <ButtonComponent
+          color={appColors.text}
+          icon={
+            <MaterialIcons
+              name="more-vert"
+              size={28}
+              color={appColors.text}
+              onPress={() => { }}
+            />
+          }
+        />
+      }>
       {isLoading ? (
         <ActivityIndicator />
       ) : profile ? (
@@ -110,19 +129,31 @@ const ProfileScreen = ({ navigation, route }: any) => {
                   text={`${profile.following.length}`}
                   size={20}
                 />
+                <SpaceComponent height={8} />
                 <TextComponent text="Following" />
               </View>
+              <View
+                style={{
+                  backgroundColor: appColors.gray2,
+                  width: 1,
+                  height: '100%',
+                }}></View>
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title
                   text={`${userFollowers.length}`}
                   size={20}
                 />
+                <SpaceComponent height={8} />
                 <TextComponent text="Followers" />
               </View>
             </RowComponent>
           </SectionComponent>
-          {auth.id !== profileId ? (<AboutProfile />) : (<EditProfile profile={profile} />)}
+          {auth.id !== profileId ? (
+            <AboutProfile />
+          ) : (
+            <EditProfile profile={profile} />
+          )}
         </>
       ) : (
         <TextComponent text="profile not found!" />
