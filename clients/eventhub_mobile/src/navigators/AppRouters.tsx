@@ -23,7 +23,13 @@ const AppRouters = () => {
     }, []);
 
     useEffect(() => {
-        UserHandler.getFollowersById(auth.id, dispatch);
+        if (auth.id) {
+            UserHandler.getFollowersById(auth.id, dispatch);
+            UserHandler.getFollowingByUid(auth.id, dispatch);
+
+        }
+
+
     }, [auth.id]);
 
     const handlerGetDatas = async () => {

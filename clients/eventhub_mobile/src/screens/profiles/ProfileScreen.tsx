@@ -126,11 +126,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title
-                  text={`${profile.following.length}`}
+                  text={`${userFollowers.length}`}
                   size={20}
                 />
                 <SpaceComponent height={8} />
-                <TextComponent text="Following" />
+                <TextComponent text="Follower" />
               </View>
               <View
                 style={{
@@ -141,11 +141,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title
-                  text={`${userFollowers.length}`}
+                  text={`${profile.following.length}`}
                   size={20}
                 />
                 <SpaceComponent height={8} />
-                <TextComponent text="Followers" />
+                <TextComponent text="Following" />
               </View>
             </RowComponent>
           </SectionComponent>

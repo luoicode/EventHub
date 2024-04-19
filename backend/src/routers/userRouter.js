@@ -8,6 +8,7 @@ const {
     updateProfile,
     updateInterest,
     toggleFollowing,
+    getFollowing,
 } = require("../controllers/userController");
 
 const userRouter = Router();
@@ -20,5 +21,7 @@ userRouter.get("/get-followers", getFollowers);
 userRouter.put("/update-profile", updateProfile);
 userRouter.put("/update-interest", updateInterest);
 userRouter.put("/update-following", toggleFollowing);
+userRouter.get("/get-following", getFollowing);
+
 
 module.exports = userRouter;

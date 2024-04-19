@@ -19,6 +19,7 @@ import TabBarComponent from './TabBarComponent';
 import TagComponent from './TagComponent';
 import TextComponent from './TextComponent';
 import UploadImagePicker from './UploadImagePicker';
+import UserComponent from './UserComponent';
 
 export {
   SpaceComponent,
@@ -42,4 +43,5 @@ export {
   MarkerCustom,
   LoadingComponent,
   AvatarComponent,
+  UserComponent,
 };

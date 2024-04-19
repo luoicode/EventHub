@@ -10,4 +10,5 @@ export interface ProfileModel {
   following: string[];
   uid: string;
   interest?: string[];
+  type?: 'Organizer' | 'Personal' | undefined;
 }
