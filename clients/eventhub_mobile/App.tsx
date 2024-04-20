@@ -7,6 +7,8 @@ import store from './src/redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host } from 'react-native-portalize';
 import { HandlerNotification } from './src/utils/handlerNotification';
+import Toast from 'react-native-toast-message';
+import linking from './src/linking';
 
 const App = () => {
 
@@ -24,11 +26,12 @@ const App = () => {
           translucent
         />
         <Host>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <AppRouters />
           </NavigationContainer>
         </Host>
       </Provider>
+      <Toast />
     </GestureHandlerRootView>
   );
 };

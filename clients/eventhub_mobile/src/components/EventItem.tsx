@@ -30,13 +30,12 @@ const EventItem = (props: Props) => {
     const navigation: any = useNavigation();
     const auth: AuthState = useSelector(authSelector);
 
-    // console.log(new Date(item.date).toISOString());
 
     return (
         <CardComponent
             isShadows
             styles={{ width: appInfo.sizes.WIDTH * 0.7 }}
-            onPress={() => navigation.navigate('EventDetail', { item })}>
+            onPress={() => navigation.navigate('EventDetail', { id: item._id })}>
             {type === 'card' ? (
                 <>
                     <ImageBackground

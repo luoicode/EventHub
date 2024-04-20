@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const EventModel = require("../models/eventModel");
 const CategoryModel = require("../models/categoryModel");
+const { request } = require("express");
 
 const calcDistanceLocation = ({
     currentLat,
@@ -37,6 +38,20 @@ const addNewEvent = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error("Event data not found!!!");
     }
+});
+
+const getEventById = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+
+    const item = await EventModel.findById({ _id: id });
+
+    console.log(item);
+
+    res.status(200).json({
+        message: 'fafa',
+        data: item,
+    });
+
 });
 
 const getEvents = asyncHandler(async (req, res) => {
@@ -131,4 +146,4 @@ const getCategories = asyncHandler(async (req, res) => {
     })
 })
 
-module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories };
+module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories, getEventById };

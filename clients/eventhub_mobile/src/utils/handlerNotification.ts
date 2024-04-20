@@ -16,7 +16,6 @@ export class HandlerNotification {
 
   static getFcmToken = async () => {
     const fcmtoken = await AsyncStorage.getItem('fcmtoken');
-
     if (!fcmtoken) {
       const token = await messaging().getToken();
 

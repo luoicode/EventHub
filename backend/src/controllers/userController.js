@@ -1,8 +1,31 @@
 const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/userModel");
-const { query } = require("express");
 const EventModel = require("../models/eventModel");
-const http = require("http");
+const nodemailer = require("nodemailer");
+const { JWT } = require('google-auth-library')
+const axios = require('axios')
+require("dotenv").config();
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: process.env.USERNAME_EMAIL,
+        pass: process.env.PASSWORD_EMAIL,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
+const handlerSendMail = async (val) => {
+    try {
+        await transporter.sendMail(val);
+
+        return "OK";
+    } catch (error) {
+        return error;
+    }
+};
 
 const getAllUsers = asyncHandler(async (req, res) => {
     const users = await UserModel.find({});
@@ -15,8 +38,6 @@ const getAllUsers = asyncHandler(async (req, res) => {
             id: item.id,
         })
     );
-
-    await handlerSendNotification();
 
     res.status(200).json({
         message: "Get users successfully!!!",
@@ -57,46 +78,59 @@ const updateFcmToken = asyncHandler(async (req, res) => {
     });
 });
 
-const handlerSendNotification = async () => {
-    var request = require("request");
-    var options = {
-        method: "POST",
-        url: "https://fcm.googleapis.com/fcm/send",
+const getAccessToken = () => {
+    return new Promise(function (resolve, reject) {
+        const key = require('../eventhub-accesstoken.json');
+        const jwtClient = new JWT(
+            key.client_email,
+            null,
+            key.private_key,
+            ['https://www.googleapis.com/auth/cloud-platform'],
+            null
+        );
+        jwtClient.authorize(function (err, tokens) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(tokens.access_token);
+        });
+    });
+}
+
+const handlerSendNotification = async ({ token, title, subtitle, body, data }) => {
+    const accesstoken = await getAccessToken();
+
+    const axios = require('axios')
+    let newdata = JSON.stringify({
+        message: {
+            token,
+            notfication: {
+                title,
+                body,
+            },
+            data,
+        }
+    });
+    let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://fcm.googleapis.com/v1/projects/eventhub-ed7f7/messages:send",
         headers: {
             "Content-Type": "application/json",
-            Authorization:
-                "key=AAAAW9HyE-U:APA91bFApLKCmAOWpQIzUwXwK1qDi9lDNJ5qtMty6Ml-bCdG-QV8lLd1g8oBFiQgCqSaeQHa-cCHo8pddUvUj2ymcoWGGGEfDDO2FaVh-PSWofpEvvG_AbgV_zQEvexoOyYvtZ1Ub7sq",
+            Authorization: `Bearer ${accesstoken}`,
+
         },
-        body: JSON.stringify({
-            registration_ids: [
-                "cBXAL6sWTnqjp5QuGtuBhe:APA91bFRtGqa4I41dE0D6NcvsNf9PyU4k5Am5Vdji5-FCKNN5NvBNEy3i_H2MkO9Yai__kmWnQ1vaINkBSHaVa0dSynEeQspHW0yBb6EV0OpbAbAv-OeJCoMAbm8DKWsflqcgdVZreWh",
-            ],
-            notification: {
-                title: "title",
-                subtitle: "sub title",
-                body: "content of message",
-                sound: "default",
-            },
-            contentAvailable: "true",
-            priority: "high",
-            apns: {
-                payload: {
-                    aps: {
-                        contentAvailable: "true",
-                    },
-                },
-                headers: {
-                    "apns-push-type": "background",
-                    "apns-priority": "5",
-                    "apns-topic": "",
-                },
-            },
-        }),
+        data: newdata,
     };
-    request(options, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-    });
+
+    await axios
+        .request(config)
+        .then((reponse) => {
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 };
 const getProfile = asyncHandler(async (req, res) => {
     const { uid } = req.query;
@@ -234,6 +268,94 @@ const getFollowing = asyncHandler(async (req, res) => {
         throw new Error("can not find uid");
     }
 });
+
+const pushInviteNotification = asyncHandler(async (req, res) => {
+
+    const { ids, eventId } = req.body;
+
+    ids.forEach(async (id) => {
+        const user = await UserModel.findById(id)
+
+        const fcmTokens = user.fcmTokens
+
+        if (fcmTokens > 0) {
+            fcmTokens.forEach(async token => await handlerSendNotification({
+                fcmTokens: token,
+                title: 'asd',
+                subtitle: '',
+                body: 'You have been invited to participate in the event!',
+                data: {
+                    eventId,
+                }
+            }))
+
+        } else {
+            //send mail
+            const data = {
+                from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
+                to: email,
+                subject: "Your Verification Code for EventHub",
+                text: "Your code to verification email",
+                html: `
+                <html>
+                    <head>
+                        <style>
+                            body {
+                                background-color: #212429;
+                                color: #ffffff;
+                                font-family: Arial, sans-serif;
+                            }
+                            .container {
+                                padding: 20px;
+                                text-align: center;
+                            }
+                            img {
+                                max-width: 200px;
+                                height: auto;
+                                margin-bottom: 20px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <img src="https://i.imgur.com/kPChuuE.png" alt="EventHub Logo">
+                            <h2>Dear User,</h2>
+                            <p><strong>${eventId}</strong></p>
+                            <p>Best regards,<br>The EventHub Team</p>
+                        </div>
+                    </body>
+                </html>
+            `,
+            };
+
+            await handlerSendMail(data);
+        }
+    })
+
+    res.status(200).json({
+        message: "asds",
+        data: [],
+    });
+
+});
+
+const pushNotification = asyncHandler(async (req, res) => {
+
+    const { title, body, data } = req.body
+
+    await handlerSendNotification({
+        token: 'cuY-FnV-RjiDcejQhyZXBw:APA91bEBKU0H7DO3mD-Em7IFUsKUOfDfCNl2D3oBAJhSKPIgABuggUVqMqfTaCjGRIapvnyF0B1IYPH0cNK_PoACaXnE6eLpmWBVPjpVXOiyYRu5Ph8UgkwZebmjDeMkXFErMDagdN9C',
+        data,
+        title,
+        body,
+    })
+
+    res.status(200).json({
+        message: 'asdasd',
+        data: [],
+    })
+
+});
 module.exports = {
     getAllUsers,
     getEventsFollowed,
@@ -243,5 +365,7 @@ module.exports = {
     updateProfile,
     updateInterest,
     toggleFollowing,
-    getFollowing
+    getFollowing,
+    pushInviteNotification,
+    pushNotification
 };

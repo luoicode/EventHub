@@ -1,29 +1,30 @@
+import { SearchNormal1, TickCircle } from 'iconsax-react-native';
 import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Share, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
+import userAPI from '../apis/userApi';
 import {
   ButtonComponent,
   InputComponent,
   RowComponent,
   SectionComponent,
-  SpaceComponent,
   TextComponent,
   UserComponent,
 } from '../components';
-import { authSelector } from '../redux/reducers/authReducer';
-import { fontFamilies } from '../constants/fontFamilies';
-import { SearchNormal1, TickCircle } from 'iconsax-react-native';
 import { appColors } from '../constants/appColors';
-import { Alert, Share, View } from 'react-native';
+import { fontFamilies } from '../constants/fontFamilies';
+import { authSelector } from '../redux/reducers/authReducer';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
+  eventId: string
 }
 
 const ModalInvite = (props: Props) => {
-  const { visible, onClose } = props;
+  const { visible, onClose, eventId } = props;
   const [friendId, setFriendId] = useState<string[]>([]);
   const [userSelected, setUserSelected] = useState<string[]>([]);
   const modalizeRef = useRef<Modalize>();
@@ -33,7 +34,7 @@ const ModalInvite = (props: Props) => {
     if (auth.following && auth.following.length > 0) {
       setFriendId(auth.following);
     }
-  }, [auth])
+  }, [auth]);
 
   useEffect(() => {
     if (visible) {
@@ -44,20 +45,20 @@ const ModalInvite = (props: Props) => {
   }, [visible]);
 
   const handlerSelectedId = (id: string) => {
-    const items: string[] = [...userSelected]
-    const index = items.findIndex(element => element === id)
+    const items: string[] = [...userSelected];
+    const index = items.findIndex(element => element === id);
 
     if (index !== -1) {
-      items.splice(index, 1)
+      items.splice(index, 1);
     } else {
-      items.push(id)
+      items.push(id);
     }
 
-    setUserSelected(items)
-  }
+    setUserSelected(items);
+  };
   const onShare = async () => {
     try {
-      const eventLink = "https://example.com/eventhub";
+      const eventLink = 'https://example.com/eventhub';
 
       const result = await Share.share({
         message: `Join the event right here: ${eventLink}`,
@@ -77,15 +78,45 @@ const ModalInvite = (props: Props) => {
     }
   };
 
+  const handlerSendInviteNotification = async () => {
+    if (userSelected.length > 0) {
+      const api = `/send-invite`;
+
+      try {
+        await userAPI.HandlerUser(
+          api,
+          {
+            ids: userSelected,
+            eventId: '',
+          },
+          'post',
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      Alert.alert('', 'Please select user want to invite!!');
+    }
+  };
+
   return (
     <Portal>
       <Modalize
         handlePosition="inside"
         adjustToContentHeight
         ref={modalizeRef}
-        FooterComponent={<SectionComponent>
-          <ButtonComponent text='Invite' type='primary' onPress={onShare} />
-        </SectionComponent>}
+        FooterComponent={
+          <SectionComponent>
+            <ButtonComponent
+              text="Invite"
+              type="primary"
+              onPress={() => {
+                onShare();
+                handlerSendInviteNotification();
+              }}
+            />
+          </SectionComponent>
+        }
         onClose={onClose}>
         <SectionComponent styles={{ marginTop: 30 }}>
           <TextComponent
@@ -104,10 +135,22 @@ const ModalInvite = (props: Props) => {
           {friendId.length ? (
             friendId.map((id: string) => (
               <RowComponent key={id}>
-                <View style={{ flex: 1, }}>
-                  <UserComponent types="Invite" onPress={() => handlerSelectedId(id)} userId={id} />
+                <View style={{ flex: 1 }}>
+                  <UserComponent
+                    types="Invite"
+                    onPress={() => handlerSelectedId(id)}
+                    userId={id}
+                  />
                 </View>
-                <TickCircle size={24} variant='Bold' color={userSelected.includes(id) ? appColors.primary : appColors.gray2} />
+                <TickCircle
+                  size={24}
+                  variant="Bold"
+                  color={
+                    userSelected.includes(id)
+                      ? appColors.primary
+                      : appColors.gray2
+                  }
+                />
               </RowComponent>
             ))
           ) : (

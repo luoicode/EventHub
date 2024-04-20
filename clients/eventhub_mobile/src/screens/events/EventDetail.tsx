@@ -2,13 +2,15 @@ import { ArrowLeft, ArrowRight, Calendar, Location } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react';
 import {
   Image,
-  ImageBackground,
   ScrollView,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import eventAPI from '../../apis/eventApi';
+import userAPI from '../../apis/userApi';
 import {
   AvatarGroup,
   ButtonComponent,
@@ -21,41 +23,49 @@ import {
   TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
-import { EventModel } from '../../models/EventModel';
-import { globalStyles } from '../../styles/globalStyles';
+import { appInfo } from '../../constants/appInfos';
 import { fontFamilies } from '../../constants/fontFamilies';
-import { useDispatch, useSelector } from 'react-redux';
+import { LoadingModal } from '../../modals';
+import ModalInvite from '../../modals/ModalInvite';
+import { EventModel } from '../../models/EventModel';
+import { ProfileModel } from '../../models/ProfileModel';
 import {
   AuthState,
   authSelector,
   updateFollowing,
 } from '../../redux/reducers/authReducer';
-import eventAPI from '../../apis/eventApi';
-import { LoadingModal } from '../../modals';
+import { globalStyles } from '../../styles/globalStyles';
 import { UserHandler } from '../../utils/UserHandlers';
 import { dateTime } from '../../utils/dateTime';
-import { appInfo } from '../../constants/appInfos';
-import userAPI from '../../apis/userApi';
-import { ProfileModel } from '../../models/ProfileModel';
-import ModalInvite from '../../modals/ModalInvite';
 
 const EventDetail = ({ navigation, route }: any) => {
-  const { item }: { item: EventModel } = route.params;
+  const { id }: { id: string } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [followers, setFollowers] = useState<string[]>([]);
   const [profile, setProfile] = useState<ProfileModel>();
   const [isVisibleModalInvite, setIsVisibleModalInvite] = useState(false);
+  const [item, setItem] = useState<EventModel>();
+
 
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
+
   useEffect(() => {
-    getFollowersByID();
-    getProfile(item.authorId);
+    if (id) {
+      getEventById();
+      getFollowersByID();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (item) {
+      getProfile(item.authorId);
+    }
   }, [item]);
 
   const getFollowersByID = async () => {
-    const api = `/followers?id=${item._id}`;
+    const api = `/followers?id=${id}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
@@ -90,7 +100,7 @@ const EventDetail = ({ navigation, route }: any) => {
       await eventAPI.HandlerEvent(
         api,
         {
-          id: item._id,
+          id,
           followers: data,
         },
         'post',
@@ -136,7 +146,20 @@ const EventDetail = ({ navigation, route }: any) => {
     }
   };
 
-  return (
+  const getEventById = async () => {
+    const api = `/get-event?id=${id}`;
+
+
+    try {
+      const res: any = await eventAPI.HandlerEvent(api);
+
+      setItem(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return item ? (
     <View style={{ flex: 1, backgroundColor: appColors.white }}>
       <View
         style={{
@@ -413,9 +436,10 @@ const EventDetail = ({ navigation, route }: any) => {
       <ModalInvite
         visible={isVisibleModalInvite}
         onClose={() => setIsVisibleModalInvite(false)}
+        eventId={item._id}
       />
     </View>
-  );
+  ) : <></>;
 };
 
 export default EventDetail;

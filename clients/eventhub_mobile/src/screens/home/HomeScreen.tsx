@@ -20,6 +20,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  ButtonComponent,
   CategoriesList,
   CircleComponent,
   EventItem,
@@ -41,6 +42,7 @@ import { EventModel } from '../../models/EventModel';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
+import Toast from 'react-native-toast-message';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
@@ -68,13 +70,17 @@ const HomeScreen = ({ navigation }: any) => {
     getEvents();
 
     messaging().onMessage(
-      async (mess: FirebaseMessagingTypes.RemoteMessage) => {
-        if (Platform.OS === 'android') {
-          ToastAndroid.show(
-            mess.notification?.title ?? 'asdasds',
-            ToastAndroid.SHORT,
-          );
-        }
+      async (mess: any) => {
+        Toast.show({
+          text1: mess.notification.title,
+          text2: mess.notification.body,
+          onPress: () => {
+            console.log(mess)
+            const id = mess.data.id;
+            console.log(id)
+            navigation.navigate('EventDetail', { id });
+          },
+        })
       },
     );
   }, []);
@@ -105,7 +111,6 @@ const HomeScreen = ({ navigation }: any) => {
       }&limit=5`
       : `/get-events?limit=5`
       }`;
-    // &date=${new Date().toISOString()}`;
 
     setIsLoading(true);
     try {
@@ -119,6 +124,7 @@ const HomeScreen = ({ navigation }: any) => {
       console.log(`Get event error in home screen line 74 ${error}`);
     }
   };
+
 
   return (
     <View style={[globalStyles.container]}>

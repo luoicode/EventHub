@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { EditProfileScreen, ProfileScreen } from '../screens';
 
+
 const ProfileNavigator = () => {
     const Stack = createNativeStackNavigator();
     return (
@@ -11,6 +12,7 @@ const ProfileNavigator = () => {
             }}>
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+
 
         </Stack.Navigator>
     );
