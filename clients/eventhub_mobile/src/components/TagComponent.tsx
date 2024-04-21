@@ -12,17 +12,19 @@ interface Props {
     textColor?: string;
     bgColor?: string;
     styles?: StyleProp<ViewStyle>;
-    textStyle?: StyleProp<TextStyle>
+    textStyles?: StyleProp<TextStyle>;
 }
 
 const TagComponent = (props: Props) => {
-    const { label, icon, textColor, onPress, bgColor, styles, textStyle } = props;
+    const { onPress, label, icon, textColor, bgColor, styles, textStyles } = props;
+
     return (
         <TouchableOpacity
             onPress={onPress}
             style={[
                 globalStyles.row,
                 globalStyles.tag,
+                globalStyles.center,
                 {
                     backgroundColor: bgColor ? bgColor : appColors.white,
                 },
@@ -32,7 +34,7 @@ const TagComponent = (props: Props) => {
             <TextComponent
                 font={fontFamilies.medium}
                 text={label}
-                styles={[{ marginLeft: icon ? 8 : 0 }, textStyle]}
+                styles={[{ marginLeft: icon ? 8 : 0 }, textStyles]}
                 color={
                     textColor ? textColor : bgColor ? appColors.white : appColors.gray
                 }

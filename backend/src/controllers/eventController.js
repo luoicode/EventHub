@@ -45,7 +45,7 @@ const getEventById = asyncHandler(async (req, res) => {
 
     const item = await EventModel.findById({ _id: id });
 
-    console.log(item);
+    // console.log(item);
 
     res.status(200).json({
         message: 'fafa',
