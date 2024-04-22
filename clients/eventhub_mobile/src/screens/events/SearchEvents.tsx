@@ -17,16 +17,31 @@ import {
 import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
+import { debounce } from 'lodash'
+import { LoadingModal } from '../../modals';
 
 const SearchEvents = ({ navigation, route }: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchKey, setSearchKey] = useState('');
+  const [results, setResults] = useState<EventModel[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     isFocused && getEvents();
   }, [isFocused]);
+
+  useEffect(() => {
+    if (!searchKey) {
+      setResults(events)
+    } else {
+      const handerChangeSearchValue = debounce(handlerSearchEvent, 500)
+
+      handerChangeSearchValue();
+    }
+  }, [searchKey])
 
   const getEvents = async () => {
     const api = `/get-events`;
@@ -47,6 +62,26 @@ const SearchEvents = ({ navigation, route }: any) => {
       setIsLoading(false);
     }
   };
+
+  const handlerSearchEvent = async () => {
+    const api = `/search-events?title=${searchKey}`
+
+
+
+    try {
+      const res = await eventAPI.HandlerEvent(api)
+      if (res.data && res.data.length > 0) {
+
+        setResults(res.data)
+      } else {
+        setResults([])
+      }
+      setIsSearching(false)
+    } catch (error) {
+      console.log(error)
+      setIsSearching(false)
+    }
+  }
 
   return (
     <ContainerComponent back title="Search">
@@ -75,8 +110,8 @@ const SearchEvents = ({ navigation, route }: any) => {
             <TextInput
               style={[globalStyles.text, { flex: 1 }]}
               placeholder="Search"
-              value=""
-              onChangeText={val => console.log(val)}
+              value={searchKey}
+              onChangeText={val => setSearchKey(val)}
             />
           </RowComponent>
           <TagComponent
@@ -99,10 +134,10 @@ const SearchEvents = ({ navigation, route }: any) => {
           />
         </RowComponent>
       </SectionComponent>
-      {events.length > 0 ? (
-        <ListEventComponent items={events} />
+      {results.length > 0 ? (
+        <ListEventComponent items={results} />
       ) : (
-        <LoadingComponent isLoading={isLoading} values={events.length} />
+        <LoadingComponent isLoading={isLoading} values={results.length} />
       )}
     </ContainerComponent>
   );

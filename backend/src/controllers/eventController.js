@@ -53,7 +53,19 @@ const getEventById = asyncHandler(async (req, res) => {
     });
 
 });
+const searchEvents = asyncHandler(async (req, res) => {
+    const { title } = req.query;
 
+    const events = await EventModel.find({})
+
+    const items = events.filter(element => element.title.toLowerCase().includes(title.toLocaleLowerCase()))
+
+    res.status(200).json({
+        message: "get events ok",
+        data: items,
+    });
+}
+);
 const getEvents = asyncHandler(async (req, res) => {
     const { lat, long, distance, limit, date } = req.query;
 
@@ -146,4 +158,4 @@ const getCategories = asyncHandler(async (req, res) => {
     })
 })
 
-module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories, getEventById };
+module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories, getEventById, searchEvents };
