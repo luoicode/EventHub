@@ -14,6 +14,7 @@ import EditProfileScreen from './profiles/EditProfileScreen';
 import NotFound from './NotFound';
 import ExploreEvents from './events/ExploreEvents';
 import HomeScreen from './home/HomeScreen';
+import CategoryDetail from './events/CategoryDetail';
 
 export {
   SignInScreen,
@@ -32,4 +33,5 @@ export {
   NotFound,
   ExploreEvents,
   HomeScreen,
+  CategoryDetail,
 };

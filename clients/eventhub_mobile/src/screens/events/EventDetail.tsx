@@ -221,7 +221,7 @@ const EventDetail = ({ navigation, route }: any) => {
           style={{ width: appInfo.sizes.WIDTH, height: 240, resizeMode: 'cover' }}
         />
         <SectionComponent styles={{ marginTop: -20 }}>
-          {item.users.length > 0 ? (
+          {item.users && item.users.length > 0 ? (
             <View
               style={{
                 justifyContent: 'center',

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -8,75 +8,87 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TagComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { Category } from '../models/Category';
+import eventAPI from '../apis/eventApi';
+import { useNavigation } from '@react-navigation/native';
 interface Props {
     isFill?: boolean;
 }
 
-
 const CategoriesList = (props: Props) => {
     const { isFill } = props;
-    const categories: Category[] = [
-        {
-            key: 'sports',
-            label: 'Sports',
-            icon: (
-                <FontAwesome5
-                    name="basketball-ball"
-                    size={22}
-                    color={isFill ? appColors.white : '#F0635A'}
-                />
-            ),
-            color: '#F0635A',
-        },
-        {
-            key: 'music',
-            label: 'Music',
-            icon: (
-                <FontAwesome5
-                    name="music"
-                    size={22}
-                    color={isFill ? appColors.white : '#F59762'}
-                />
-            ),
-            color: '#F59762',
-        },
-        {
-            key: 'food',
-            label: 'Food',
-            icon: <FontAwesome6
-                name="bowl-food"
-                size={22}
-                color={isFill ? appColors.white : '#29D697'}
-            />,
-            color: '#29D697',
-        },
-        {
-            key: 'arts',
-            label: 'Arts',
-            icon: (
-                <Ionicons
-                    name="color-palette-outline"
-                    size={22}
-                    color={isFill ? appColors.white : '#46CDFB'}
-                />
-            ),
-            color: '#46CDFB',
-        },
-        {
-            key: 'games',
-            label: 'Games',
-            icon: (
-                <Ionicons
-                    name="game-controller"
-                    size={22}
-                    color={isFill ? appColors.white : '#E1AFD1'}
-                />
-            ),
-            color: '#E1AFD1',
-        },
-    ];
+    const [categories, setCategories] = useState<Category[]>([]);
 
-    return (
+    const navigation: any = useNavigation();
+
+    useEffect(() => {
+        getCategories();
+    }, []);
+
+    const getCategories = async () => {
+        const api = `/get-categories`;
+
+        try {
+            const res = await eventAPI.HandlerEvent(api);
+            setCategories(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const renderIcon = (key: string) => {
+        let icon = <></>;
+        switch (key) {
+            case 'music':
+                icon = (
+                    <FontAwesome5
+                        name="music"
+                        size={22}
+                        color={isFill ? appColors.white : '#F59762'}
+                    />
+                );
+                break;
+            case 'food':
+                icon = (
+                    <FontAwesome6
+                        name="bowl-food"
+                        size={22}
+                        color={isFill ? appColors.white : '#29D697'}
+                    />
+                );
+                break;
+            case 'arts':
+                icon = (
+                    <Ionicons
+                        name="color-palette-outline"
+                        size={22}
+                        color={isFill ? appColors.white : '#46CDFB'}
+                    />
+                );
+                break;
+            case 'game':
+                icon = (
+                    <Ionicons
+                        name="game-controller"
+                        size={22}
+                        color={isFill ? appColors.white : '#E1AFD1'}
+                    />
+                );
+                break;
+            default:
+                icon = (
+                    <FontAwesome5
+                        name="basketball-ball"
+                        size={22}
+                        color={isFill ? appColors.white : '#F0635A'}
+                    />
+                );
+                break;
+        }
+        return icon;
+    };
+
+
+    return categories.length > 0 ? (
         <FlatList
             style={{ paddingHorizontal: 16 }}
             horizontal
@@ -89,13 +101,18 @@ const CategoriesList = (props: Props) => {
                         minWidth: 82,
                     }}
                     bgColor={isFill ? item.color : appColors.white}
-                    onPress={() => { }}
-                    icon={item.icon}
-                    label={item.label}
+                    onPress={() => navigation.navigate('CategoryDetail', {
+                        id: item._id,
+                        title: item.title
+                    })}
+                    icon={renderIcon(item.key)}
+                    label={item.title}
                     textColor={isFill ? appColors.white : appColors.text2}
                 />
             )}
         />
+    ) : (
+        <></>
     );
 };
 

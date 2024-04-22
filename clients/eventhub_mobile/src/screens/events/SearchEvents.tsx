@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
@@ -13,6 +13,7 @@ import {
   RowComponent,
   SectionComponent,
   TagComponent,
+  TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
@@ -82,6 +83,22 @@ const SearchEvents = ({ navigation, route }: any) => {
       setIsSearching(false)
     }
   }
+
+  // const handlerUpdateEvent = async () => {
+  //   const categories = ['662103c304c2c69a1036c29f']
+  //   try {
+  //     events.forEach(async item => {
+  //       const api = `/update-event?id=${item._id}`
+
+  //       const res = await eventAPI.HandlerEvent(api, { data: { categories }, }, 'put')
+  //       console.log(res)
+  //     })
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+
+  // }
 
   return (
     <ContainerComponent back title="Search">

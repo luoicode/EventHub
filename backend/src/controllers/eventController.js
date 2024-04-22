@@ -48,24 +48,24 @@ const getEventById = asyncHandler(async (req, res) => {
     // console.log(item);
 
     res.status(200).json({
-        message: 'fafa',
+        message: "fafa",
         data: item,
     });
-
 });
 const searchEvents = asyncHandler(async (req, res) => {
     const { title } = req.query;
 
-    const events = await EventModel.find({})
+    const events = await EventModel.find({});
 
-    const items = events.filter(element => element.title.toLowerCase().includes(title.toLocaleLowerCase()))
+    const items = events.filter((element) =>
+        element.title.toLowerCase().includes(title.toLocaleLowerCase())
+    );
 
     res.status(200).json({
         message: "get events ok",
         data: items,
     });
-}
-);
+});
 const getEvents = asyncHandler(async (req, res) => {
     const { lat, long, distance, limit, date } = req.query;
 
@@ -112,12 +112,12 @@ const updateFollowers = asyncHandler(async (req, res) => {
 
     await EventModel.findByIdAndUpdate(id, { followers, updatedAt: Date.now() });
 
-    console.log(followers)
+    console.log(followers);
 
     res.status(200).json({
-        mess: 'Update followers successfully! ',
+        mess: "Update followers successfully! ",
         data: [],
-    })
+    });
 });
 
 const getFollowers = asyncHandler(async (req, res) => {
@@ -127,35 +127,66 @@ const getFollowers = asyncHandler(async (req, res) => {
 
     if (event) {
         res.status(200).json({
-            mess: 'Followers',
+            mess: "Followers",
             data: event.followers ?? [],
         });
     } else {
         res.status(401);
-        throw new Error('Event not found');
+        throw new Error("Event not found");
     }
 });
 
 const createCategory = asyncHandler(async (req, res) => {
-    const data = req.body
+    const data = req.body;
 
-    const newCategory = new CategoryModel(data)
+    const newCategory = new CategoryModel(data);
 
-    newCategory.save()
+    newCategory.save();
 
     res.status(200).json({
-        message: 'Add new category successfully!',
-        data: newCategory
-    })
-})
+        message: "Add new category successfully!",
+        data: newCategory,
+    });
+});
 
 const getCategories = asyncHandler(async (req, res) => {
-    const items = await CategoryModel.find({})
+    const items = await CategoryModel.find({});
 
     res.status(200).json({
-        message: 'get category successfully!',
+        message: "get category successfully!",
         data: items,
-    })
-})
+    });
+});
 
-module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories, getEventById, searchEvents };
+const updateEvent = asyncHandler(async (req, res) => {
+    const { data } = req.body;
+    const { id } = req.query;
+
+    const item = await EventModel.findByIdAndUpdate(id, data);
+    res.status(200).json({
+        message: "update events successfully!",
+        data: [],
+    });
+});
+const getEventsByCategoryId = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+
+    const items = await EventModel.find({ categories: { $all: id } });
+    res.status(200).json({
+        message: "get events by category successfully!",
+        data: items,
+    });
+});
+
+module.exports = {
+    updateEvent,
+    addNewEvent,
+    getEvents,
+    updateFollowers,
+    getFollowers,
+    createCategory,
+    getCategories,
+    getEventById,
+    searchEvents,
+    getEventsByCategoryId
+};
