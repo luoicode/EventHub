@@ -54,7 +54,6 @@ const ContainerComponent = (props: Props) => {
                   text={title}
                   size={24}
                   font={fontFamilies.medium}
-                  flex={1}
                 />
               ) : (
                 <></>

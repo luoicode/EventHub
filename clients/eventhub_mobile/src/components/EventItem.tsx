@@ -1,6 +1,6 @@
 import { Location } from 'iconsax-react-native';
 import React from 'react';
-import { Image, ImageBackground, View } from 'react-native';
+import { Image, ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
     AvatarGroup,
@@ -23,10 +23,11 @@ import { numberToString } from '../utils/numberToString';
 interface Props {
     item: EventModel;
     type: 'card' | 'list';
+    styles?: StyleProp<ViewStyle>
 }
 
 const EventItem = (props: Props) => {
-    const { item, type } = props;
+    const { item, type, styles } = props;
     const navigation: any = useNavigation();
     const auth: AuthState = useSelector(authSelector);
 
@@ -34,7 +35,7 @@ const EventItem = (props: Props) => {
     return (
         <CardComponent
             isShadows
-            styles={{ width: appInfo.sizes.WIDTH * 0.7 }}
+            styles={[{ width: appInfo.sizes.WIDTH * 0.7 }, styles]}
             onPress={() => navigation.navigate('EventDetail', { id: item._id })}>
             {type === 'card' ? (
                 <>

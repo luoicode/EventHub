@@ -10,7 +10,7 @@ export const globalStyles = StyleSheet.create({
 
   text: {
     fontFamily: fontFamilies.regular,
-    fontSize: 16,
+    fontSize: 18,
     color: appColors.text,
   },
 
