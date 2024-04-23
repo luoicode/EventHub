@@ -15,6 +15,9 @@ import { ImageOrVideo } from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import { LoadingModal } from '../../modals';
 import userAPI from '../../apis/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAuth, authSelector } from '../../redux/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfileScreen = ({ navigation, route }: any) => {
     const { profile }: { profile: ProfileModel } = route.params;
@@ -22,6 +25,8 @@ const EditProfileScreen = ({ navigation, route }: any) => {
     const [fileSelected, setFileSelected] = useState<any>();
     const [profileData, setProfileData] = useState<ProfileModel>(profile);
     const [isLoading, setIsLoading] = useState(false);
+    const auth = useSelector(authSelector)
+    const dispatch = useDispatch()
 
     const handlerFileSelected = (val: ImageOrVideo) => {
         setFileSelected(val);
@@ -85,6 +90,11 @@ const EditProfileScreen = ({ navigation, route }: any) => {
             const res: any = await userAPI.HandlerUser(api, newData, 'put');
 
             setIsLoading(false);
+
+            const authData = { ...auth, photo: data.photoUrl ?? '' }
+
+            await AsyncStorage.setItem('auth', JSON.stringify(authData))
+            dispatch(addAuth(authData))
 
             navigation.navigate('ProfileScreen', {
                 isUpdated: true,

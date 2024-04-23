@@ -60,6 +60,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
     setIsLoading(true);
     try {
       const res = await userAPI.HandlerUser(api);
+
       res && res.data && setProfile(res.data);
       setIsLoading(false);
     } catch (error) {
@@ -79,11 +80,10 @@ const ProfileScreen = ({ navigation, route }: any) => {
     }
   };
 
+
   return (
     <ContainerComponent
       isScroll
-      back
-      title={route.params ? ' ' : 'Profile'}
       right={
         <ButtonComponent
           color={appColors.text}
