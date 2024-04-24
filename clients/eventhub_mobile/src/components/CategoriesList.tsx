@@ -94,6 +94,7 @@ const CategoriesList = (props: Props) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={categories}
+            keyExtractor={item => item._id}
             renderItem={({ item, index }) => (
                 <TagComponent
                     styles={{

@@ -11,7 +11,7 @@ import { dateTime } from '../utils/dateTime';
 interface Props {
     selected?: Date;
     type: 'date' | 'time';
-    onSelect: (val: Date) => void;
+    onSelect: (val: number) => void;
     label?: string;
 }
 
@@ -44,7 +44,7 @@ const DateTimePicker = (props: Props) => {
                 onCancel={() => setIsShowDatePicker(false)}
                 onConfirm={val => {
                     setIsShowDatePicker(false);
-                    onSelect(val);
+                    onSelect(new Date(val).getTime());
                 }}
                 open={isShowDatePicker}
                 mode={type}

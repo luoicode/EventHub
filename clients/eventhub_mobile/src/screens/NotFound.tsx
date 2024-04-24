@@ -1,13 +1,16 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { ContainerComponent } from '../components'
+import React from 'react';
+import {
+    ContainerComponent,
+    SectionComponent,
+    TextComponent,
+} from '../components';
 
-const NotFound = () => {
+export default function NotFound() {
     return (
-        <ContainerComponent>
-            <Text>NotFound</Text>
+        <ContainerComponent back>
+            <SectionComponent>
+                <TextComponent text="Not Found!!!" />
+            </SectionComponent>
         </ContainerComponent>
-    )
+    );
 }
-
-export default NotFound

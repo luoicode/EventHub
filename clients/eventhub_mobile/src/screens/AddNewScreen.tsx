@@ -23,6 +23,7 @@ import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { Validate } from '../utils/validate';
+import { LoadingModal } from '../modals';
 
 const initValues = {
   title: '',
@@ -53,6 +54,7 @@ const AddNewScreen = ({ navigation }: any) => {
 
   const [fileSelected, setFileSelected] = useState<any>();
   const [errorMess, setErrorMess] = useState<string[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     handlerGetAllUsers();
@@ -63,7 +65,7 @@ const AddNewScreen = ({ navigation }: any) => {
     setErrorMess(mess);
   }, [eventData]);
 
-  const handlerChangeValue = (key: string, value: string | Date | string[]) => {
+  const handlerChangeValue = (key: string, value: string | number | string[]) => {
     const items = { ...eventData };
     items[`${key}`] = value;
 
@@ -127,13 +129,17 @@ const AddNewScreen = ({ navigation }: any) => {
 
   const handlePustEvent = async (event: EventModel) => {
     const api = `/add-new`;
+    setIsCreating(true)
     try {
       const res = await eventAPI.HandlerEvent(api, event, 'post');
+      setIsCreating(false)
 
       navigation.navigate('Explore', {
         screen: 'HomeScreen',
       });
     } catch (error) {
+      setIsCreating(false)
+
       console.log(error);
     }
   };
@@ -291,6 +297,7 @@ const AddNewScreen = ({ navigation }: any) => {
           onPress={handlerAddEvent}
         />
       </SectionComponent>
+      <LoadingModal visible={isCreating} />
     </ContainerComponent>
   );
 };

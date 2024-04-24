@@ -1,27 +1,25 @@
 import Geolocation from '@react-native-community/geolocation';
+import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import {
     HambergerMenu,
     Notification,
-    SearchNormal1,
-    Sort,
+    SearchNormal1
 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
     FlatList,
     ImageBackground,
-    Linking,
-    Platform,
     ScrollView,
     StatusBar,
-    ToastAndroid,
     TouchableOpacity,
-    View,
+    View
 } from 'react-native';
+import Geocoder from 'react-native-geocoding';
+import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useDispatch, useSelector } from 'react-redux';
+import eventAPI from '../../apis/eventApi';
 import {
-    ButtonComponent,
     CategoriesList,
     CircleComponent,
     EventItem,
@@ -31,20 +29,15 @@ import {
     SpaceComponent,
     TabBarComponent,
     TagComponent,
-    TextComponent,
+    TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import { AddressModel } from '../../models/AddressModel';
-import { authSelector } from '../../redux/reducers/authReducer';
-import { globalStyles } from '../../styles/globalStyles';
-import Geocoder from 'react-native-geocoding';
-import eventAPI from '../../apis/eventApi';
 import { EventModel } from '../../models/EventModel';
-import messaging, {
-    FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging';
-import Toast from 'react-native-toast-message';
+import { globalStyles } from '../../styles/globalStyles';
+import { handlerLinking } from '../../utils/handlerLinking';
+import { useIsFocused } from '@react-navigation/native';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
@@ -53,6 +46,8 @@ const HomeScreen = ({ navigation }: any) => {
     const [events, setEvents] = useState<EventModel[]>([]);
     const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         Geolocation.getCurrentPosition(
@@ -76,20 +71,39 @@ const HomeScreen = ({ navigation }: any) => {
                 text1: mess.notification.title,
                 text2: mess.notification.body,
                 onPress: () => {
-                    console.log(mess);
-                    const id = mess.data.id;
-                    console.log(id);
-                    navigation.navigate('EventDetail', { id });
+                    const id = mess.data ? mess.data.id : '';
+                    // console.log(id);
+                    id && navigation.navigate('EventDetail', { id });
                 },
             });
         });
+        messaging()
+            .getInitialNotification()
+            .then((mess: any) => {
+                const id = mess && mess.data ? mess.data.id : '';
+
+                id && handlerLinking(`eventhub://app/detail/${mess.data.id}`)
+
+            })
+
     }, []);
 
     useEffect(() => {
+        getNearByEvents();
+    }, [currentLocation]);
+
+    useEffect(() => {
+        if (isFocused) {
+            getEvents();
+            getNearByEvents();
+        }
+    }, [isFocused])
+
+    const getNearByEvents = () => {
         currentLocation &&
             currentLocation.postion &&
             getEvents(currentLocation.postion.lat, currentLocation.postion.long);
-    }, [currentLocation]);
+    }
 
     const reverseGeoCode = async ({ lat, long }: { lat: number; long: number }) => {
         const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&leng=vi-VI&apiKey=9xtPpCx-_XvOPAIXkPFPAn-fXs2HOa9mvitLme7Mit4`;
@@ -112,7 +126,11 @@ const HomeScreen = ({ navigation }: any) => {
             : `/get-events?limit=5`
             }`;
 
-        setIsLoading(true);
+        if (events.length === 0 || nearbyEvents.length === 0) {
+            setIsLoading(true);
+
+        }
+
         try {
             const res = await eventAPI.HandlerEvent(api);
             setIsLoading(false);
@@ -314,11 +332,6 @@ const HomeScreen = ({ navigation }: any) => {
                         />
                     )}
                 </SectionComponent>
-                <ButtonComponent
-                    text="Test linking"
-                    type="primary"
-                    onPress={() => Linking.openURL('eventhub://app/asdasd')}
-                />
             </ScrollView>
         </View>
     );

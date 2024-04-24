@@ -178,7 +178,7 @@ const EventDetail = ({ navigation, route }: any) => {
             }}>
             <RowComponent styles={{ flex: 1 }}>
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Main')}
                 style={{ width: 48, height: 48, justifyContent: 'center' }}>
                 <ArrowLeft size={28} color={appColors.white} />
               </TouchableOpacity>

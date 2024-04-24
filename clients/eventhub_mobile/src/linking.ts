@@ -1,14 +1,17 @@
-import MainNavigator from './navigators/MainNavigator';
-import {EventDetail} from './screens';
-
 const config = {
   screens: {
     NotFound: '*',
-    HomeRoot: {
-      path: 'home',
+    EventDetail: {
+      path: 'detail/:id',
+    },
+    DrawerNavigator: {
+      path: 'main',
       screens: {
-        EventDetail: {
-          path: 'detail/:id',
+        TabNavigator: {
+          path: 'home',
+          screens: {
+            AddNewScreen: {path: 'add'},
+          },
         },
       },
     },
@@ -16,7 +19,7 @@ const config = {
 };
 
 const linking: any = {
-  prefixes: ['eventhub://app', 'https://abc.xyz'],
+  prefixes: ['eventhub://app'],
   config,
 };
 export default linking;

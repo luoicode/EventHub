@@ -48,7 +48,7 @@ const getEventById = asyncHandler(async (req, res) => {
     // console.log(item);
 
     res.status(200).json({
-        message: "fafa",
+        message: "Event detail",
         data: item,
     });
 });
