@@ -103,7 +103,7 @@ const SocialLogin = () => {
         font={fontFamilies.medium}
       />
       <SpaceComponent height={20} />
-      <RowComponent>
+      <RowComponent styles={{ backgroundColor: 'coral' }}>
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}
           onPress={handlerLoginWithGoogle}
@@ -114,7 +114,7 @@ const SocialLogin = () => {
         <SpaceComponent width={30} />
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}
-          onPress={handlerLoginWithGoogle}
+          onPress={handlerLoginWithFacebook}
           color={appColors.white}
           iconFlex="left"
           icon={<Facebook />}
