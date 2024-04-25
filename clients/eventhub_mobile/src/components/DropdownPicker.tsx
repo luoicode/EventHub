@@ -109,15 +109,15 @@ const DropdownPicker = (props: Props) => {
                     }
                     color={
                         selectedItems?.includes(item.value)
-                            ? appColors.primary
-                            : appColors.text
+                            ? appColors.primary6
+                            : appColors.primary5
                     }
                 />
                 {selectedItems.includes(item.value) && (
                     <FontAwesome
                         name="check-square-o"
                         size={22}
-                        color={appColors.primary}
+                        color={appColors.primary6}
                     />
                 )}
             </RowComponent>
@@ -175,6 +175,7 @@ const DropdownPicker = (props: Props) => {
                                 marginBottom: 12,
                                 paddingHorizontal: 20,
                                 paddingTop: 30,
+
                             }}>
                             <View style={{ flex: 1 }}>
                                 <InputComponent
@@ -183,7 +184,7 @@ const DropdownPicker = (props: Props) => {
                                     value={searchKey}
                                     onChange={val => setSearchKey(val)}
                                     allowClear
-                                    affix={<SearchNormal1 size={22} color={appColors.text} />}
+                                    affix={<SearchNormal1 size={22} color={appColors.primary7} />}
                                 />
                             </View>
                             <SpaceComponent width={20} />

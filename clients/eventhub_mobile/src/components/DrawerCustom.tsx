@@ -32,8 +32,8 @@ import { HandlerNotification } from '../utils/handlerNotification';
 const DrawerCustom = ({ navigation }: any) => {
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
-    const size = 30;
-    const color = appColors.gray;
+    const size = 32;
+    const color = appColors.primary7;
     const profileMenu = [
         {
             key: 'MyProfile',
@@ -114,7 +114,7 @@ const DrawerCustom = ({ navigation }: any) => {
         navigation.closeDrawer();
     };
     return (
-        <View style={[localStyles.container]}>
+        <View style={[localStyles.container, { backgroundColor: appColors.primary8 }]}>
             <AvatarComponent
                 onPress={() => handlerNavigation('MyProfile')}
                 photoUrl={auth.photo}
@@ -140,11 +140,11 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: '#00F8FF33', height: 'auto' },
+                        { backgroundColor: appColors.primary6, height: 'auto' },
                     ]}>
-                    <MaterialCommunityIcons name="crown" size={22} color={'#00F8FF'} />
+                    <MaterialCommunityIcons name="crown" size={22} color={appColors.primary7} />
                     <SpaceComponent width={8} />
-                    <TextComponent color="#00F8FF" text="Upgrade Pro" />
+                    <TextComponent color={appColors.primary7} font={fontFamilies.medium} text="Upgrade Pro" />
                 </TouchableOpacity>
             </RowComponent>
         </View>

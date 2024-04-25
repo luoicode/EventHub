@@ -15,6 +15,7 @@ import { appColors } from '../constants/appColors';
 import { Category } from '../models/Category';
 import { authSelector } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
+import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
     visible: boolean;
@@ -68,7 +69,8 @@ const ModalSelectCategories = (props: Props) => {
                 adjustToContentHeight
                 ref={modalizeRef}
                 onClose={onClose}>
-                <SectionComponent styles={{ padding: 30 }}>
+
+                <SectionComponent styles={{ padding: 30, backgroundColor: appColors.primary8 }}>
                     <RowComponent>
                         {categories.length > 0 &&
                             categories.map(category => (
@@ -81,22 +83,25 @@ const ModalSelectCategories = (props: Props) => {
                                             padding: 12,
                                             marginRight: 8,
                                             marginBottom: 8,
-                                            backgroundColor: appColors.white,
+                                            backgroundColor: appColors.primary6,
                                             borderRadius: 12,
                                             minWidth: 60,
-                                            borderWidth: 1,
+                                            borderWidth: catsSelected?.includes(category._id)
+                                                ? 2
+                                                : 0,
                                             borderColor: catsSelected?.includes(category._id)
-                                                ? appColors.primary
-                                                : appColors.white,
+                                                ? appColors.primary7
+                                                : appColors.gray2,
+
                                         },
                                     ]}
                                     key={category._id}>
-                                    <TextComponent text={category.title} />
+                                    <TextComponent text={category.title} color={appColors.primary7} font={fontFamilies.medium} />
                                 </TouchableOpacity>
                             ))}
                     </RowComponent>
                 </SectionComponent>
-                <SectionComponent>
+                <SectionComponent styles={{ backgroundColor: appColors.primary8 }}>
                     <ButtonComponent
                         text="Agree"
                         type="primary"

@@ -43,7 +43,7 @@ const CategoriesList = (props: Props) => {
                     <FontAwesome5
                         name="music"
                         size={22}
-                        color={isFill ? appColors.white : '#F59762'}
+                        color={isFill ? appColors.primary7 : '#F59762'}
                     />
                 );
                 break;
@@ -52,7 +52,7 @@ const CategoriesList = (props: Props) => {
                     <FontAwesome6
                         name="bowl-food"
                         size={22}
-                        color={isFill ? appColors.white : '#29D697'}
+                        color={isFill ? appColors.primary7 : '#29D697'}
                     />
                 );
                 break;
@@ -61,7 +61,7 @@ const CategoriesList = (props: Props) => {
                     <Ionicons
                         name="color-palette-outline"
                         size={22}
-                        color={isFill ? appColors.white : '#46CDFB'}
+                        color={isFill ? appColors.primary7 : '#46CDFB'}
                     />
                 );
                 break;
@@ -70,7 +70,7 @@ const CategoriesList = (props: Props) => {
                     <Ionicons
                         name="game-controller"
                         size={22}
-                        color={isFill ? appColors.white : '#E1AFD1'}
+                        color={isFill ? appColors.primary7 : '#E1AFD1'}
                     />
                 );
                 break;
@@ -79,7 +79,7 @@ const CategoriesList = (props: Props) => {
                     <FontAwesome5
                         name="basketball-ball"
                         size={22}
-                        color={isFill ? appColors.white : '#F0635A'}
+                        color={isFill ? appColors.primary7 : '#F0635A'}
                     />
                 );
                 break;
@@ -101,14 +101,14 @@ const CategoriesList = (props: Props) => {
                         marginRight: index === categories.length - 1 ? 38 : 12,
                         minWidth: 82,
                     }}
-                    bgColor={isFill ? item.color : appColors.white}
+                    bgColor={isFill ? item.color : appColors.primary7}
                     onPress={() => navigation.navigate('CategoryDetail', {
                         id: item._id,
                         title: item.title
                     })}
                     icon={renderIcon(item.key)}
                     label={item.title}
-                    textColor={isFill ? appColors.white : appColors.text2}
+                    textColor={isFill ? appColors.primary7 : appColors.text2}
                 />
             )}
         />

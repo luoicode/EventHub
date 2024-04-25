@@ -107,7 +107,7 @@ const EditProfileScreen = ({ navigation, route }: any) => {
     };
 
     return (
-        <ContainerComponent isScroll back title={profile.name}>
+        <ContainerComponent isScroll back title='Edit Profile'>
             <SectionComponent>
                 <RowComponent>
                     <AvatarComponent
@@ -149,7 +149,7 @@ const EditProfileScreen = ({ navigation, route }: any) => {
             />
 
             <LoadingModal visible={isLoading} />
-        </ContainerComponent>
+        </ContainerComponent >
     );
 };
 

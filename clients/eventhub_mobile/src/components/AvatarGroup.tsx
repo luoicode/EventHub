@@ -26,7 +26,7 @@ const AvatarGroup = (props: Props) => {
                                 height: 24,
                                 borderRadius: 100,
                                 borderWidth: 1,
-                                borderColor: appColors.white,
+                                borderColor: appColors.primary7,
                                 marginLeft: index > 0 ? -8 : 0,
                             }}
                         />
@@ -35,7 +35,7 @@ const AvatarGroup = (props: Props) => {
                     <TextComponent
                         text="+20 Going"
                         size={12 + (size ? (size - 24) / 5 : 0)}
-                        color={appColors.primary}
+                        color={appColors.primary8}
                         font={fontFamilies.semiBold}
                     />
                 </>)

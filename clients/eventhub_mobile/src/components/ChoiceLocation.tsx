@@ -24,17 +24,17 @@ const ChoiceLocation = (props: Props) => {
         <>
             <RowComponent
                 onPress={() => setisVisibleModalLocation(!isVisibleModalLocation)}
-                styles={[globalStyles.inputContainer]}>
+                styles={{ marginLeft: 6 }}>
                 <CardComponent
                     styles={[
                         globalStyles.noSpaceCard,
                         { width: 56, height: 45, minHeight: 56 },
                     ]}
-                    color={`${appColors.primary}33`}>
+                    color={appColors.primary6}>
                     <CardComponent
                         styles={[globalStyles.noSpaceCard, { width: 30, height: 30 }]}
-                        color={appColors.white}>
-                        <Location color={appColors.primary} size={18} />
+                        color={appColors.primary7}>
+                        <Location color={appColors.primary6} size={18} />
                     </CardComponent>
                 </CardComponent>
                 <SpaceComponent width={12} />
@@ -44,7 +44,7 @@ const ChoiceLocation = (props: Props) => {
                     text={addressSelected ? addressSelected.address : 'Choice location'}
                     flex={1}
                 />
-                <ArrowRight2 size={22} color={appColors.primary} />
+                <ArrowRight2 size={22} color={appColors.primary6} />
             </RowComponent>
             <ModalLocation
                 visible={isVisibleModalLocation}

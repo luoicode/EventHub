@@ -44,9 +44,9 @@ const ExploreEvents = ({ navigation }: any) => {
             back
             title="Events"
             right={
-                <RowComponent>
+                <RowComponent >
                     <ButtonComponent onPress={() => navigation.navigate('SearchEvents')}
-                        icon={<SearchNormal1 size={26} color={appColors.text} />}
+                        icon={<SearchNormal1 size={26} color={appColors.primary7} />}
                     />
                     <SpaceComponent width={16} />
                     <ButtonComponent
@@ -54,7 +54,7 @@ const ExploreEvents = ({ navigation }: any) => {
                             <MaterialIcons
                                 name="more-vert"
                                 size={26}
-                                color={appColors.text}
+                                color={appColors.primary7}
                             />
                         }
                     />

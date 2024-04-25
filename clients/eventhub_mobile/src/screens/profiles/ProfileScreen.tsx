@@ -83,15 +83,16 @@ const ProfileScreen = ({ navigation, route }: any) => {
 
   return (
     <ContainerComponent
+      title={profile?.name}
       isScroll
       right={
         <ButtonComponent
-          color={appColors.text}
+          color={appColors.white}
           icon={
             <MaterialIcons
               name="more-vert"
               size={28}
-              color={appColors.text}
+              color={appColors.primary7}
               onPress={() => { }}
             />
           }
@@ -106,23 +107,8 @@ const ProfileScreen = ({ navigation, route }: any) => {
               <AvatarComponent
                 photoUrl={profile.photoUrl}
                 name={profile.name ? profile.name : profile.email}
-                size={120}
+                size={100}
               />
-            </RowComponent>
-            <SpaceComponent height={16} />
-            <TextComponent
-              text={
-                profile.name
-                  ? profile.name
-                  : profile.familyName && profile.giveName
-                    ? `${profile.familyName} ${profile.giveName}`
-                    : profile.email
-              }
-              title
-              size={24}
-            />
-            <SpaceComponent height={16} />
-            <RowComponent>
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title
@@ -132,12 +118,6 @@ const ProfileScreen = ({ navigation, route }: any) => {
                 <SpaceComponent height={8} />
                 <TextComponent text="Follower" />
               </View>
-              <View
-                style={{
-                  backgroundColor: appColors.gray2,
-                  width: 1,
-                  height: '100%',
-                }} />
               <View style={[globalStyles.center, { flex: 1 }]}>
                 <TextComponent
                   title

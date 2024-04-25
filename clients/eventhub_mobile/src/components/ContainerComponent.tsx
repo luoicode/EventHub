@@ -1,19 +1,18 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
-import React, { ReactNode } from 'react';
-import { globalStyles } from '../styles/globalStyles';
 import { useNavigation } from '@react-navigation/native';
-import { ButtonComponent, RowComponent, TextComponent } from '.';
 import { ArrowLeft } from 'iconsax-react-native';
+import React, { ReactNode } from 'react';
+import {
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { RowComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
   isImageBackground?: boolean;
@@ -25,13 +24,13 @@ interface Props {
 }
 
 const ContainerComponent = (props: Props) => {
-  const { children, isScroll, isImageBackground, title, back, right } = props;
+  const { children, isScroll, isImageBackground, title, back, right, } = props;
 
   const navigation: any = useNavigation();
 
   const headerComponent = () => {
     return (
-      <View style={{ flex: 1, paddingTop: 30 }}>
+      <View style={{ flex: 1, paddingTop: 30, backgroundColor: appColors.primary5 }}>
         {(title || back || right) && (
           <RowComponent
             styles={{
@@ -45,7 +44,7 @@ const ContainerComponent = (props: Props) => {
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={{ marginRight: 12 }}>
-                <ArrowLeft size={28} color={appColors.text} />
+                <ArrowLeft size={28} color={appColors.primary7} />
               </TouchableOpacity>
             )}
             <View style={{ flex: 1 }}>

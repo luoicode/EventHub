@@ -98,11 +98,11 @@ const SocialLogin = () => {
       <TextComponent
         styles={{ textAlign: 'center' }}
         text="OR"
-        color={appColors.gray4}
+        color={appColors.primary6}
         size={16}
         font={fontFamilies.medium}
       />
-      <SpaceComponent height={16} />
+      <SpaceComponent height={20} />
       <RowComponent>
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}

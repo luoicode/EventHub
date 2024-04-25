@@ -23,12 +23,12 @@ const TabNavigator = () => {
           height: 68,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: appColors.white,
+          backgroundColor: appColors.primary5,
         },
         tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused, color, size }) => {
           let icon: ReactNode;
-          color = focused ? appColors.primary : appColors.gray5;
+          color = focused ? appColors.primary6 : appColors.gray5;
           size = 32;
           switch (route.name) {
             case 'Explore':
@@ -48,8 +48,8 @@ const TabNavigator = () => {
               icon = (
                 <CircleComponent
                   size={70}
-                  styles={[globalStyles.shadow, { marginTop: -60 }]}>
-                  <AddSquare size={46} color={appColors.white} variant="Bold" />
+                  styles={[globalStyles.shadow, { marginTop: -60, backgroundColor: appColors.primary8 }]}>
+                  <AddSquare size={46} color={appColors.primary7} variant="Bold" />
                 </CircleComponent>
               );
               break;
@@ -65,7 +65,7 @@ const TabNavigator = () => {
               text={route.name}
               flex={0}
               size={12}
-              color={focused ? appColors.primary : appColors.gray5}
+              color={focused ? appColors.primary6 : appColors.gray5}
               styles={{
                 marginBottom: 12,
               }}

@@ -123,13 +123,14 @@ const ModalInvite = (props: Props) => {
             text="Invite Friend"
             title
             size={24}
+            color={appColors.primary6}
             font={fontFamilies.medium}
           />
           <InputComponent
             styles={{ marginTop: 12, marginBottom: 24 }}
             placeholder="Search"
             value=""
-            suffix={<SearchNormal1 size={24} color={appColors.primary} />}
+            suffix={<SearchNormal1 size={24} color={appColors.primary6} />}
             onChange={val => console.log('')}
           />
           {friendId.length ? (
@@ -137,6 +138,7 @@ const ModalInvite = (props: Props) => {
               <RowComponent key={id}>
                 <View style={{ flex: 1 }}>
                   <UserComponent
+
                     types="Invite"
                     onPress={() => handlerSelectedId(id)}
                     userId={id}
@@ -147,14 +149,14 @@ const ModalInvite = (props: Props) => {
                   variant="Bold"
                   color={
                     userSelected.includes(id)
-                      ? appColors.primary
+                      ? appColors.primary6
                       : appColors.gray2
                   }
                 />
               </RowComponent>
             ))
           ) : (
-            <TextComponent text="No friends to invite" />
+            <TextComponent text="No friends to invite" color={appColors.primary5} />
           )}
         </SectionComponent>
       </Modalize>

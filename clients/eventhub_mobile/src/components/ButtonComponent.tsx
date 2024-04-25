@@ -54,7 +54,7 @@ const ButtonComponent = (props: Props) => {
               ? color
               : disabled
                 ? appColors.gray4
-                : appColors.primary,
+                : appColors.primary6,
             marginBottom: 17,
             width: '80%',
           },
@@ -65,7 +65,7 @@ const ButtonComponent = (props: Props) => {
           text &&
           <TextComponent
             text={text}
-            color={textColor ?? appColors.white}
+            color={textColor ?? appColors.text5}
             styles={[
               textStyles,
               {
@@ -90,7 +90,7 @@ const ButtonComponent = (props: Props) => {
         <TextComponent
           flex={0}
           text={text}
-          color={type === 'link' ? appColors.link : appColors.text}
+          color={type === 'link' ? appColors.link : appColors.text5}
         />
       }
     </TouchableOpacity>

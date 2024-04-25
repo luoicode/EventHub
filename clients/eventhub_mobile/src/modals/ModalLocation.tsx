@@ -119,7 +119,7 @@ const ModalLocation = (props: Props) => {
   return (
     <Modal animationType="slide" visible={visible} style={{ flex: 1 }}>
       <View style={{ paddingVertical: 42 }}>
-        <TextComponent styles={{ paddingLeft: 20 }} title font={fontFamilies.medium} text='Search Location' />
+        <TextComponent color={appColors.primary5} styles={{ paddingLeft: 20 }} title font={fontFamilies.medium} text='Search Location' />
         <RowComponent
           justify="flex-end"
           styles={{ marginVertical: 20, paddingHorizontal: 20 }}>
@@ -148,6 +148,7 @@ const ModalLocation = (props: Props) => {
               <ActivityIndicator />
             ) : locations.length > 0 ? (
               <FlatList
+
                 data={locations}
                 renderItem={({ item }) => (
                   <TouchableOpacity
@@ -200,7 +201,7 @@ const ModalLocation = (props: Props) => {
         <View
           style={{
             position: 'absolute',
-            bottom: 10,
+            bottom: 0,
             left: 0,
             right: 0,
           }}>

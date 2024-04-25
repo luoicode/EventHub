@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Calendar, Location } from 'iconsax-react-native';
+import { ArrowLeft, ArrowRight, Calendar, Heart, Location } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   Image,
@@ -160,7 +160,7 @@ const EventDetail = ({ navigation, route }: any) => {
   };
 
   return item ? (
-    <View style={{ flex: 1, backgroundColor: appColors.white }}>
+    <View style={{ flex: 1, backgroundColor: appColors.primary5 }}>
       <View
         style={{
           position: 'absolute',
@@ -180,13 +180,13 @@ const EventDetail = ({ navigation, route }: any) => {
               <TouchableOpacity
                 onPress={() => navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Main')}
                 style={{ width: 48, height: 48, justifyContent: 'center' }}>
-                <ArrowLeft size={28} color={appColors.white} />
+                <ArrowLeft size={28} color={appColors.primary7} />
               </TouchableOpacity>
               <TextComponent
                 flex={1}
                 text="Event Details"
                 title
-                color={appColors.white}
+                color={appColors.primary7}
               />
               <CardComponent
                 onPress={handlerFollower}
@@ -196,14 +196,14 @@ const EventDetail = ({ navigation, route }: any) => {
                     ? '#ffffffB3'
                     : '#ffffff4D'
                 }>
-                <MaterialIcons
-                  name="bookmark"
+                <Heart
+                  size="28"
                   color={
                     auth.follow_events && auth.follow_events.includes(item._id)
                       ? appColors.danger2
-                      : appColors.white
+                      : appColors.primary7
                   }
-                  size={28}
+                  variant='Bold'
                 />
               </CardComponent>
             </RowComponent>
@@ -233,7 +233,7 @@ const EventDetail = ({ navigation, route }: any) => {
                 styles={[
                   globalStyles.shadow,
                   {
-                    backgroundColor: appColors.white,
+                    backgroundColor: appColors.primary7,
                     borderRadius: 100,
                     paddingHorizontal: 12,
                     width: '90%',
@@ -245,11 +245,11 @@ const EventDetail = ({ navigation, route }: any) => {
                   style={[
                     globalStyles.button,
                     {
-                      backgroundColor: appColors.primary,
+                      backgroundColor: appColors.primary6,
                       paddingVertical: 8,
                     },
                   ]}>
-                  <TextComponent text="Invite" color={appColors.white} />
+                  <TextComponent text="Invite" color={appColors.primary7} />
                 </TouchableOpacity>
               </RowComponent>
             </View>
@@ -264,7 +264,7 @@ const EventDetail = ({ navigation, route }: any) => {
             </>
           )}
         </SectionComponent>
-        <View style={{ backgroundColor: appColors.white }}>
+        <View style={{ backgroundColor: appColors.primary5 }}>
           <SectionComponent>
             <TextComponent
               text={item.title}
@@ -277,8 +277,8 @@ const EventDetail = ({ navigation, route }: any) => {
             <RowComponent styles={{ marginBottom: 20 }}>
               <CardComponent
                 styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
-                color={`${appColors.primary}33`}>
-                <Calendar variant="Bold" color={appColors.primary} size={30} />
+                color={`${appColors.primary6}33`}>
+                <Calendar variant="Bold" color={appColors.primary7} size={30} />
               </CardComponent>
               <SpaceComponent width={16} />
               <View
@@ -295,7 +295,7 @@ const EventDetail = ({ navigation, route }: any) => {
                 <TextComponent
                   text={`${appInfo.dayNames[new Date(item.date).getDay()]
                     }, ${dateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
-                  color={appColors.gray}
+                  color={appColors.gray2}
                   size={16}
                 />
               </View>
@@ -304,8 +304,8 @@ const EventDetail = ({ navigation, route }: any) => {
             <RowComponent styles={{ marginBottom: 20, alignItems: 'flex-start' }}>
               <CardComponent
                 styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
-                color={`${appColors.primary}33`}>
-                <Location variant="Bold" color={appColors.primary} size={30} />
+                color={`${appColors.primary6}33`}>
+                <Location variant="Bold" color={appColors.primary7} size={30} />
               </CardComponent>
               <SpaceComponent width={16} />
               <View
@@ -322,7 +322,7 @@ const EventDetail = ({ navigation, route }: any) => {
                 />
                 <TextComponent
                   text={item.locationAddress}
-                  color={appColors.gray}
+                  color={appColors.gray2}
                   size={16}
                 />
               </View>
@@ -364,7 +364,7 @@ const EventDetail = ({ navigation, route }: any) => {
                   />
                   <TextComponent
                     text={profile.type ? profile.type : 'Personal'}
-                    color={appColors.gray}
+                    color={appColors.gray2}
                     size={16}
                   />
                 </View>
@@ -378,15 +378,12 @@ const EventDetail = ({ navigation, route }: any) => {
                   textColor={
                     auth.following && auth.following.includes(item.authorId)
                       ? appColors.danger
-                      : appColors.primary
+                      : appColors.primary6
                   }
                   styles={[
                     globalStyles.button,
                     {
-                      backgroundColor:
-                        auth.following && auth.following.includes(item.authorId)
-                          ? appColors.white
-                          : '#EBEDFF',
+                      backgroundColor: appColors.primary7,
                       paddingVertical: 8,
                       marginRight: 8,
                       borderRadius: 12,
@@ -405,7 +402,7 @@ const EventDetail = ({ navigation, route }: any) => {
       </ScrollView>
 
       <LinearGradient
-        colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
+        colors={['rgba(34,40,49,0.4)', 'rgba(34,40,49,1)']}
         style={{
           position: 'absolute',
           bottom: 0,
@@ -422,10 +419,10 @@ const EventDetail = ({ navigation, route }: any) => {
               style={[
                 globalStyles.iconContainer,
                 {
-                  backgroundColor: '#3D56F0',
+                  backgroundColor: appColors.primary7,
                 },
               ]}>
-              <ArrowRight size={18} color={appColors.white} />
+              <ArrowRight size={18} color={appColors.primary6} />
             </View>
           }
         />
