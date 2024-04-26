@@ -103,7 +103,7 @@ const SocialLogin = () => {
         font={fontFamilies.medium}
       />
       <SpaceComponent height={20} />
-      <RowComponent styles={{ backgroundColor: 'coral' }}>
+      <RowComponent>
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}
           onPress={handlerLoginWithGoogle}
