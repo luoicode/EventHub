@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
 import {
+    ButtonComponent,
     CategoriesList,
     CircleComponent,
     EventItem,
@@ -47,6 +48,8 @@ const HomeScreen = ({ navigation }: any) => {
     const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [eventsData, seteventsData] = useState<EventModel[]>([]);
+
     const isFocused = useIsFocused();
 
     useEffect(() => {
@@ -65,7 +68,7 @@ const HomeScreen = ({ navigation }: any) => {
         );
 
         getEvents();
-
+        getEventsData();
         messaging().onMessage(async (mess: any) => {
             Toast.show({
                 text1: mess.notification.title,
@@ -142,6 +145,43 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(`Get event error in home screen line 74 ${error}`);
         }
     };
+    const getEventsData = async (lat?: number, long?: number, distance?: number) => {
+        const api = `/get-events`;
+
+        try {
+            const res = await eventAPI.HandlerEvent(api)
+
+            const data = res.data
+
+            const items: EventModel[] = []
+
+            data.forEach((item: any) => items.push(item))
+
+            seteventsData(items)
+        } catch (error) {
+            console.log(error)
+        }
+
+    };
+
+    const categories = [
+        { "label": "Music", "value": "662103c304c2c69a1036c29f" }, { "label": "Sports", "value": "662103c304c2c69a1036c2a1" }, { "label": "Food", "value": "662103c304c2c69a1036c2a3" }, { "label": "Games", "value": "662103c304c2c69a1036c2a7" }, { "label": "Arts", "value": "662103c304c2c69a1036c2a5" }
+    ]
+
+    const handlerFixDataEvent = async () => {
+        if (eventsData.length > 0)
+            eventsData.forEach(async event => {
+                const api = `/update-event?id=${event._id}`
+
+                const data = {
+                    categories: categories[Math.floor(Math.random() * 4)].value
+                }
+
+                const res = await eventAPI.HandlerEvent(api, data, 'put')
+
+                console.log(res.data)
+            })
+    }
 
     return (
         <View style={[globalStyles.container, { backgroundColor: appColors.primary6 }]}>
@@ -175,7 +215,7 @@ const HomeScreen = ({ navigation }: any) => {
                             </RowComponent>
                             {currentLocation && (
                                 <TextComponent
-                                    text={`${currentLocation.address.city},${currentLocation.address.countryName}`}
+                                    text={`${currentLocation.address.city},${currentLocation.address.countryName} `}
                                     flex={0}
                                     color={appColors.primary7}
                                     font={fontFamilies.medium}
@@ -277,7 +317,7 @@ const HomeScreen = ({ navigation }: any) => {
                             horizontal
                             data={events}
                             renderItem={({ item, index }) => (
-                                <EventItem key={`event${index}`} item={item} type="card" />
+                                <EventItem key={`event${index} `} item={item} type="card" />
                             )}
                         />
                     ) : (
@@ -323,7 +363,7 @@ const HomeScreen = ({ navigation }: any) => {
                             showsHorizontalScrollIndicator={false}
                             data={nearbyEvents}
                             renderItem={({ item, index }) => (
-                                <EventItem key={`event${index}`} item={item} type="card" />
+                                <EventItem key={`event${index} `} item={item} type="card" />
                             )}
                         />
                     ) : (
@@ -334,6 +374,7 @@ const HomeScreen = ({ navigation }: any) => {
                     )}
                 </SectionComponent>
             </ScrollView>
+            <ButtonComponent text='FixData' type='primary' onPress={handlerFixDataEvent} />
         </View>
     );
 };

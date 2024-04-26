@@ -41,7 +41,7 @@ const initValues = {
   endAt: Date.now(),
   date: Date.now(),
   price: '',
-  category: '',
+  categories: '',
 };
 
 const AddNewScreen = ({ navigation }: any) => {
@@ -55,9 +55,11 @@ const AddNewScreen = ({ navigation }: any) => {
   const [fileSelected, setFileSelected] = useState<any>();
   const [errorMess, setErrorMess] = useState<string[]>([]);
   const [isCreating, setIsCreating] = useState(false);
+  const [categories, setCategories] = useState<SelectModel[]>([]);
 
   useEffect(() => {
     handlerGetAllUsers();
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -65,6 +67,29 @@ const AddNewScreen = ({ navigation }: any) => {
     setErrorMess(mess);
   }, [eventData]);
 
+  const getCategories = async () => {
+    const api = `/get-categories`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+      if (res.data) {
+        const items: SelectModel[] = []
+
+        const data = res.data
+        data.forEach((item: any) =>
+          items.push({
+            label: item.title,
+            value: item._id
+          })
+        )
+        setCategories(items)
+
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handlerChangeValue = (key: string, value: string | number | string[]) => {
     const items = { ...eventData };
     items[`${key}`] = value;
@@ -106,10 +131,10 @@ const AddNewScreen = ({ navigation }: any) => {
       res.on(
         'state_changed',
         snap => {
-          console.log(snap.bytesTransferred);
+          // console.log(snap.bytesTransferred);
         },
         error => {
-          console.log(error);
+          // console.log(error);
         },
         () => {
           storage()
@@ -129,6 +154,7 @@ const AddNewScreen = ({ navigation }: any) => {
 
   const handlePustEvent = async (event: EventModel) => {
     const api = `/add-new`;
+
     setIsCreating(true)
     try {
       const res = await eventAPI.HandlerEvent(api, event, 'post');
@@ -199,30 +225,9 @@ const AddNewScreen = ({ navigation }: any) => {
           }}
         />
         <DropdownPicker
-          selected={eventData.category}
-          values={[
-            {
-              label: 'Sport',
-              value: 'sport',
-            },
-            {
-              label: 'Food',
-              value: 'food',
-            },
-            {
-              label: 'Art',
-              value: 'art',
-            },
-            {
-              label: 'Music',
-              value: 'music',
-            },
-            {
-              label: 'Game',
-              value: 'game',
-            },
-          ]}
-          onSelect={val => handlerChangeValue('category', val)}
+          selected={eventData.categories}
+          values={categories}
+          onSelect={val => handlerChangeValue('categories', val)}
         />
         <RowComponent>
           <DateTimePicker

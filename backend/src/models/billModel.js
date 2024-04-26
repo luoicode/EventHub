@@ -26,6 +26,7 @@ const BillSchema = new mongoose.Schema({
     },
     updateAt: {
         type: Date,
+        default: Date.now(),
 
     }
 })

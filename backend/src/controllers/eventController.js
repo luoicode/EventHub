@@ -49,6 +49,8 @@ const toRoad = (val) => (val * Math.PI) / 180;
 
 const addNewEvent = asyncHandler(async (req, res) => {
     const body = req.body;
+    const data = { ...body }
+    data.price = parseFloat(body.price)
 
     if (body) {
         const newEvent = new EventModel(body);
@@ -69,8 +71,6 @@ const getEventById = asyncHandler(async (req, res) => {
     const { id } = req.query;
 
     const item = await EventModel.findById({ _id: id });
-
-    // console.log(item);
 
     res.status(200).json({
         message: "Event detail",
@@ -184,13 +184,13 @@ const getCategories = asyncHandler(async (req, res) => {
 });
 
 const updateEvent = asyncHandler(async (req, res) => {
-    const { data } = req.body;
+    const data = req.body;
     const { id } = req.query;
 
     const item = await EventModel.findByIdAndUpdate(id, data);
     res.status(200).json({
         message: "update events successfully!",
-        data: [],
+        data: item,
     });
 });
 const getEventsByCategoryId = asyncHandler(async (req, res) => {
