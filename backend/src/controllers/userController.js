@@ -1,9 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/userModel");
 const EventModel = require("../models/eventModel");
-const nodemailer = require("nodemailer");
 const { JWT } = require('google-auth-library')
 const axios = require('axios')
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({

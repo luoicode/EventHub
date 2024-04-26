@@ -15,6 +15,7 @@ import NotFound from './NotFound';
 import ExploreEvents from './events/ExploreEvents';
 import HomeScreen from './home/HomeScreen';
 import CategoryDetail from './events/CategoryDetail';
+import PaymentScreen from './events/PaymentScreen';
 
 export {
   SignInScreen,
@@ -34,4 +35,5 @@ export {
   ExploreEvents,
   HomeScreen,
   CategoryDetail,
+  PaymentScreen,
 };

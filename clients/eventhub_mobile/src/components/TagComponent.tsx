@@ -6,7 +6,7 @@ import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
-    onPress: () => void;
+    onPress?: () => void;
     label: string;
     icon?: ReactNode;
     textColor?: string;
@@ -20,6 +20,7 @@ const TagComponent = (props: Props) => {
 
     return (
         <TouchableOpacity
+            disabled={!onPress}
             onPress={onPress}
             style={[
                 globalStyles.row,
