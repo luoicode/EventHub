@@ -212,7 +212,7 @@ const SignUpScreen = ({ navigation }: any) => {
                         <TextComponent text="Already have an account? " />
                         <ButtonComponent
                             text="Login"
-                            onPress={() => navigation.navigate('LoginScreen')}
+                            onPress={() => navigation.navigate('SignInScreen')}
                             type="link"
                         />
                     </RowComponent>

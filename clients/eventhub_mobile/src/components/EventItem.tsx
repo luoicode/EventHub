@@ -1,4 +1,4 @@
-import { Location } from 'iconsax-react-native';
+import { Heart, Location } from 'iconsax-react-native';
 import React from 'react';
 import { Image, ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -35,7 +35,7 @@ const EventItem = (props: Props) => {
     return (
         <CardComponent
             isShadows
-            styles={[{ width: appInfo.sizes.WIDTH * 0.7 }, styles]}
+            styles={[{ width: appInfo.sizes.WIDTH * 0.7, backgroundColor: appColors.primary5 }, styles]}
             onPress={() => navigation.navigate('EventDetail', { id: item._id })}
         >
             {type === 'card' ? (
@@ -52,13 +52,13 @@ const EventItem = (props: Props) => {
                                 styles={[globalStyles.noSpaceCard]}
                                 color="#ffffffB3">
                                 <TextComponent
-                                    color={appColors.danger2}
+                                    color={appColors.primary8}
                                     font={fontFamilies.bold}
                                     size={18}
                                     text={numberToString(new Date(item.date).getDate())}
                                 />
                                 <TextComponent
-                                    color={appColors.danger2}
+                                    color={appColors.primary8}
                                     font={fontFamilies.semiBold}
                                     size={10}
                                     text={appInfo.monthNames[new Date(item.date).getMonth()].substring(0, 3)}
@@ -69,10 +69,10 @@ const EventItem = (props: Props) => {
                                 (<CardComponent
                                     styles={[globalStyles.noSpaceCard]}
                                     color="#ffffffB3">
-                                    <MaterialIcons
-                                        name="bookmark"
+                                    <Heart
                                         color={appColors.danger2}
-                                        size={28}
+                                        size='28'
+                                        variant='Bold'
                                     />
                                 </CardComponent>)
                             }
@@ -81,14 +81,14 @@ const EventItem = (props: Props) => {
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
                     <AvatarGroup userIds={item.users} />
                     <RowComponent>
-                        <Location size={18} color={appColors.text3} variant="Bold" />
+                        <Location size={18} color={appColors.primary7} variant="Bold" />
                         <SpaceComponent width={8} />
                         <TextComponent
                             flex={1}
                             numberOfLine={1}
                             text={item.locationAddress}
                             size={16}
-                            color={appColors.text2}
+                            color={appColors.primary7}
                         />
                     </RowComponent>
                 </>
@@ -106,17 +106,17 @@ const EventItem = (props: Props) => {
                         />
                         <SpaceComponent width={12} />
                         <View style={{ flex: 1, alignItems: 'stretch' }}>
-                            <TextComponent color={appColors.primary} text={`${dateTime.GetDayString(item.date)} • ${dateTime.GetTime(new Date(item.startAt))} `} />
+                            <TextComponent color={appColors.primary5} text={`${dateTime.GetDayString(item.date)} • ${dateTime.GetTime(new Date(item.startAt))} `} />
                             <TextComponent text={item.title} title size={18} numberOfLine={2} />
                             <RowComponent>
-                                <Location size={18} color={appColors.text3} variant="Bold" />
+                                <Location size={18} color={appColors.primary7} variant="Bold" />
                                 <SpaceComponent width={8} />
                                 <TextComponent
                                     flex={1}
                                     numberOfLine={1}
                                     text={item.locationAddress}
                                     size={12}
-                                    color={appColors.text2}
+                                    color={appColors.primary7}
                                 />
                             </RowComponent>
                         </View>

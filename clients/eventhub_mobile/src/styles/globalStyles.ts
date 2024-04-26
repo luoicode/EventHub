@@ -11,7 +11,7 @@ export const globalStyles = StyleSheet.create({
   text: {
     fontFamily: fontFamilies.regular,
     fontSize: 18,
-    color: appColors.text,
+    color: appColors.primary7,
   },
 
   button: {
@@ -84,15 +84,15 @@ export const globalStyles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: appColors.gray3,
+    borderBottomWidth: 1,
+    borderColor: appColors.primary7,
     width: '100%',
     minHeight: 56,
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
-    backgroundColor: appColors.white,
+    backgroundColor: appColors.primary5,
     marginBottom: 19,
   },
 
@@ -101,7 +101,7 @@ export const globalStyles = StyleSheet.create({
     margin: 0,
     flex: 1,
     // paddingHorizontal: 14,
-    color: appColors.text,
+    color: appColors.primary7,
   },
   center: {
     justifyContent: 'center',

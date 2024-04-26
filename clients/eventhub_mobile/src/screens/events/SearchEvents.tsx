@@ -114,32 +114,32 @@ const SearchEvents = ({ navigation, route }: any) => {
             <SearchNormal1
               variant="TwoTone"
               size={30}
-              color={appColors.primary}
+              color={appColors.primary7}
             />
             <View
               style={{
                 width: 1,
                 height: 20,
                 marginHorizontal: 12,
-                backgroundColor: appColors.primary,
+                backgroundColor: appColors.primary7,
               }}
             />
             <TextInput
               style={[globalStyles.text, { flex: 1 }]}
               placeholder="Search"
+              placeholderTextColor={appColors.primary7}
               value={searchKey}
               onChangeText={val => setSearchKey(val)}
             />
           </RowComponent>
           <TagComponent
             label="Filters"
-            bgColor={appColors.primary}
             icon={
-              <CircleComponent size={20} color={appColors.white}>
+              <CircleComponent size={20} color={appColors.primary6}>
                 <MaterialIcons
                   name="sort"
                   size={20}
-                  color={appColors.primary}
+                  color={appColors.primary7}
                 />
               </CircleComponent>
             }

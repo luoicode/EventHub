@@ -3,6 +3,7 @@ import React from 'react';
 import { EventModel } from '../models/EventModel';
 import { FlatList } from 'react-native-gesture-handler';
 import EventItem from './EventItem';
+import { appColors } from '../constants/appColors';
 
 interface Props {
   items: EventModel[];
@@ -18,7 +19,7 @@ const ListEventComponent = (props: Props) => {
           item={item}
           key={item._id}
           type="list"
-          styles={{ flex: 1, width: undefined }}
+          styles={{ flex: 1, width: undefined, backgroundColor: appColors.primary6 }}
         />
       )}
     />

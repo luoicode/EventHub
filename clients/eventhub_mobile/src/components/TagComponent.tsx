@@ -26,7 +26,7 @@ const TagComponent = (props: Props) => {
                 globalStyles.tag,
                 globalStyles.center,
                 {
-                    backgroundColor: bgColor ? bgColor : appColors.white,
+                    backgroundColor: bgColor ? bgColor : appColors.primary7,
                 },
                 styles,
             ]}>
@@ -36,7 +36,7 @@ const TagComponent = (props: Props) => {
                 text={label}
                 styles={[{ marginLeft: icon ? 8 : 0 }, textStyles]}
                 color={
-                    textColor ? textColor : bgColor ? appColors.white : appColors.gray
+                    textColor ? textColor : bgColor ? appColors.primary7 : appColors.gray
                 }
             />
         </TouchableOpacity>

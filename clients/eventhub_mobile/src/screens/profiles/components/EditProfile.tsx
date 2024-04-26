@@ -51,15 +51,15 @@ const EditProfile = (props: Props) => {
       <RowComponent>
         <ButtonComponent
           iconFlex="left"
-          icon={<Edit size="26" color={appColors.primary} />}
+          icon={<Edit size="26" color={appColors.primary7} />}
           styles={{
             borderWidth: 1,
-            borderColor: appColors.primary,
-            backgroundColor: appColors.white,
+            borderColor: appColors.primary7,
+            backgroundColor: appColors.primary6,
           }}
           text="Edit profile"
           type="primary"
-          textColor={appColors.primary}
+          textColor={appColors.primary7}
           onPress={() =>
             navigation.navigate('EditProfileScreen', {
               profile,
@@ -84,14 +84,14 @@ const EditProfile = (props: Props) => {
             styles={{ paddingVertical: 10 }}
           />
           <RowComponent
-            styles={[globalStyles.tag, { backgroundColor: '#EEF0FF' }]}
+            styles={[globalStyles.tag, { backgroundColor: appColors.primary7 }]}
             onPress={() => setIsVisibleModalCategory(true)}>
-            <Edit2 size={18} color={appColors.primary} />
+            <Edit2 size={18} color={appColors.primary6} />
             <SpaceComponent width={8} />
             <TextComponent
               text="Change"
               font={fontFamilies.medium}
-              color={appColors.primary}
+              color={appColors.primary6}
             />
           </RowComponent>
         </RowComponent>

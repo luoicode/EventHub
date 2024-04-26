@@ -63,6 +63,7 @@ const UserComponent = (props: Props) => {
                         text={profile.name ? profile.name : profile?.email}
                         font={fontFamilies.medium}
                         size={18}
+                        color={appColors.primary5}
                     />
                     <TextComponent
                         text={profile.type ? profile.type : 'Personal'}

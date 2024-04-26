@@ -175,6 +175,7 @@ const AddNewScreen = ({ navigation }: any) => {
           <></>
         )}
         <UploadImagePicker
+
           onSelect={(val: any) =>
             val.type === 'url'
               ? handlerChangeValue('photoUrl', val.value as string)
@@ -262,11 +263,13 @@ const AddNewScreen = ({ navigation }: any) => {
             handlerChangeValue('locationTitle', val);
           }}
         />
+        <SpaceComponent height={5} />
         <ChoiceLocation
           onSelect={val => {
             handlerLocation(val);
           }}
         />
+        <SpaceComponent height={5} />
         <InputComponent
           placeholder="Price"
           allowClear

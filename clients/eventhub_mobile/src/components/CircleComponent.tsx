@@ -16,7 +16,7 @@ const CircleComponent = (props: Props) => {
     const localStyle: any = {
         width: size ?? 40,
         height: size ?? 40,
-        backgroundColor: color ?? appColors.primary,
+        backgroundColor: color ?? appColors.primary6,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,

@@ -1,13 +1,13 @@
-import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
-import {globalStyles} from '../../styles/globalStyles';
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
 import Swiper from 'react-native-swiper';
-import {appInfo} from '../../constants/appInfos';
-import {appColors} from '../../constants/appColors';
-import {TextComponent} from '../../components';
-import {fontFamilies} from '../../constants/fontFamilies';
+import { appInfo } from '../../constants/appInfos';
+import { appColors } from '../../constants/appColors';
+import { TextComponent } from '../../components';
+import { fontFamilies } from '../../constants/fontFamilies';
 
-const OnboardingScreen = ({navigation}: any) => {
+const OnboardingScreen = ({ navigation }: any) => {
   const [index, setIndex] = useState(0);
   return (
     <View style={[globalStyles.container]}>
@@ -63,7 +63,7 @@ const OnboardingScreen = ({navigation}: any) => {
           <TextComponent
             text="Skip"
             size={24}
-            color="#ABB4FF"
+            color={appColors.primary8}
             font={fontFamilies.medium}
           />
         </TouchableOpacity>
@@ -76,7 +76,7 @@ const OnboardingScreen = ({navigation}: any) => {
           <TextComponent
             text="Next"
             size={24}
-            color={appColors.white}
+            color={appColors.primary7}
             font={fontFamilies.medium}
           />
         </TouchableOpacity>

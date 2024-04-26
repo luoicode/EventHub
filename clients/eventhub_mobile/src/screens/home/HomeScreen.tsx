@@ -144,12 +144,12 @@ const HomeScreen = ({ navigation }: any) => {
     };
 
     return (
-        <View style={[globalStyles.container]}>
+        <View style={[globalStyles.container, { backgroundColor: appColors.primary6 }]}>
             <StatusBar barStyle={'light-content'} />
 
             <View
                 style={{
-                    backgroundColor: appColors.primary,
+                    backgroundColor: appColors.primary5,
                     height: 180,
                     borderBottomLeftRadius: 40,
                     borderBottomRightRadius: 40,
@@ -158,46 +158,46 @@ const HomeScreen = ({ navigation }: any) => {
                 <View style={{ paddingHorizontal: 16 }}>
                     <RowComponent>
                         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                            <HambergerMenu size={40} color={appColors.white} />
+                            <HambergerMenu size={40} color={appColors.primary7} />
                         </TouchableOpacity>
                         <View style={[{ flex: 1, alignItems: 'center' }]}>
                             <RowComponent>
                                 <TextComponent
                                     text="Current Location"
-                                    color={appColors.white2}
+                                    color={appColors.primary7}
                                     size={16}
                                 />
                                 <MaterialIcons
                                     name="arrow-drop-down"
                                     size={24}
-                                    color={appColors.white}
+                                    color={appColors.primary7}
                                 />
                             </RowComponent>
                             {currentLocation && (
                                 <TextComponent
                                     text={`${currentLocation.address.city},${currentLocation.address.countryName}`}
                                     flex={0}
-                                    color={appColors.white}
+                                    color={appColors.primary7}
                                     font={fontFamilies.medium}
                                     size={14}
                                 />
                             )}
                         </View>
 
-                        <CircleComponent color="#524CE0" size={40}>
+                        <CircleComponent size={40} color={appColors.primary5}>
                             <View>
-                                <Notification size={28} color={appColors.white} />
+                                <Notification size={28} color={appColors.primary7} />
                                 <View
                                     style={{
-                                        backgroundColor: '#02E9FE',
-                                        width: 10,
-                                        height: 10,
+                                        backgroundColor: appColors.danger,
+                                        width: 6,
+                                        height: 6,
                                         borderRadius: 4,
                                         borderWidth: 2,
-                                        borderColor: '#524CE0',
+                                        borderColor: appColors.danger,
                                         position: 'absolute',
-                                        top: -2,
-                                        right: -2,
+                                        top: 0,
+                                        right: 1,
                                     }}
                                 />
                             </View>
@@ -215,32 +215,31 @@ const HomeScreen = ({ navigation }: any) => {
                             <SearchNormal1
                                 variant="TwoTone"
                                 size={30}
-                                color={appColors.white}
+                                color={appColors.primary7}
                             />
                             <View
                                 style={{
                                     width: 1,
                                     height: 20,
                                     marginHorizontal: 12,
-                                    backgroundColor: '#A29EF0',
+                                    backgroundColor: appColors.primary7,
                                 }}
                             />
                             <TextComponent
                                 size={24}
                                 text="Search..."
-                                color='#A29EF0'
+                                color={appColors.primary7}
                                 flex={1}
                             />
                         </RowComponent>
                         <TagComponent
                             label="Filters"
-                            bgColor={'#5D56F3'}
                             icon={
-                                <CircleComponent size={20} color={'#A29EF0'} >
+                                <CircleComponent size={20} color={appColors.primary6} >
                                     <MaterialIcons
                                         name="sort"
                                         size={20}
-                                        color={appColors.primary}
+                                        color={appColors.primary7}
                                     />
                                 </CircleComponent>
                             }
@@ -263,11 +262,13 @@ const HomeScreen = ({ navigation }: any) => {
                     {
                         flex: 1,
                         marginTop: 18,
+                        backgroundColor: appColors.primary6
                     },
                 ]}>
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
+
                         onPress={() => navigation.navigate('ExploreEvents')}
                     />
                     {events.length > 0 ? (
@@ -301,14 +302,14 @@ const HomeScreen = ({ navigation }: any) => {
                                     globalStyles.button,
                                     {
                                         marginTop: 12,
-                                        backgroundColor: appColors.primary3,
+                                        backgroundColor: appColors.primary6,
                                         paddingHorizontal: 28,
                                     },
                                 ]}>
                                 <TextComponent
                                     text="INVITE"
                                     font={fontFamilies.bold}
-                                    color={appColors.white}
+                                    color={appColors.primary7}
                                 />
                             </TouchableOpacity>
                         </RowComponent>

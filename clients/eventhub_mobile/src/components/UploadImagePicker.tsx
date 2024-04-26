@@ -35,17 +35,17 @@ const UploadImagePicker = (props: Props) => {
     {
       key: 'camera',
       title: 'Take a picture',
-      icon: <Camera size={22} color={appColors.text} />,
+      icon: <Camera size={22} color={appColors.primary5} />,
     },
     {
       key: 'library',
       title: 'Album',
-      icon: <Image size={22} color={appColors.text} />,
+      icon: <Image size={22} color={appColors.primary5} />,
     },
     {
       key: 'url',
       title: 'From Url',
-      icon: <Link size={22} color={appColors.text} />,
+      icon: <Link size={22} color={appColors.primary5} />,
     },
   ];
 
@@ -78,7 +78,7 @@ const UploadImagePicker = (props: Props) => {
       onPress={() => handlerChoiceImage(item.key)}>
       {item.icon}
       <SpaceComponent width={12} />
-      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} />
+      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} color={appColors.primary6} />
     </RowComponent>
   );
 
@@ -118,7 +118,7 @@ const UploadImagePicker = (props: Props) => {
           <View
             style={[
               {
-                backgroundColor: appColors.white,
+                backgroundColor: appColors.primary6,
                 margin: 20,
                 borderRadius: 12,
                 width: '90%',
@@ -131,11 +131,12 @@ const UploadImagePicker = (props: Props) => {
                   setImageUrl('');
                   setIsVisibleModalAddUr(false);
                 }}>
-                <AntDesign name="close" size={24} color={appColors.text} />
+                <AntDesign name="close" size={24} color={appColors.primary5} />
               </TouchableOpacity>
             </RowComponent>
 
             <TextComponent text="Image URL" title size={18} />
+            <SpaceComponent height={8} />
             <InputComponent
               placeholder="URL"
               value={imageUrl}
@@ -146,6 +147,7 @@ const UploadImagePicker = (props: Props) => {
               <ButtonComponent
                 text="Agree"
                 type="primary"
+                color={appColors.primary5}
                 onPress={() => {
                   setIsVisibleModalAddUr(false);
                   onSelect({ type: 'url', value: imageUrl });
