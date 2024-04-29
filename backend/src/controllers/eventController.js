@@ -2,6 +2,31 @@ const asyncHandler = require("express-async-handler");
 const EventModel = require("../models/eventModel");
 const CategoryModel = require("../models/categoryModel");
 const { request } = require("express");
+const BillModel = require("../models/BillModel");
+
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: process.env.USERNAME_EMAIL,
+        pass: process.env.PASSWORD_EMAIL,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
+const handlerSendMail = async (val) => {
+    try {
+        await transporter.sendMail(val);
+
+        return "OK";
+    } catch (error) {
+        return error;
+    }
+};
 
 const calcDistanceLocation = ({
     currentLat,
@@ -24,6 +49,8 @@ const toRoad = (val) => (val * Math.PI) / 180;
 
 const addNewEvent = asyncHandler(async (req, res) => {
     const body = req.body;
+    const data = { ...body }
+    data.price = parseFloat(body.price)
 
     if (body) {
         const newEvent = new EventModel(body);
@@ -44,8 +71,6 @@ const getEventById = asyncHandler(async (req, res) => {
     const { id } = req.query;
 
     const item = await EventModel.findById({ _id: id });
-
-    // console.log(item);
 
     res.status(200).json({
         message: "Event detail",
@@ -159,13 +184,13 @@ const getCategories = asyncHandler(async (req, res) => {
 });
 
 const updateEvent = asyncHandler(async (req, res) => {
-    const { data } = req.body;
+    const data = req.body;
     const { id } = req.query;
 
     const item = await EventModel.findByIdAndUpdate(id, data);
     res.status(200).json({
         message: "update events successfully!",
-        data: [],
+        data: item,
     });
 });
 const getEventsByCategoryId = asyncHandler(async (req, res) => {
@@ -178,6 +203,47 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
     });
 });
 
+const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
+    const data = req.body
+
+    data.price = parseFloat(data.price)
+
+    const bill = new BillModel(data)
+    bill.save()
+
+    res.status(200).json({
+        message: "Add new bill",
+        data: bill,
+    });
+})
+
+const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
+    const { billId } = req.query
+
+    await BillModel.findByIdAndUpdate(billId, {
+        status: 'success',
+    })
+
+    const data = {
+        from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
+        to: 'huyhn045@gmail.com',
+        subject: "Your Verification Code for EventHub",
+        text: "Your code to verification email",
+        html: `
+        <html>
+        <h1>Your ticket</h1>
+        </html>
+    `,
+    };
+
+    await handlerSendMail(data)
+
+    res.status(200).json({
+        message: "Update bill successfully",
+        data: [],
+    });
+})
+
 module.exports = {
     updateEvent,
     addNewEvent,
@@ -188,5 +254,7 @@ module.exports = {
     getCategories,
     getEventById,
     searchEvents,
-    getEventsByCategoryId
+    getEventsByCategoryId,
+    handlerAddNewBillDetail,
+    handlerUpdatePaymentSuccess
 };

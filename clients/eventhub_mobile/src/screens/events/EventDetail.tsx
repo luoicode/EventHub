@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, Calendar, Heart, Location } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -159,7 +160,30 @@ const EventDetail = ({ navigation, route }: any) => {
     }
   };
 
-  return item ? (
+  const handlerCreateBillPayment = async () => {
+    const data = {
+      createAt: Date.now(),
+      createBy: auth.id,
+      eventId: id,
+      price: item?.price,
+      authorId: item?.authorId
+    }
+    const api = `/buy-ticket`
+
+    try {
+      const res = await eventAPI.HandlerEvent(api, data, 'post')
+
+      navigation.navigate('PaymentScreen', { billDetail: res.data })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return isLoading ? (
+    <View style={[globalStyles.container, globalStyles.center, { flex: 1 }]}>
+      <ActivityIndicator />
+    </View>
+  ) : item ? (
     <View style={{ flex: 1, backgroundColor: appColors.primary5 }}>
       <View
         style={{
@@ -411,7 +435,8 @@ const EventDetail = ({ navigation, route }: any) => {
           padding: 12,
         }}>
         <ButtonComponent
-          text="BUY TICKET $120"
+          onPress={handlerCreateBillPayment}
+          text={`BUY TICKET $${parseFloat(item.price).toLocaleString()}`}
           type="primary"
           iconFlex="right"
           icon={
