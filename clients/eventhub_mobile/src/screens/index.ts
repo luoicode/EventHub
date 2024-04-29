@@ -16,6 +16,7 @@ import ExploreEvents from './events/ExploreEvents';
 import HomeScreen from './home/HomeScreen';
 import CategoryDetail from './events/CategoryDetail';
 import PaymentScreen from './events/PaymentScreen';
+import NearbyScreen from './events/NearbyScreen';
 
 export {
   SignInScreen,
@@ -36,4 +37,5 @@ export {
   HomeScreen,
   CategoryDetail,
   PaymentScreen,
+  NearbyScreen,
 };

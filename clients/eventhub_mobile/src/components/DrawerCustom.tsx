@@ -33,7 +33,7 @@ const DrawerCustom = ({ navigation }: any) => {
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
     const size = 32;
-    const color = appColors.primary7;
+    const color = appColors.primary5;
     const profileMenu = [
         {
             key: 'MyProfile',
@@ -114,7 +114,7 @@ const DrawerCustom = ({ navigation }: any) => {
         navigation.closeDrawer();
     };
     return (
-        <View style={[localStyles.container, { backgroundColor: appColors.primary8 }]}>
+        <View style={[localStyles.container, { backgroundColor: appColors.primary7, marginTop: 30 }]}>
             <AvatarComponent
                 onPress={() => handlerNavigation('MyProfile')}
                 photoUrl={auth.photo}
@@ -140,9 +140,9 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: appColors.primary6, height: 'auto' },
+                        { backgroundColor: appColors.primary5, height: 'auto' },
                     ]}>
-                    <MaterialCommunityIcons name="crown" size={22} color={appColors.primary7} />
+                    <MaterialCommunityIcons name="crown" size={22} color="yellow" />
                     <SpaceComponent width={8} />
                     <TextComponent color={appColors.primary7} font={fontFamilies.medium} text="Upgrade Pro" />
                 </TouchableOpacity>

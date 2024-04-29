@@ -20,12 +20,13 @@ import { authSelector } from '../redux/reducers/authReducer';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  eventId: string
+  eventId?: string
 }
 
 const ModalInvite = (props: Props) => {
   const { visible, onClose, eventId } = props;
   const [friendId, setFriendId] = useState<string[]>([]);
+  const [isDissable, setIsDissable] = useState(true);
   const [userSelected, setUserSelected] = useState<string[]>([]);
   const modalizeRef = useRef<Modalize>();
   const auth = useSelector(authSelector);
@@ -55,6 +56,7 @@ const ModalInvite = (props: Props) => {
     }
 
     setUserSelected(items);
+    setIsDissable(items.length === 0);
   };
   const onShare = async () => {
     try {
@@ -110,6 +112,7 @@ const ModalInvite = (props: Props) => {
             <ButtonComponent
               text="Invite"
               type="primary"
+              disabled={isDissable}
               onPress={() => {
                 onShare();
                 handlerSendInviteNotification();
@@ -123,14 +126,14 @@ const ModalInvite = (props: Props) => {
             text="Invite Friend"
             title
             size={24}
-            color={appColors.primary6}
+            color={appColors.primary5}
             font={fontFamilies.medium}
           />
           <InputComponent
             styles={{ marginTop: 12, marginBottom: 24 }}
             placeholder="Search"
             value=""
-            suffix={<SearchNormal1 size={24} color={appColors.primary6} />}
+            suffix={<SearchNormal1 size={24} color={appColors.primary5} />}
             onChange={val => console.log('')}
           />
           {friendId.length ? (
@@ -149,7 +152,7 @@ const ModalInvite = (props: Props) => {
                   variant="Bold"
                   color={
                     userSelected.includes(id)
-                      ? appColors.primary6
+                      ? appColors.primary3
                       : appColors.gray2
                   }
                 />

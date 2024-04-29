@@ -19,7 +19,7 @@ const ListEventComponent = (props: Props) => {
           item={item}
           key={item._id}
           type="list"
-          styles={{ flex: 1, width: undefined, backgroundColor: appColors.primary6 }}
+          styles={{ flex: 1, width: undefined, backgroundColor: appColors.primary7 }}
         />
       )}
     />

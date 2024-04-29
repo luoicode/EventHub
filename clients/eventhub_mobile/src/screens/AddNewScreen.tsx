@@ -1,6 +1,6 @@
 import storage from '@react-native-firebase/storage';
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, TextInput, TouchableOpacity } from 'react-native';
 import { ImageOrVideo } from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import eventAPI from '../apis/eventApi';
@@ -11,6 +11,7 @@ import {
   ContainerComponent,
   DateTimePicker,
   DropdownPicker,
+  InputAddNewScreen,
   InputComponent,
   RowComponent,
   SectionComponent,
@@ -24,6 +25,7 @@ import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { Validate } from '../utils/validate';
 import { LoadingModal } from '../modals';
+import { Sort } from 'iconsax-react-native';
 
 const initValues = {
   title: '',
@@ -186,9 +188,17 @@ const AddNewScreen = ({ navigation }: any) => {
   return (
     <ContainerComponent isScroll>
       <SectionComponent>
-        <TextComponent text="Add New" title />
+        <TextComponent text="Create New Event" title />
       </SectionComponent>
       <SectionComponent>
+
+        <InputAddNewScreen
+          styles={{}}
+          placeholder="Add title"
+          fontSize={30}
+          value={eventData.title}
+          onChange={val => handlerChangeValue('title', val)}
+        />
         {eventData.photoUrl || fileSelected ? (
           <Image
             resizeMode="cover"
@@ -208,22 +218,40 @@ const AddNewScreen = ({ navigation }: any) => {
               : handlerFileSelected(val.value)
           }
         />
-        <InputComponent
-          placeholder="Title"
+        {/* <InputComponent
+          placeholder="Add title"
           value={eventData.title}
           allowClear
           onChange={val => handlerChangeValue('title', val)}
-        />
-        <InputComponent
-          placeholder="Description"
-          multiline
-          numberOfLine={3}
-          allowClear
-          value={eventData.description}
+        /> */}
+        <RowComponent justify='center' styles={{ backgroundColor: "coral" }}>
+          <Sort color='red' size={20} />
+          <InputAddNewScreen
+            placeholder="Add description"
+            multiline
+            value={eventData.description}
+            onChange={val => {
+              handlerChangeValue('description', val);
+            }}
+          />
+        </RowComponent>
+        <InputAddNewScreen
+          placeholder="Add location"
+          styles={{ height: 56 }}
+          value={eventData.locationTitle}
           onChange={val => {
-            handlerChangeValue('description', val);
+            handlerChangeValue('locationTitle', val);
           }}
         />
+        <SpaceComponent height={5} />
+        <ChoiceLocation
+          onSelect={val => {
+            handlerLocation(val);
+          }}
+        />
+        <TouchableOpacity>
+
+        </TouchableOpacity>
         <DropdownPicker
           selected={eventData.categories}
           values={categories}
@@ -259,21 +287,7 @@ const AddNewScreen = ({ navigation }: any) => {
           selected={eventData.users}
           multible
         />
-        <InputComponent
-          placeholder="Title Address"
-          styles={{ height: 56 }}
-          allowClear
-          value={eventData.locationTitle}
-          onChange={val => {
-            handlerChangeValue('locationTitle', val);
-          }}
-        />
-        <SpaceComponent height={5} />
-        <ChoiceLocation
-          onSelect={val => {
-            handlerLocation(val);
-          }}
-        />
+
         <SpaceComponent height={5} />
         <InputComponent
           placeholder="Price"

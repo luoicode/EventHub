@@ -16,6 +16,7 @@ import InputComponent from './InputComponent';
 import RowComponent from './RowComponent';
 import SpaceComponent from './SpaceComponent';
 import TextComponent from './TextComponent';
+import CardComponent from './CardComponent';
 interface Props {
   onSelect: (val: { type: 'url' | 'file'; value: string | ImageOrVideo }) => void;
 }
@@ -78,17 +79,28 @@ const UploadImagePicker = (props: Props) => {
       onPress={() => handlerChoiceImage(item.key)}>
       {item.icon}
       <SpaceComponent width={12} />
-      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} color={appColors.primary6} />
+      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} color={appColors.primary5} />
     </RowComponent>
   );
 
   return (
     <View style={{ marginBottom: 20 }}>
-      <ButtonComponent
-        text="Upload Image"
-        onPress={() => modalizeRef.current?.open()}
-        type="link"
-      />
+
+      <RowComponent justify='flex-start' onPress={() => modalizeRef.current?.open()}>
+        <CardComponent
+          styles={[
+            globalStyles.noSpaceCard,
+            { width: 56, height: 45, minHeight: 56 },
+          ]}
+          color='#E1F0DA'>
+          <Image
+            size="32"
+            color="green"
+          />
+        </CardComponent>
+        <SpaceComponent width={16} />
+        <TextComponent size={20} text='Add cover photo' />
+      </RowComponent>
       <Portal>
         <Modalize
           adjustToContentHeight
@@ -118,7 +130,7 @@ const UploadImagePicker = (props: Props) => {
           <View
             style={[
               {
-                backgroundColor: appColors.primary6,
+                backgroundColor: appColors.primary7,
                 margin: 20,
                 borderRadius: 12,
                 width: '90%',

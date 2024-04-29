@@ -114,41 +114,35 @@ const SearchEvents = ({ navigation, route }: any) => {
             <SearchNormal1
               variant="TwoTone"
               size={30}
-              color={appColors.primary7}
+              color={appColors.primary5}
             />
             <View
               style={{
                 width: 1,
                 height: 20,
                 marginHorizontal: 12,
-                backgroundColor: appColors.primary7,
+                backgroundColor: appColors.primary5,
               }}
             />
             <TextInput
               style={[globalStyles.text, { flex: 1 }]}
               placeholder="Search"
-              placeholderTextColor={appColors.primary7}
+              placeholderTextColor={appColors.primary5}
               value={searchKey}
               onChangeText={val => setSearchKey(val)}
             />
           </RowComponent>
-          <TagComponent
-            label="Filters"
-            icon={
-              <CircleComponent size={20} color={appColors.primary6}>
-                <MaterialIcons
-                  name="sort"
-                  size={20}
-                  color={appColors.primary7}
-                />
-              </CircleComponent>
-            }
-            onPress={() =>
-              navigation.navigate('SearchEvents', {
-                isFilter: true,
-              })
-            }
-          />
+          <TouchableOpacity onPress={() =>
+            navigation.navigate('SearchEvents', {
+              isFilter: true,
+            })
+          }>
+            <MaterialIcons
+              name="sort"
+              size={30}
+              color={appColors.primary5}
+            />
+          </TouchableOpacity>
         </RowComponent>
       </SectionComponent>
       {results.length > 0 ? (

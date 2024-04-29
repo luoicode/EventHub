@@ -23,10 +23,10 @@ const AvatarGroup = (props: Props) => {
                             source={{ uri: photoUrl }}
                             style={{
                                 width: size ?? 24,
-                                height: 24,
+                                height: size ?? 24,
                                 borderRadius: 100,
                                 borderWidth: 1,
-                                borderColor: appColors.primary7,
+                                borderColor: appColors.primary5,
                                 marginLeft: index > 0 ? -8 : 0,
                             }}
                         />
@@ -35,7 +35,7 @@ const AvatarGroup = (props: Props) => {
                     <TextComponent
                         text="+20 Going"
                         size={12 + (size ? (size - 24) / 5 : 0)}
-                        color={appColors.primary8}
+                        color={appColors.primary5}
                         font={fontFamilies.semiBold}
                     />
                 </>)

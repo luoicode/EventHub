@@ -1,5 +1,7 @@
-import { View, Text, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { ArrowCircleRight2, Sms } from 'iconsax-react-native';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
+import authenticationAPI from '../../apis/authApi';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -9,19 +11,17 @@ import {
   TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
-import { ArrowCircleRight2, Sms } from 'iconsax-react-native';
-import { Validate } from '../../utils/validate';
 import { LoadingModal } from '../../modals';
-import authenticationAPI from '../../apis/authApi';
+import { Validate } from '../../utils/validate';
 
 const ForgottenPassword = () => {
   const [email, setEmail] = useState('');
-  const [isDissble, setIsDissble] = useState(true);
+  const [isDissble, setIsDissable] = useState(true);
   const [isLoading, setiIsLoading] = useState(false);
 
   const handlerCheckEmail = () => {
     const isValidEmail = Validate.email(email);
-    setIsDissble(!isValidEmail);
+    setIsDissable(!isValidEmail);
   };
 
   const handlerForgottenPassword = async () => {

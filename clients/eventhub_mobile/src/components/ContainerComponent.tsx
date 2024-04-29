@@ -30,7 +30,7 @@ const ContainerComponent = (props: Props) => {
 
   const headerComponent = () => {
     return (
-      <View style={{ flex: 1, paddingTop: 30, backgroundColor: appColors.primary5 }}>
+      <View style={{ flex: 1, paddingTop: 30, backgroundColor: appColors.primary7 }}>
         {(title || back || right) && (
           <RowComponent
             styles={{
@@ -44,7 +44,7 @@ const ContainerComponent = (props: Props) => {
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={{ marginRight: 12 }}>
-                <ArrowLeft size={28} color={appColors.primary7} />
+                <ArrowLeft size={28} color={appColors.primary5} />
               </TouchableOpacity>
             )}
             <View style={{ flex: 1 }}>

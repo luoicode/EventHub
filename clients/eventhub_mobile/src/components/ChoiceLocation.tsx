@@ -1,9 +1,9 @@
-import { ArrowRight2, Location } from 'iconsax-react-native';
+import { Location } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import { CardComponent, RowComponent, SpaceComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
-import { globalStyles } from '../styles/globalStyles';
 import { ModalLocation } from '../modals';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     onSelect: (val: any) => void;
@@ -30,21 +30,15 @@ const ChoiceLocation = (props: Props) => {
                         globalStyles.noSpaceCard,
                         { width: 56, height: 45, minHeight: 56 },
                     ]}
-                    color={appColors.primary6}>
-                    <CardComponent
-                        styles={[globalStyles.noSpaceCard, { width: 30, height: 30 }]}
-                        color={appColors.primary7}>
-                        <Location color={appColors.primary6} size={18} />
-                    </CardComponent>
+                    color={appColors.primary}>
+                    <Location color={appColors.primary3} size={36} variant='Bold' />
                 </CardComponent>
                 <SpaceComponent width={12} />
-
                 <TextComponent
                     numberOfLine={1}
                     text={addressSelected ? addressSelected.address : 'Choice location'}
                     flex={1}
                 />
-                <ArrowRight2 size={22} color={appColors.primary6} />
             </RowComponent>
             <ModalLocation
                 visible={isVisibleModalLocation}

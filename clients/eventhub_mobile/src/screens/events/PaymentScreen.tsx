@@ -42,14 +42,14 @@ const PaymentScreen = ({ navigation, route }: any) => {
           size={20}
         />
         <TextComponent
-          text={`Date: ${dateTime.GetDayString(billDetail.createdAt)}`}
+          text={`Date: ${dateTime.GetDayString(billDetail.updateAt)}`}
         />
         <SpaceComponent height={16} />
         <TextComponent
           text={`$${parseFloat(billDetail.price).toLocaleString()}`}
           font={fontFamilies.bold}
           size={24}
-          color={appColors.primary}
+          color={appColors.primary3}
         />
       </SectionComponent>
       <SectionComponent
@@ -64,7 +64,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           <TextComponent text="Total change" />
           <TextComponent
             font={fontFamilies.medium}
-            color={appColors.primary}
+            color={appColors.primary3}
             text={`$${billDetail.price}`}
           />
         </RowComponent>

@@ -1,17 +1,16 @@
+import React, { ReactNode } from 'react';
 import {
-  View,
-  Text,
   StyleProp,
-  ViewStyle,
   TextStyle,
   TouchableOpacity,
+  View,
+  ViewStyle
 } from 'react-native';
-import React, { ReactNode } from 'react';
 
-import { globalStyles } from '../styles/globalStyles';
 import { TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
   text?: string;
@@ -54,7 +53,7 @@ const ButtonComponent = (props: Props) => {
               ? color
               : disabled
                 ? appColors.gray4
-                : appColors.primary6,
+                : appColors.primary5,
             marginBottom: 17,
             width: '80%',
           },
@@ -65,7 +64,7 @@ const ButtonComponent = (props: Props) => {
           text &&
           <TextComponent
             text={text}
-            color={textColor ?? appColors.text5}
+            color={textColor ?? appColors.primary7}
             styles={[
               textStyles,
               {

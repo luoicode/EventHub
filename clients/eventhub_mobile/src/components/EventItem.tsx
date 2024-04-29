@@ -35,7 +35,7 @@ const EventItem = (props: Props) => {
     return (
         <CardComponent
             isShadows
-            styles={[{ width: appInfo.sizes.WIDTH * 0.7, backgroundColor: appColors.primary5 }, styles]}
+            styles={[{ width: appInfo.sizes.WIDTH * 0.7, backgroundColor: appColors.primary7 }, styles]}
             onPress={() => navigation.navigate('EventDetail', { id: item._id })}
         >
             {type === 'card' ? (
@@ -52,13 +52,13 @@ const EventItem = (props: Props) => {
                                 styles={[globalStyles.noSpaceCard]}
                                 color="#ffffffB3">
                                 <TextComponent
-                                    color={appColors.primary8}
+                                    color={appColors.danger}
                                     font={fontFamilies.bold}
                                     size={18}
                                     text={numberToString(new Date(item.date).getDate())}
                                 />
                                 <TextComponent
-                                    color={appColors.primary8}
+                                    color={appColors.danger}
                                     font={fontFamilies.semiBold}
                                     size={10}
                                     text={appInfo.monthNames[new Date(item.date).getMonth()].substring(0, 3)}
@@ -81,14 +81,14 @@ const EventItem = (props: Props) => {
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
                     <AvatarGroup userIds={item.users} />
                     <RowComponent>
-                        <Location size={18} color={appColors.primary7} variant="Bold" />
+                        <Location size={18} color={appColors.primary5} variant="Bold" />
                         <SpaceComponent width={8} />
                         <TextComponent
                             flex={1}
                             numberOfLine={1}
                             text={item.locationAddress}
                             size={16}
-                            color={appColors.primary7}
+                            color={appColors.primary5}
                         />
                     </RowComponent>
                 </>
@@ -109,14 +109,14 @@ const EventItem = (props: Props) => {
                             <TextComponent color={appColors.primary5} text={`${dateTime.GetDayString(item.date)} • ${dateTime.GetTime(new Date(item.startAt))} `} />
                             <TextComponent text={item.title} title size={18} numberOfLine={2} />
                             <RowComponent>
-                                <Location size={18} color={appColors.primary7} variant="Bold" />
+                                <Location size={18} color={appColors.primary5} variant="Bold" />
                                 <SpaceComponent width={8} />
                                 <TextComponent
                                     flex={1}
                                     numberOfLine={1}
                                     text={item.locationAddress}
                                     size={12}
-                                    color={appColors.primary7}
+                                    color={appColors.primary5}
                                 />
                             </RowComponent>
                         </View>

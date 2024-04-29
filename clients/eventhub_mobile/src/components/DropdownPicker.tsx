@@ -69,7 +69,7 @@ const DropdownPicker = (props: Props) => {
                 <TextComponent
                     text={`${item.label.includes('@') ? item.label.split('@')[0] : item.label
                         }`}
-                    color={appColors.primary}
+                    color={appColors.primary3}
                 />
                 <SpaceComponent width={8} />
                 <TouchableOpacity
@@ -77,7 +77,7 @@ const DropdownPicker = (props: Props) => {
                         handlerSelectItem(id);
                         onSelect(selectedItems);
                     }}>
-                    <AntDesign name="close" size={18} color={appColors.text} />
+                    <AntDesign name="close" size={18} color={appColors.primary5} />
                 </TouchableOpacity>
             </RowComponent>
         ) : (
@@ -109,7 +109,7 @@ const DropdownPicker = (props: Props) => {
                     }
                     color={
                         selectedItems?.includes(item.value)
-                            ? appColors.primary6
+                            ? appColors.primary3
                             : appColors.primary5
                     }
                 />
@@ -117,7 +117,7 @@ const DropdownPicker = (props: Props) => {
                     <FontAwesome
                         name="check-square-o"
                         size={22}
-                        color={appColors.primary6}
+                        color={appColors.primary3}
                     />
                 )}
             </RowComponent>
@@ -177,7 +177,7 @@ const DropdownPicker = (props: Props) => {
                                 paddingTop: 30,
 
                             }}>
-                            <View style={{ flex: 1 }}>
+                            {/* <View style={{ flex: 1 }}>
                                 <InputComponent
                                     styles={{ marginBottom: 0 }}
                                     placeholder="Search..."
@@ -186,7 +186,7 @@ const DropdownPicker = (props: Props) => {
                                     allowClear
                                     affix={<SearchNormal1 size={22} color={appColors.primary7} />}
                                 />
-                            </View>
+                            </View> */}
                             <SpaceComponent width={20} />
                             <ButtonComponent
                                 type="link"
