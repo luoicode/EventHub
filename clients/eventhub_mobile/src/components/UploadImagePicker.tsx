@@ -99,7 +99,7 @@ const UploadImagePicker = (props: Props) => {
           />
         </CardComponent>
         <SpaceComponent width={16} />
-        <TextComponent size={20} text='Add cover photo' />
+        <TextComponent text='Upload image' size={20} />
       </RowComponent>
       <Portal>
         <Modalize

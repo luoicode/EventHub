@@ -6,8 +6,10 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
+  StyleProp,
   TouchableOpacity,
-  View
+  View,
+  ViewStyle
 } from 'react-native';
 import { RowComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
@@ -21,16 +23,17 @@ interface Props {
   children: ReactNode;
   back?: boolean;
   right?: ReactNode
+  styles?: StyleProp<ViewStyle>
 }
 
 const ContainerComponent = (props: Props) => {
-  const { children, isScroll, isImageBackground, title, back, right, } = props;
+  const { children, isScroll, isImageBackground, title, back, right, styles } = props;
 
   const navigation: any = useNavigation();
 
   const headerComponent = () => {
     return (
-      <View style={{ flex: 1, paddingTop: 30, backgroundColor: appColors.primary7 }}>
+      <View style={[{ flex: 1, paddingTop: 30, backgroundColor: appColors.primary7 }, styles]}>
         {(title || back || right) && (
           <RowComponent
             styles={{

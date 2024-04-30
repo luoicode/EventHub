@@ -128,7 +128,7 @@ const SignUpScreen = ({ navigation }: any) => {
     };
     return (
         <>
-            <ContainerComponent isImageBackground isScroll back>
+            <ContainerComponent isImageBackground isScroll back styles={{ backgroundColor: appColors.primary4 }}>
                 <SectionComponent
                     styles={{
                         justifyContent: 'center',

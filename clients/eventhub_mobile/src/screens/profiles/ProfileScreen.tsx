@@ -83,6 +83,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
 
   return (
     <ContainerComponent
+      back
       title={profile?.name}
       isScroll
       right={

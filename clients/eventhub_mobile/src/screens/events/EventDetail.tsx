@@ -367,12 +367,14 @@ const EventDetail = ({ navigation, route }: any) => {
                   textColor={
                     auth.following && auth.following.includes(item.authorId)
                       ? appColors.danger
-                      : appColors.primary5
+                      : appColors.primary3
                   }
                   styles={[
                     globalStyles.button,
                     {
-                      backgroundColor: appColors.primary7,
+                      backgroundColor: auth.following && auth.following.includes(item.authorId)
+                        ? `${appColors.danger}33`
+                        : appColors.primary,
                       paddingVertical: 8,
                       marginRight: 8,
                       borderRadius: 12,
@@ -382,10 +384,7 @@ const EventDetail = ({ navigation, route }: any) => {
               </RowComponent>
             )}
           </SectionComponent>
-          <TabBarComponent title="About Event" />
-          <SectionComponent>
-            <TextComponent text={item.description} />
-          </SectionComponent>
+          <TabBarComponent title="Members" />
           <SectionComponent styles={{}}>
             {item.users && item.users.length > 0 ? (
               <View
@@ -432,6 +431,11 @@ const EventDetail = ({ navigation, route }: any) => {
               </>
             )}
           </SectionComponent>
+          <TabBarComponent title="About Event" />
+          <SectionComponent>
+            <TextComponent text={item.description} />
+          </SectionComponent>
+
         </View>
         <SpaceComponent height={80} />
       </ScrollView>

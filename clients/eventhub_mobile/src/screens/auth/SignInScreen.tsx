@@ -64,7 +64,7 @@ const SignInScreen = ({ navigation }: any) => {
   };
 
   return (
-    <ContainerComponent isImageBackground isScroll>
+    <ContainerComponent isImageBackground isScroll styles={{ backgroundColor: appColors.primary4 }}>
       <SectionComponent
         styles={{
           justifyContent: 'center',
@@ -80,7 +80,7 @@ const SignInScreen = ({ navigation }: any) => {
           }}
         />
       </SectionComponent>
-      <SectionComponent>
+      <SectionComponent >
         <TextComponent text="Sign In" size={24} title />
         <SpaceComponent height={21} />
         <InputComponent

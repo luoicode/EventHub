@@ -2,7 +2,7 @@ export const appColors = {
   primary: '#AFE0FF',
   primary2: '#7974E7',
   primary3: '#378CE7',
-  primary4: '#DFF5FF',
+  primary4: '#F6F2FA',
   primary5: 'black',
   primary6: '#76ABAE',
   primary7: '#ffffff',

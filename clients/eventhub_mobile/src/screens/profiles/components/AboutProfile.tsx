@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import {
   ButtonComponent,
+  ContainerComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -160,8 +161,8 @@ const AboutProfile = (props: Props) => {
 
       {/* About event reviews */}
 
-      <SectionComponent>
-        <RowComponent>
+      <SectionComponent >
+        <RowComponent >
           {tabs.map(item => (
             <TouchableOpacity
               onPress={() => setTabSelected(item.key)}
@@ -199,7 +200,9 @@ const AboutProfile = (props: Props) => {
               />
             </TouchableOpacity>
           ))}
+
         </RowComponent>
+        <SpaceComponent height={20} />
         {rednerTabContent(tabSelected)}
       </SectionComponent>
       <LoadingModal visible={isLoading} />

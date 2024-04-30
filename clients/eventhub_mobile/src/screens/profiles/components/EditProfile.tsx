@@ -48,14 +48,16 @@ const EditProfile = (props: Props) => {
 
   return (
     <SectionComponent>
-      <RowComponent>
+      <RowComponent justify='flex-start'>
         <ButtonComponent
           iconFlex="left"
-          icon={<Edit size="26" color={appColors.primary5} />}
+          icon={<Edit size="20" color={appColors.primary5} />}
           styles={{
+            height: 54,
+            width: 'auto',
             borderWidth: 1,
-            borderColor: appColors.primary5,
-            backgroundColor: appColors.primary7,
+            borderColor: appColors.gray2,
+            backgroundColor: appColors.primary4,
           }}
           text="Edit profile"
           type="primary"

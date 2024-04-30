@@ -214,7 +214,6 @@ const AddNewScreen = ({ navigation }: any) => {
           <></>
         )}
         <UploadImagePicker
-
           onSelect={(val: any) =>
             val.type === 'url'
               ? handlerChangeValue('photoUrl', val.value as string)
@@ -235,7 +234,7 @@ const AddNewScreen = ({ navigation }: any) => {
             }}
           />
         </RowComponent>
-        <SpaceComponent height={8} />
+        {/* <SpaceComponent height={8} /> */}
         <RowComponent justify='flex-start'>
           <Category
             size="32"
@@ -247,7 +246,7 @@ const AddNewScreen = ({ navigation }: any) => {
             onSelect={val => handlerChangeValue('categories', val)}
           />
         </RowComponent>
-        <SpaceComponent height={12} />
+        <SpaceComponent height={20} />
         <RowComponent>
           <DateTimePicker
             label='Time start:'
@@ -263,7 +262,7 @@ const AddNewScreen = ({ navigation }: any) => {
             selected={eventData.endAt}
           />
         </RowComponent>
-        <SpaceComponent height={12} />
+        <SpaceComponent height={20} />
         <DateTimePicker
           type="date"
           onSelect={val => handlerChangeValue('date', val)}
