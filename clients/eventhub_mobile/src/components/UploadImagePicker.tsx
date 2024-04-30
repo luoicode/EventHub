@@ -90,11 +90,11 @@ const UploadImagePicker = (props: Props) => {
         <CardComponent
           styles={[
             globalStyles.noSpaceCard,
-            { width: 56, height: 45, minHeight: 56 },
+            { width: 56, minHeight: 50 },
           ]}
           color='#E1F0DA'>
           <Image
-            size="32"
+            size="30"
             color="green"
           />
         </CardComponent>

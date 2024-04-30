@@ -46,7 +46,9 @@ const InputAddNewScreen = (props: Props) => {
                     localStyles.text,
                     {
                         paddingHorizontal: affix || suffix ? 12 : 0,
-                        textAlignVertical: multiline ? 'top' : 'auto',
+                        // textAlignVertical: multiline ? 'top' : 'auto',
+                        textAlignVertical: 'center',
+
                         fontSize: props.fontSize ?? 18,
                     },
                 ]}
@@ -77,7 +79,8 @@ const localStyles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 15,
         backgroundColor: appColors.primary7,
-        marginBottom: 19,
+        // marginBottom: 19,
+
     },
     text: {
         fontFamily: fontFamilies.regular,

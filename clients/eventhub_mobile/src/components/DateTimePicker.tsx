@@ -23,10 +23,12 @@ const DateTimePicker = (props: Props) => {
         <View style={{ flex: 1 }}>
             {label && <TextComponent text={label} styles={{ marginBottom: 8 }} />}
             <RowComponent
-                styles={[globalStyles.inputContainer]}
                 onPress={() => setIsShowDatePicker(true)}>
+                {
+                    type === 'time' ? <Clock size={30} color={appColors.gray} /> : <Calendar size={30} color={appColors.gray} />
+                }
                 <TextComponent
-                    styles={{ textAlign: 'center' }}
+                    styles={{ marginLeft: 16 }}
                     text={`${selected
                         ? type === 'time'
                             ? dateTime.GetTime(selected)
@@ -36,9 +38,7 @@ const DateTimePicker = (props: Props) => {
                     flex={1}
                     font={fontFamilies.medium}
                 />
-                {
-                    type === 'time' ? <Clock size={24} color={appColors.gray} /> : <Calendar size={24} color={appColors.gray} />
-                }
+
             </RowComponent>
             <DatePicker
                 onCancel={() => setIsShowDatePicker(false)}

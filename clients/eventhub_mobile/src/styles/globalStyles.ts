@@ -81,6 +81,18 @@ export const globalStyles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
   },
+  inputDropDown: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    width: '100%',
+    minHeight: 56,
+    paddingVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    backgroundColor: appColors.gray3,
+    marginBottom: 19,
+  },
   inputContainer: {
     flexDirection: 'row',
     borderRadius: 12,

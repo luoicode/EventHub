@@ -1,4 +1,4 @@
-import { ArrowDown2, SearchNormal1 } from 'iconsax-react-native';
+import { ArrowDown2, Category, SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -31,6 +31,8 @@ const DropdownPicker = (props: Props) => {
     const [isVisibleModalize, setIsVisibleModalize] = useState(false);
     const modalieRef = useRef<Modalize>();
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [selectedCount, setSelectedCount] = useState(0);
+
 
     useEffect(() => {
         if (isVisibleModalize) {
@@ -48,16 +50,18 @@ const DropdownPicker = (props: Props) => {
 
         if (selectedItems.includes(id)) {
             const data = [...selectedItems];
-
             const index = selectedItems.findIndex(element => element === id);
-
             if (index !== -1) {
                 data.splice(index, 1);
             }
 
             setSelectedItems(data);
+            setSelectedCount(selectedCount - 1); // Giảm giá trị của selectedCount khi bỏ chọn
         } else {
-            setSelectedItems([...selectedItems, id]);
+            if (selectedCount < 5) { // Kiểm tra xem có thể chọn thêm người không
+                setSelectedItems([...selectedItems, id]);
+                setSelectedCount(selectedCount + 1); // Tăng giá trị của selectedCount khi chọn
+            }
         }
     };
 
@@ -91,12 +95,10 @@ const DropdownPicker = (props: Props) => {
             <RowComponent
                 key={item.value}
                 onPress={
-                    multible
-                        ? () => handlerSelectItem(item.value)
-                        : () => {
-                            onSelect(item.value);
-                            modalieRef.current?.close();
-                        }
+                    multible && selectedCount < 5 ? () => handlerSelectItem(item.value) : () => {
+                        onSelect(item.value);
+                        modalieRef.current?.close();
+                    }
                 }
                 styles={[localStyles.listItem]}>
                 <TextComponent
@@ -126,29 +128,29 @@ const DropdownPicker = (props: Props) => {
 
 
     return (
-        <View style={{ marginBottom: 8 }}>
+        <View >
             {label && <TextComponent text={label} styles={{ marginBottom: 8 }} />}
-            <RowComponent
-                styles={[globalStyles.inputContainer, { alignItems: 'flex-start' }]}
+            <RowComponent justify='flex-start'
+                styles={[{ alignItems: 'center' }]}
                 onPress={() => setIsVisibleModalize(true)}>
-                <RowComponent styles={{ flex: 1, flexWrap: 'wrap' }}>
+                <RowComponent styles={{ flexWrap: 'wrap', marginLeft: 12 }}>
                     {selected ? (
                         selectedItems.length > 0 ? (
                             selectedItems.map(item => renderSelectedItem(item))
                         ) : (
                             <TextComponent
                                 styles={{ marginTop: 20 }}
+                                size={18}
                                 text={
                                     values.find(element => element.value === selected)?.label ??
-                                    ''
+                                    'Invite your friend'
                                 }
                             />
                         )
                     ) : (
-                        <TextComponent styles={{ marginTop: 20 }} text="Select" />
+                        <TextComponent size={18} styles={{ marginTop: 20 }} text="Select category" />
                     )}
                 </RowComponent>
-                <ArrowDown2 size={22} color={appColors.gray} />
             </RowComponent>
             <Portal>
                 <Modalize
@@ -157,14 +159,23 @@ const DropdownPicker = (props: Props) => {
                     FooterComponent={
                         multible && (
                             <View style={{ paddingHorizontal: 20, paddingBottom: 30 }}>
-                                <ButtonComponent
-                                    text="Agree"
-                                    type="primary"
-                                    onPress={() => {
-                                        onSelect(selectedItems);
-                                        modalieRef.current?.close();
-                                    }}
-                                />
+                                <RowComponent>
+
+                                    <ButtonComponent
+                                        text="Agree"
+                                        type="primary"
+                                        onPress={() => {
+                                            onSelect(selectedItems);
+                                            modalieRef.current?.close();
+                                        }}
+                                    />
+                                    <ButtonComponent
+                                        type="primary"
+                                        text="Cancel"
+                                        color='red'
+                                        onPress={() => modalieRef.current?.close()}
+                                    />
+                                </RowComponent>
                             </View>
                         )
                     }
@@ -177,22 +188,8 @@ const DropdownPicker = (props: Props) => {
                                 paddingTop: 30,
 
                             }}>
-                            {/* <View style={{ flex: 1 }}>
-                                <InputComponent
-                                    styles={{ marginBottom: 0 }}
-                                    placeholder="Search..."
-                                    value={searchKey}
-                                    onChange={val => setSearchKey(val)}
-                                    allowClear
-                                    affix={<SearchNormal1 size={22} color={appColors.primary7} />}
-                                />
-                            </View> */}
                             <SpaceComponent width={20} />
-                            <ButtonComponent
-                                type="link"
-                                text="Cancel"
-                                onPress={() => modalieRef.current?.close()}
-                            />
+                            <TextComponent title size={36} text='Select' />
                         </RowComponent>
                     }
                     onClose={() => setIsVisibleModalize(false)}>
@@ -201,7 +198,7 @@ const DropdownPicker = (props: Props) => {
                     </View>
                 </Modalize>
             </Portal>
-        </View>
+        </View >
     );
 };
 
