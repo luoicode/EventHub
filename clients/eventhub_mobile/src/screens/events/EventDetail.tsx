@@ -1,13 +1,13 @@
-import { ArrowLeft, ArrowRight, Calendar, Location } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Heart, Location } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
 import userAPI from '../../apis/userApi';
@@ -23,7 +23,6 @@ import {
   TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
-import { appInfo } from '../../constants/appInfos';
 import { fontFamilies } from '../../constants/fontFamilies';
 import { LoadingModal } from '../../modals';
 import ModalInvite from '../../modals/ModalInvite';
@@ -46,10 +45,8 @@ const EventDetail = ({ navigation, route }: any) => {
   const [isVisibleModalInvite, setIsVisibleModalInvite] = useState(false);
   const [item, setItem] = useState<EventModel>();
 
-
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     if (id) {
@@ -149,7 +146,6 @@ const EventDetail = ({ navigation, route }: any) => {
   const getEventById = async () => {
     const api = `/get-event?id=${id}`;
 
-
     try {
       const res: any = await eventAPI.HandlerEvent(api);
 
@@ -159,8 +155,31 @@ const EventDetail = ({ navigation, route }: any) => {
     }
   };
 
-  return item ? (
-    <View style={{ flex: 1, backgroundColor: appColors.white }}>
+  const handlerCreateBillPayment = async () => {
+    const data = {
+      createdAt: Date.now(),
+      createdBy: auth.id,
+      eventId: id,
+      price: item?.price,
+      authorId: item?.authorId,
+    };
+
+    const api = `/buy-ticket`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api, data, 'post');
+      navigation.navigate('PaymentScreen', { billDetail: res.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return isLoading ? (
+    <View style={[globalStyles.container, globalStyles.center, { flex: 1 }]}>
+      <ActivityIndicator />
+    </View>
+  ) : item ? (
+    <View style={{ flex: 1, backgroundColor: appColors.primary7 }}>
       <View
         style={{
           position: 'absolute',
@@ -178,15 +197,19 @@ const EventDetail = ({ navigation, route }: any) => {
             }}>
             <RowComponent styles={{ flex: 1 }}>
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() =>
+                  navigation.canGoBack()
+                    ? navigation.goBack()
+                    : navigation.navigate('Main')
+                }
                 style={{ width: 48, height: 48, justifyContent: 'center' }}>
-                <ArrowLeft size={28} color={appColors.white} />
+                <ArrowLeft size={28} color={appColors.primary7} />
               </TouchableOpacity>
               <TextComponent
                 flex={1}
                 text="Event Details"
                 title
-                color={appColors.white}
+                color={appColors.primary7}
               />
               <CardComponent
                 onPress={handlerFollower}
@@ -196,14 +219,14 @@ const EventDetail = ({ navigation, route }: any) => {
                     ? '#ffffffB3'
                     : '#ffffff4D'
                 }>
-                <MaterialIcons
-                  name="bookmark"
+                <Heart
+                  size="28"
                   color={
                     auth.follow_events && auth.follow_events.includes(item._id)
                       ? appColors.danger2
-                      : appColors.white
+                      : appColors.primary7
                   }
-                  size={28}
+                  variant="Bold"
                 />
               </CardComponent>
             </RowComponent>
@@ -215,127 +238,86 @@ const EventDetail = ({ navigation, route }: any) => {
         showsVerticalScrollIndicator={false}
         style={{
           flex: 1,
+          backgroundColor: `${appColors.gray2}33`,
         }}>
-        <Image
-          source={{ uri: item.photoUrl }}
-          style={{ width: appInfo.sizes.WIDTH, height: 240, resizeMode: 'cover' }}
-        />
-        <SectionComponent styles={{ marginTop: -20 }}>
-          {item.users.length > 0 ? (
-            <View
-              style={{
-                justifyContent: 'center',
-                flex: 1,
-                alignItems: 'center',
-              }}>
-              <RowComponent
-                justify="space-between"
-                styles={[
-                  globalStyles.shadow,
-                  {
-                    backgroundColor: appColors.white,
-                    borderRadius: 100,
-                    paddingHorizontal: 12,
-                    width: '90%',
-                  },
-                ]}>
-                <AvatarGroup userIds={item.users} size={36} />
-                <TouchableOpacity
-                  onPress={() => setIsVisibleModalInvite(true)}
-                  style={[
-                    globalStyles.button,
-                    {
-                      backgroundColor: appColors.primary,
-                      paddingVertical: 8,
-                    },
-                  ]}>
-                  <TextComponent text="Invite" color={appColors.white} />
-                </TouchableOpacity>
-              </RowComponent>
-            </View>
-          ) : (
-            <>
-              <ButtonComponent
-                onPress={() => setIsVisibleModalInvite(true)}
-                text="Invite"
-                styles={{ borderRadius: 100, width: '30%' }}
-                type="primary"
+        <View
+          style={{
+            backgroundColor: appColors.primary7,
+            margin: 5,
+            borderRadius: 40,
+            flex: 1,
+          }}>
+          <Image
+            source={{ uri: item.photoUrl }}
+            style={{
+              width: 'auto',
+              height: 300,
+              resizeMode: 'cover',
+              borderBottomLeftRadius: 40,
+              borderBottomRightRadius: 40,
+            }}
+          />
+          <RowComponent justify="space-between">
+            <SectionComponent styles={{ width: '70%' }}>
+              <SpaceComponent height={20} />
+              <TextComponent
+                text={item.title}
+                title
+                size={26}
+                font={fontFamilies.medium}
               />
-            </>
-          )}
-        </SectionComponent>
-        <View style={{ backgroundColor: appColors.white }}>
-          <SectionComponent>
-            <TextComponent
-              text={item.title}
-              title
-              size={34}
-              font={fontFamilies.medium}
-            />
-          </SectionComponent>
-          <SectionComponent>
-            <RowComponent styles={{ marginBottom: 20 }}>
-              <CardComponent
-                styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
-                color={`${appColors.primary}33`}>
-                <Calendar variant="Bold" color={appColors.primary} size={30} />
-              </CardComponent>
-              <SpaceComponent width={16} />
-              <View
-                style={{
-                  flex: 1,
-                  height: 48,
-                  justifyContent: 'space-around',
-                }}>
+              <SpaceComponent height={16} />
+              <RowComponent justify="flex-start">
+                <Calendar variant="Bold" color={appColors.gray2} size={20} />
+                <SpaceComponent width={5} />
                 <TextComponent
                   text={`${dateTime.GetDate(new Date(item.date))}`}
-                  font={fontFamilies.medium}
-                  size={18}
-                />
-                <TextComponent
-                  text={`${appInfo.dayNames[new Date(item.date).getDay()]
-                    }, ${dateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
+                  size={14}
                   color={appColors.gray}
-                  size={16}
                 />
-              </View>
-            </RowComponent>
+                <SpaceComponent width={16} />
+                <Location variant="Bold" color={appColors.gray2} size={20} />
+                <SpaceComponent width={5} />
+                <TextComponent
+                  text={`${dateTime.GetDate(new Date(item.date))}`}
+                  size={14}
+                  color={appColors.gray}
+                />
+              </RowComponent>
+            </SectionComponent>
+            <SectionComponent
+              styles={[globalStyles.shadow, {
+                padding: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: appColors.danger,
+                borderRadius: 20,
+              }]}>
+              <TextComponent
+                text={`$${parseFloat(item.price).toLocaleString()}`}
+                title
+                color={appColors.primary7}
+              />
+            </SectionComponent>
+          </RowComponent>
+        </View>
 
-            <RowComponent styles={{ marginBottom: 20, alignItems: 'flex-start' }}>
-              <CardComponent
-                styles={[globalStyles.noSpaceCard, { width: 48, height: 48 }]}
-                color={`${appColors.primary}33`}>
-                <Location variant="Bold" color={appColors.primary} size={30} />
-              </CardComponent>
-              <SpaceComponent width={16} />
-              <View
-                style={{
-                  flex: 1,
-                  minHeight: 48,
-                  justifyContent: 'space-around',
-                }}>
-                <TextComponent
-                  numberOfLine={1}
-                  text={item.locationTitle}
-                  font={fontFamilies.medium}
-                  size={18}
-                />
-                <TextComponent
-                  text={item.locationAddress}
-                  color={appColors.gray}
-                  size={16}
-                />
-              </View>
-            </RowComponent>
+        <View
+          style={{
+            backgroundColor: appColors.primary7,
+            marginHorizontal: 5,
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
+          }}>
+          <SectionComponent>
             {profile && (
-              <RowComponent
-                styles={{ marginBottom: 20 }}
-                onPress={() =>
-                  navigation.navigate('ProfileScreen', {
-                    id: item.authorId,
-                  })
-                }>
-                <TouchableOpacity>
+              <RowComponent styles={{ marginVertical: 20 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('ProfileScreen', {
+                      id: item.authorId,
+                    })
+                  }>
                   <Image
                     source={{
                       uri: profile.photoUrl
@@ -357,11 +339,18 @@ const EventDetail = ({ navigation, route }: any) => {
                     height: 48,
                     justifyContent: 'space-around',
                   }}>
-                  <TextComponent
-                    text={profile.name ? profile.name : profile?.email}
-                    font={fontFamilies.medium}
-                    size={18}
-                  />
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('ProfileScreen', {
+                        id: item.authorId,
+                      })
+                    }>
+                    <TextComponent
+                      text={profile.name ? profile.name : profile?.email}
+                      font={fontFamilies.medium}
+                      size={18}
+                    />
+                  </TouchableOpacity>
                   <TextComponent
                     text={profile.type ? profile.type : 'Personal'}
                     color={appColors.gray}
@@ -378,15 +367,14 @@ const EventDetail = ({ navigation, route }: any) => {
                   textColor={
                     auth.following && auth.following.includes(item.authorId)
                       ? appColors.danger
-                      : appColors.primary
+                      : appColors.primary3
                   }
                   styles={[
                     globalStyles.button,
                     {
-                      backgroundColor:
-                        auth.following && auth.following.includes(item.authorId)
-                          ? appColors.white
-                          : '#EBEDFF',
+                      backgroundColor: auth.following && auth.following.includes(item.authorId)
+                        ? `${appColors.danger}33`
+                        : appColors.primary,
                       paddingVertical: 8,
                       marginRight: 8,
                       borderRadius: 12,
@@ -396,10 +384,58 @@ const EventDetail = ({ navigation, route }: any) => {
               </RowComponent>
             )}
           </SectionComponent>
+          <TabBarComponent title="Members" />
+          <SectionComponent styles={{}}>
+            {item.users && item.users.length > 0 ? (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  flex: 1,
+                  alignItems: 'center',
+                }}>
+                <RowComponent
+                  justify="space-between"
+                  styles={[
+                    globalStyles.shadow,
+                    {
+                      backgroundColor: appColors.primary7,
+                      borderRadius: 40,
+                      padding: 30,
+                      width: '100%',
+                    },
+                  ]}>
+                  <AvatarGroup userIds={item.users} size={50} />
+                  <SpaceComponent width={16} />
+                  <TouchableOpacity
+                    onPress={() => setIsVisibleModalInvite(true)}
+                    style={[
+                      globalStyles.button,
+                      {
+                        backgroundColor: '#8E8FFA',
+                        paddingVertical: 8,
+                      },
+                    ]}>
+                    <TextComponent text="Invite" color={appColors.primary7} />
+                  </TouchableOpacity>
+                </RowComponent>
+              </View>
+            ) : (
+              <>
+                <ButtonComponent
+                  onPress={() => setIsVisibleModalInvite(true)}
+                  text="Invite your friend"
+                  color="#8E8FFA"
+                  styles={{ borderRadius: 100, width: '50%' }}
+                  type="primary"
+                />
+              </>
+            )}
+          </SectionComponent>
           <TabBarComponent title="About Event" />
           <SectionComponent>
             <TextComponent text={item.description} />
           </SectionComponent>
+
         </View>
         <SpaceComponent height={80} />
       </ScrollView>
@@ -414,20 +450,9 @@ const EventDetail = ({ navigation, route }: any) => {
           padding: 12,
         }}>
         <ButtonComponent
-          text="BUY TICKET $120"
+          onPress={handlerCreateBillPayment}
+          text="BUY TICKET "
           type="primary"
-          iconFlex="right"
-          icon={
-            <View
-              style={[
-                globalStyles.iconContainer,
-                {
-                  backgroundColor: '#3D56F0',
-                },
-              ]}>
-              <ArrowRight size={18} color={appColors.white} />
-            </View>
-          }
         />
       </LinearGradient>
 
@@ -439,7 +464,9 @@ const EventDetail = ({ navigation, route }: any) => {
         eventId={item._id}
       />
     </View>
-  ) : <></>;
+  ) : (
+    <></>
+  );
 };
 
 export default EventDetail;

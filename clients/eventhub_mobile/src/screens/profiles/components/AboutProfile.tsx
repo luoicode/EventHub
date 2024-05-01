@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import {
   ButtonComponent,
+  ContainerComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -108,8 +109,8 @@ const AboutProfile = (props: Props) => {
                 borderWidth: 1,
                 borderColor:
                   auth.following && auth.following.includes(profile.uid)
-                    ? appColors.white
-                    : appColors.primary,
+                    ? appColors.danger
+                    : appColors.primary5,
                 backgroundColor:
                   auth.following && auth.following.includes(profile.uid)
                     ? appColors.danger
@@ -127,7 +128,7 @@ const AboutProfile = (props: Props) => {
                 color={
                   auth.following && auth.following.includes(profile.uid)
                     ? appColors.white
-                    : appColors.primary
+                    : appColors.primary5
                 }
               />
             }
@@ -137,22 +138,20 @@ const AboutProfile = (props: Props) => {
             type='primary'
             iconFlex='left'
             text='Message'
-            textColor={appColors.primary}
+            textColor={appColors.primary5}
             onPress={() => { }}
-            styles={[
-              globalStyles.button,
-              {
-                flex: 1,
-                borderWidth: 1,
-                borderColor: appColors.primary,
-                backgroundColor: appColors.white,
-              },
+            styles={[globalStyles.button, {
+              flex: 1,
+              borderWidth: 1,
+              borderColor: appColors.primary5,
+              backgroundColor: appColors.primary7
+            },
             ]}
             icon={
               <Ionicons
                 name='chatbubbles-outline'
                 size={26}
-                color={appColors.primary}
+                color={appColors.primary5}
               />
             }
           />
@@ -160,10 +159,10 @@ const AboutProfile = (props: Props) => {
       </SectionComponent>
 
 
-      {/* Abou event reviews */}
+      {/* About event reviews */}
 
-      <SectionComponent>
-        <RowComponent>
+      <SectionComponent >
+        <RowComponent >
           {tabs.map(item => (
             <TouchableOpacity
               onPress={() => setTabSelected(item.key)}
@@ -176,7 +175,7 @@ const AboutProfile = (props: Props) => {
               key={item.key}>
               <TextComponent
                 color={
-                  item.key === tabSelected ? appColors.primary : appColors.text
+                  item.key === tabSelected ? appColors.primary3 : appColors.text
                 }
                 text={item.title}
                 size={18}
@@ -195,13 +194,15 @@ const AboutProfile = (props: Props) => {
                   height: 3,
                   backgroundColor:
                     item.key === tabSelected
-                      ? appColors.primary
+                      ? appColors.primary3
                       : appColors.white,
                 }}
               />
             </TouchableOpacity>
           ))}
+
         </RowComponent>
+        <SpaceComponent height={20} />
         {rednerTabContent(tabSelected)}
       </SectionComponent>
       <LoadingModal visible={isLoading} />

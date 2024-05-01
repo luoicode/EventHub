@@ -46,10 +46,10 @@ const EventSchema = new mongoose.Schema({
         required: true,
     },
     price: {
-        type: String,
+        type: Number,
         required: true,
     },
-    category: {
+    categories: {
         type: String,
         required: true,
     },
@@ -69,6 +69,7 @@ const EventSchema = new mongoose.Schema({
         type: [String],
     },
 });
+
 
 const EventModel = mongoose.model('events', EventSchema);
 module.exports = EventModel;

@@ -10,8 +10,8 @@ export const globalStyles = StyleSheet.create({
 
   text: {
     fontFamily: fontFamilies.regular,
-    fontSize: 16,
-    color: appColors.text,
+    fontSize: 18,
+    color: appColors.primary5,
   },
 
   button: {
@@ -81,18 +81,30 @@ export const globalStyles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
   },
-  inputContainer: {
+  inputDropDown: {
     flexDirection: 'row',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: appColors.gray3,
     width: '100%',
     minHeight: 56,
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
-    backgroundColor: appColors.white,
+    backgroundColor: appColors.gray3,
+    marginBottom: 19,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: appColors.gray2,
+    width: '100%',
+    minHeight: 56,
+    paddingVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    backgroundColor: appColors.primary7,
     marginBottom: 19,
   },
 
@@ -100,8 +112,7 @@ export const globalStyles = StyleSheet.create({
     padding: 0,
     margin: 0,
     flex: 1,
-    // paddingHorizontal: 14,
-    color: appColors.text,
+    color: appColors.primary7,
   },
   center: {
     justifyContent: 'center',

@@ -77,7 +77,7 @@ const MapScreen = ({ navigation }: any) => {
         <RowComponent>
           <View style={{ flex: 1 }}>
             <InputComponent
-              styles={{ marginBottom: 0 }}
+              styles={{ marginBottom: 0, backgroundColor: appColors.primary7 }}
               affix={
                 <TouchableOpacity
                   onPress={() => {
@@ -85,7 +85,7 @@ const MapScreen = ({ navigation }: any) => {
                       screen: 'HomeScreen',
                     });
                   }}>
-                  <ArrowLeft2 size={22} color={appColors.text} />
+                  <ArrowLeft2 size={22} color={appColors.primary5} />
                 </TouchableOpacity>
               }
               placeholder="Search"
@@ -97,8 +97,8 @@ const MapScreen = ({ navigation }: any) => {
           <CardComponent
             onPress={getNearbyEvents}
             styles={[globalStyles.noSpaceCard, { width: 56, height: 56 }]}
-            color={appColors.white}>
-            <Foundation name="target-two" color={appColors.primary} size={32} />
+            color={appColors.primary7}>
+            <Foundation name="target-two" color={appColors.primary5} size={32} />
           </CardComponent>
         </RowComponent>
         <SpaceComponent height={20} />

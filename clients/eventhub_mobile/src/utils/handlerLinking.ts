@@ -1,3 +1,5 @@
+import {Linking} from 'react-native';
+
 export const handlerLinking = (url: string) => {
-  console.log(url);
+  Linking.openURL(url);
 };

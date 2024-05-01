@@ -1,7 +1,10 @@
 import storage from '@react-native-firebase/storage';
+import { BrushSquare, Category, People } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { ImageOrVideo } from 'react-native-image-crop-picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import eventAPI from '../apis/eventApi';
 import userAPI from '../apis/userApi';
@@ -11,14 +14,15 @@ import {
   ContainerComponent,
   DateTimePicker,
   DropdownPicker,
-  InputComponent,
+  InputAddNewScreen,
   RowComponent,
   SectionComponent,
   SpaceComponent,
   TextComponent,
-  UploadImagePicker,
+  UploadImagePicker
 } from '../components';
 import { appColors } from '../constants/appColors';
+import { LoadingModal } from '../modals';
 import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
@@ -40,7 +44,7 @@ const initValues = {
   endAt: Date.now(),
   date: Date.now(),
   price: '',
-  category: '',
+  categories: '',
 };
 
 const AddNewScreen = ({ navigation }: any) => {
@@ -53,9 +57,12 @@ const AddNewScreen = ({ navigation }: any) => {
 
   const [fileSelected, setFileSelected] = useState<any>();
   const [errorMess, setErrorMess] = useState<string[]>([]);
+  const [isCreating, setIsCreating] = useState(false);
+  const [categories, setCategories] = useState<SelectModel[]>([]);
 
   useEffect(() => {
     handlerGetAllUsers();
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -63,7 +70,30 @@ const AddNewScreen = ({ navigation }: any) => {
     setErrorMess(mess);
   }, [eventData]);
 
-  const handlerChangeValue = (key: string, value: string | Date | string[]) => {
+  const getCategories = async () => {
+    const api = `/get-categories`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+      if (res.data) {
+        const items: SelectModel[] = []
+
+        const data = res.data
+        data.forEach((item: any) =>
+          items.push({
+            label: item.title,
+            value: item._id
+          })
+        )
+        setCategories(items)
+
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handlerChangeValue = (key: string, value: string | number | string[]) => {
     const items = { ...eventData };
     items[`${key}`] = value;
 
@@ -104,10 +134,10 @@ const AddNewScreen = ({ navigation }: any) => {
       res.on(
         'state_changed',
         snap => {
-          console.log(snap.bytesTransferred);
+          // console.log(snap.bytesTransferred);
         },
         error => {
-          console.log(error);
+          // console.log(error);
         },
         () => {
           storage()
@@ -127,13 +157,18 @@ const AddNewScreen = ({ navigation }: any) => {
 
   const handlePustEvent = async (event: EventModel) => {
     const api = `/add-new`;
+
+    setIsCreating(true)
     try {
       const res = await eventAPI.HandlerEvent(api, event, 'post');
+      setIsCreating(false)
 
       navigation.navigate('Explore', {
         screen: 'HomeScreen',
       });
     } catch (error) {
+      setIsCreating(false)
+
       console.log(error);
     }
   };
@@ -154,9 +189,19 @@ const AddNewScreen = ({ navigation }: any) => {
   return (
     <ContainerComponent isScroll>
       <SectionComponent>
-        <TextComponent text="Add New" title />
+        <TextComponent text="Create New Event" title />
       </SectionComponent>
       <SectionComponent>
+
+        <InputAddNewScreen
+          styles={{}}
+          placeholder="Add title"
+          fontSize={28}
+          multiline
+          value={eventData.title}
+          onChange={val => handlerChangeValue('title', val)}
+        />
+        <SpaceComponent height={8} />
         {eventData.photoUrl || fileSelected ? (
           <Image
             resizeMode="cover"
@@ -175,112 +220,107 @@ const AddNewScreen = ({ navigation }: any) => {
               : handlerFileSelected(val.value)
           }
         />
-        <InputComponent
-          placeholder="Title"
-          value={eventData.title}
-          allowClear
-          onChange={val => handlerChangeValue('title', val)}
-        />
-        <InputComponent
-          placeholder="Description"
-          multiline
-          numberOfLine={3}
-          allowClear
-          value={eventData.description}
-          onChange={val => {
-            handlerChangeValue('description', val);
-          }}
-        />
-        <DropdownPicker
-          selected={eventData.category}
-          values={[
-            {
-              label: 'Sport',
-              value: 'sport',
-            },
-            {
-              label: 'Food',
-              value: 'food',
-            },
-            {
-              label: 'Art',
-              value: 'art',
-            },
-            {
-              label: 'Music',
-              value: 'music',
-            },
-            {
-              label: 'Game',
-              value: 'game',
-            },
-          ]}
-          onSelect={val => handlerChangeValue('category', val)}
-        />
+        <SpaceComponent height={8} />
+        <RowComponent justify='flex-start' styles={{ alignItems: 'center' }} >
+          <MaterialCommunityIcons name='sort-variant'
+            color={appColors.primary5} size={30} />
+          <InputAddNewScreen
+            placeholder="Add description"
+            multiline
+            numberOfLine={3}
+            value={eventData.description}
+            onChange={val => {
+              handlerChangeValue('description', val);
+            }}
+          />
+        </RowComponent>
+        {/* <SpaceComponent height={8} /> */}
+        <RowComponent justify='flex-start'>
+          <Category
+            size="32"
+            color="orange"
+          />
+          <DropdownPicker
+            selected={eventData.categories}
+            values={categories}
+            onSelect={val => handlerChangeValue('categories', val)}
+          />
+        </RowComponent>
+        <SpaceComponent height={20} />
         <RowComponent>
           <DateTimePicker
-            label="Start at:"
+            label='Time start:'
             type="time"
             onSelect={val => handlerChangeValue('startAt', val)}
             selected={eventData.startAt}
           />
           <SpaceComponent width={20} />
           <DateTimePicker
-            label="End at:"
+            label='Time end:'
             type="time"
             onSelect={val => handlerChangeValue('endAt', val)}
             selected={eventData.endAt}
           />
         </RowComponent>
+        <SpaceComponent height={20} />
         <DateTimePicker
-          label="Date :"
           type="date"
           onSelect={val => handlerChangeValue('date', val)}
           selected={eventData.date}
         />
-        <DropdownPicker
-          label="Invited users"
-          values={usersSelects}
-          onSelect={(val: string | string[]) =>
-            handlerChangeValue('users', val as string[])
-          }
-          selected={eventData.users}
-          multible
-        />
-        <InputComponent
-          placeholder="Title Address"
-          styles={{ height: 56 }}
-          allowClear
-          value={eventData.locationTitle}
-          onChange={val => {
-            handlerChangeValue('locationTitle', val);
-          }}
-        />
+        <SpaceComponent height={8} />
+        <RowComponent justify='flex-start' styles={{ alignItems: 'center' }} >
+          <BrushSquare
+            color={appColors.primary3} size={30} />
+          <InputAddNewScreen
+            placeholder="Add location title"
+            value={eventData.locationTitle}
+            onChange={val => {
+              handlerChangeValue('locationTitle', val);
+            }}
+          />
+        </RowComponent>
+        <SpaceComponent height={8} />
         <ChoiceLocation
           onSelect={val => {
             handlerLocation(val);
           }}
         />
-        <InputComponent
-          placeholder="Price"
-          allowClear
-          type="number-pad"
-          value={eventData.price}
-          onChange={val => {
-            handlerChangeValue('price', val);
-          }}
-        />
+        <SpaceComponent height={12} />
+
+        <RowComponent justify='flex-start'>
+          <People
+            size="32"
+            color={appColors.primary6}
+          />
+          <DropdownPicker
+            values={usersSelects}
+            onSelect={(val: string | string[]) =>
+              handlerChangeValue('users', val as string[])
+            }
+            selected={eventData.users}
+            multible
+          />
+        </RowComponent>
+        <RowComponent justify='flex-start' styles={{ alignItems: 'center' }} >
+          <MaterialIcons name='attach-money' size={30} color={appColors.danger} />
+          <InputAddNewScreen
+            placeholder="Add price"
+            type="number-pad"
+            value={eventData.price}
+            onChange={val => {
+              handlerChangeValue('price', val);
+            }}
+          />
+        </RowComponent>
       </SectionComponent>
       {errorMess.length > 0 && (
         <SectionComponent>
-          {errorMess.map(mess => (
-            <TextComponent
-              styles={{ marginBottom: 12 }}
-              text={mess}
-              key={mess}
-              color={appColors.danger}
-            />
-          ))}
+          <TextComponent
+            styles={{ marginBottom: 12 }}
+            text="Please enter complete information!"
+            color={appColors.danger}
+          />
         </SectionComponent>
       )}
       <SectionComponent>
@@ -291,6 +331,7 @@ const AddNewScreen = ({ navigation }: any) => {
           onPress={handlerAddEvent}
         />
       </SectionComponent>
+      <LoadingModal visible={isCreating} />
     </ContainerComponent>
   );
 };

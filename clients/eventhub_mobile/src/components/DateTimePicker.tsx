@@ -11,7 +11,7 @@ import { dateTime } from '../utils/dateTime';
 interface Props {
     selected?: Date;
     type: 'date' | 'time';
-    onSelect: (val: Date) => void;
+    onSelect: (val: number) => void;
     label?: string;
 }
 
@@ -23,10 +23,12 @@ const DateTimePicker = (props: Props) => {
         <View style={{ flex: 1 }}>
             {label && <TextComponent text={label} styles={{ marginBottom: 8 }} />}
             <RowComponent
-                styles={[globalStyles.inputContainer]}
                 onPress={() => setIsShowDatePicker(true)}>
+                {
+                    type === 'time' ? <Clock size={30} color={appColors.gray} /> : <Calendar size={30} color={appColors.gray} />
+                }
                 <TextComponent
-                    styles={{ textAlign: 'center' }}
+                    styles={{ marginLeft: 16 }}
                     text={`${selected
                         ? type === 'time'
                             ? dateTime.GetTime(selected)
@@ -36,15 +38,13 @@ const DateTimePicker = (props: Props) => {
                     flex={1}
                     font={fontFamilies.medium}
                 />
-                {
-                    type === 'time' ? <Clock size={24} color={appColors.gray} /> : <Calendar size={24} color={appColors.gray} />
-                }
+
             </RowComponent>
             <DatePicker
                 onCancel={() => setIsShowDatePicker(false)}
                 onConfirm={val => {
                     setIsShowDatePicker(false);
-                    onSelect(val);
+                    onSelect(new Date(val).getTime());
                 }}
                 open={isShowDatePicker}
                 mode={type}

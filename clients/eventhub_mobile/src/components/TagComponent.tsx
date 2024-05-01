@@ -6,25 +6,28 @@ import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
-    onPress: () => void;
+    onPress?: () => void;
     label: string;
     icon?: ReactNode;
     textColor?: string;
     bgColor?: string;
     styles?: StyleProp<ViewStyle>;
-    textStyle?: StyleProp<TextStyle>
+    textStyles?: StyleProp<TextStyle>;
 }
 
 const TagComponent = (props: Props) => {
-    const { label, icon, textColor, onPress, bgColor, styles, textStyle } = props;
+    const { onPress, label, icon, textColor, bgColor, styles, textStyles } = props;
+
     return (
         <TouchableOpacity
+            disabled={!onPress}
             onPress={onPress}
             style={[
                 globalStyles.row,
                 globalStyles.tag,
+                globalStyles.center,
                 {
-                    backgroundColor: bgColor ? bgColor : appColors.white,
+                    backgroundColor: bgColor ? bgColor : appColors.primary7,
                 },
                 styles,
             ]}>
@@ -32,9 +35,9 @@ const TagComponent = (props: Props) => {
             <TextComponent
                 font={fontFamilies.medium}
                 text={label}
-                styles={[{ marginLeft: icon ? 8 : 0 }, textStyle]}
+                styles={[{ marginLeft: icon ? 8 : 0 }, textStyles]}
                 color={
-                    textColor ? textColor : bgColor ? appColors.white : appColors.gray
+                    textColor ? textColor : bgColor ? appColors.primary7 : appColors.gray
                 }
             />
         </TouchableOpacity>

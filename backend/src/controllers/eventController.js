@@ -2,6 +2,31 @@ const asyncHandler = require("express-async-handler");
 const EventModel = require("../models/eventModel");
 const CategoryModel = require("../models/categoryModel");
 const { request } = require("express");
+const BillModel = require("../models/billModel");
+
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: process.env.USERNAME_EMAIL,
+        pass: process.env.PASSWORD_EMAIL,
+    },
+    tls: {
+        rejectUnauthorized: false,
+    },
+});
+const handlerSendMail = async (val) => {
+    try {
+        await transporter.sendMail(val);
+
+        return "OK";
+    } catch (error) {
+        return error;
+    }
+};
 
 const calcDistanceLocation = ({
     currentLat,
@@ -24,6 +49,8 @@ const toRoad = (val) => (val * Math.PI) / 180;
 
 const addNewEvent = asyncHandler(async (req, res) => {
     const body = req.body;
+    const data = { ...body }
+    data.price = parseFloat(body.price)
 
     if (body) {
         const newEvent = new EventModel(body);
@@ -45,15 +72,25 @@ const getEventById = asyncHandler(async (req, res) => {
 
     const item = await EventModel.findById({ _id: id });
 
-    console.log(item);
-
     res.status(200).json({
-        message: 'fafa',
+        message: "Event detail",
         data: item,
     });
-
 });
+const searchEvents = asyncHandler(async (req, res) => {
+    const { title } = req.query;
 
+    const events = await EventModel.find({});
+
+    const items = events.filter((element) =>
+        element.title.toLowerCase().includes(title.toLocaleLowerCase())
+    );
+
+    res.status(200).json({
+        message: "get events ok",
+        data: items,
+    });
+});
 const getEvents = asyncHandler(async (req, res) => {
     const { lat, long, distance, limit, date } = req.query;
 
@@ -100,12 +137,12 @@ const updateFollowers = asyncHandler(async (req, res) => {
 
     await EventModel.findByIdAndUpdate(id, { followers, updatedAt: Date.now() });
 
-    console.log(followers)
+    console.log(followers);
 
     res.status(200).json({
-        mess: 'Update followers successfully! ',
+        mess: "Update followers successfully! ",
         data: [],
-    })
+    });
 });
 
 const getFollowers = asyncHandler(async (req, res) => {
@@ -115,35 +152,104 @@ const getFollowers = asyncHandler(async (req, res) => {
 
     if (event) {
         res.status(200).json({
-            mess: 'Followers',
+            mess: "Followers",
             data: event.followers ?? [],
         });
     } else {
         res.status(401);
-        throw new Error('Event not found');
+        throw new Error("Event not found");
     }
 });
 
 const createCategory = asyncHandler(async (req, res) => {
-    const data = req.body
+    const data = req.body;
 
-    const newCategory = new CategoryModel(data)
+    const newCategory = new CategoryModel(data);
 
-    newCategory.save()
+    newCategory.save();
 
     res.status(200).json({
-        message: 'Add new category successfully!',
-        data: newCategory
-    })
-})
+        message: "Add new category successfully!",
+        data: newCategory,
+    });
+});
 
 const getCategories = asyncHandler(async (req, res) => {
-    const items = await CategoryModel.find({})
+    const items = await CategoryModel.find({});
 
     res.status(200).json({
-        message: 'get category successfully!',
+        message: "get category successfully!",
         data: items,
-    })
-})
+    });
+});
 
-module.exports = { addNewEvent, getEvents, updateFollowers, getFollowers, createCategory, getCategories, getEventById };
+const updateEvent = asyncHandler(async (req, res) => {
+    const data = req.body;
+    const { id } = req.query;
+
+    const item = await EventModel.findByIdAndUpdate(id, data);
+    res.status(200).json({
+        message: "update events successfully!",
+        data: item,
+    });
+});
+const getEventsByCategoryId = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+
+    const items = await EventModel.find({ categories: { $all: id } });
+    res.status(200).json({
+        message: "get events by category successfully!",
+        data: items,
+    });
+});
+
+const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
+    const data = req.body;
+
+    data.price = parseFloat(data.price);
+
+    const bill = new BillModel(data);
+    bill.save();
+
+    res.status(200).json({
+        message: 'Add new bill info successfully',
+        data: bill,
+    });
+});
+
+const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
+    const { billId } = req.query;
+    await BillModel.findByIdAndUpdate(billId, {
+        status: 'success',
+    });
+
+    const data = {
+        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
+        to: 'huyhn045@gmail.com',
+        subject: 'Verification email code',
+        text: 'Your code to verification email',
+        html: `<h1>Your ticket</h1>`,
+    };
+
+    await handlerSendMail(data);
+
+    res.status(200).json({
+        message: 'Update bill successfully',
+        data: [],
+    });
+});
+
+module.exports = {
+    updateEvent,
+    addNewEvent,
+    getEvents,
+    updateFollowers,
+    getFollowers,
+    createCategory,
+    getCategories,
+    getEventById,
+    searchEvents,
+    getEventsByCategoryId,
+    handlerAddNewBillDetail,
+    handlerUpdatePaymentSuccess
+};

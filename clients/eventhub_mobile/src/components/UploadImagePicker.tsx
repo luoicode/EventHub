@@ -16,6 +16,7 @@ import InputComponent from './InputComponent';
 import RowComponent from './RowComponent';
 import SpaceComponent from './SpaceComponent';
 import TextComponent from './TextComponent';
+import CardComponent from './CardComponent';
 interface Props {
   onSelect: (val: { type: 'url' | 'file'; value: string | ImageOrVideo }) => void;
 }
@@ -35,17 +36,17 @@ const UploadImagePicker = (props: Props) => {
     {
       key: 'camera',
       title: 'Take a picture',
-      icon: <Camera size={22} color={appColors.text} />,
+      icon: <Camera size={22} color={appColors.primary5} />,
     },
     {
       key: 'library',
       title: 'Album',
-      icon: <Image size={22} color={appColors.text} />,
+      icon: <Image size={22} color={appColors.primary5} />,
     },
     {
       key: 'url',
       title: 'From Url',
-      icon: <Link size={22} color={appColors.text} />,
+      icon: <Link size={22} color={appColors.primary5} />,
     },
   ];
 
@@ -78,17 +79,28 @@ const UploadImagePicker = (props: Props) => {
       onPress={() => handlerChoiceImage(item.key)}>
       {item.icon}
       <SpaceComponent width={12} />
-      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} />
+      <TextComponent text={item.title} flex={1} font={fontFamilies.medium} color={appColors.primary5} />
     </RowComponent>
   );
 
   return (
     <View style={{ marginBottom: 20 }}>
-      <ButtonComponent
-        text="Upload Image"
-        onPress={() => modalizeRef.current?.open()}
-        type="link"
-      />
+
+      <RowComponent justify='flex-start' onPress={() => modalizeRef.current?.open()}>
+        <CardComponent
+          styles={[
+            globalStyles.noSpaceCard,
+            { width: 56, minHeight: 50 },
+          ]}
+          color='#E1F0DA'>
+          <Image
+            size="30"
+            color="green"
+          />
+        </CardComponent>
+        <SpaceComponent width={16} />
+        <TextComponent text='Upload image' size={20} />
+      </RowComponent>
       <Portal>
         <Modalize
           adjustToContentHeight
@@ -118,7 +130,7 @@ const UploadImagePicker = (props: Props) => {
           <View
             style={[
               {
-                backgroundColor: appColors.white,
+                backgroundColor: appColors.primary7,
                 margin: 20,
                 borderRadius: 12,
                 width: '90%',
@@ -131,11 +143,12 @@ const UploadImagePicker = (props: Props) => {
                   setImageUrl('');
                   setIsVisibleModalAddUr(false);
                 }}>
-                <AntDesign name="close" size={24} color={appColors.text} />
+                <AntDesign name="close" size={24} color={appColors.primary5} />
               </TouchableOpacity>
             </RowComponent>
 
             <TextComponent text="Image URL" title size={18} />
+            <SpaceComponent height={8} />
             <InputComponent
               placeholder="URL"
               value={imageUrl}
@@ -146,6 +159,7 @@ const UploadImagePicker = (props: Props) => {
               <ButtonComponent
                 text="Agree"
                 type="primary"
+                color={appColors.primary5}
                 onPress={() => {
                   setIsVisibleModalAddUr(false);
                   onSelect({ type: 'url', value: imageUrl });

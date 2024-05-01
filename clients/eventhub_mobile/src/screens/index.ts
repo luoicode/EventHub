@@ -8,14 +8,17 @@ import Verification from './auth/Verification';
 import EventDetail from './events/EventDetail';
 import EventsScreen from './events/EventsScreen';
 import SearchEvents from './events/SearchEvents';
-import HomeScreen from './home/HomeScreen';
 import MapScreen from './maps/MapScreen';
 import ProfileScreen from './profiles/ProfileScreen';
 import EditProfileScreen from './profiles/EditProfileScreen';
 import NotFound from './NotFound';
+import ExploreEvents from './events/ExploreEvents';
+import HomeScreen from './home/HomeScreen';
+import CategoryDetail from './events/CategoryDetail';
+import PaymentScreen from './events/PaymentScreen';
+import NearbyScreen from './events/NearbyScreen';
 
 export {
-  HomeScreen,
   SignInScreen,
   SplashScreen,
   OnboardingScreen,
@@ -30,4 +33,9 @@ export {
   EventDetail,
   EditProfileScreen,
   NotFound,
+  ExploreEvents,
+  HomeScreen,
+  CategoryDetail,
+  PaymentScreen,
+  NearbyScreen,
 };

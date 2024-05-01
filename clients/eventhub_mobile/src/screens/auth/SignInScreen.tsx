@@ -1,25 +1,21 @@
-import { View, Text, Button, Image, Switch, Alert, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Switch, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
+import authenticationAPI from '../../apis/authApi';
+import { appColors } from '../../constants/appColors';
+import { addAuth } from '../../redux/reducers/authReducer';
+import { Validate } from '../../utils/validate';
 import {
   ButtonComponent,
-  InputComponent,
-  TextComponent,
   ContainerComponent,
+  InputComponent,
+  RowComponent,
   SectionComponent,
   SpaceComponent,
-  RowComponent,
+  TextComponent,
 } from './../../components/';
-import { globalStyles } from '../../styles/globalStyles';
-import { Lock1, Sms } from 'iconsax-react-native';
-import { appColors } from '../../constants/appColors';
-import { fontFamilies } from '../../constants/fontFamilies';
 import SocialLogin from './components/SocialLogin';
-import authenticationAPI from '../../apis/authApi';
-import { Validate } from '../../utils/validate';
-import { useDispatch } from 'react-redux';
-import { addAuth } from '../../redux/reducers/authReducer';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const SignInScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -68,7 +64,7 @@ const SignInScreen = ({ navigation }: any) => {
   };
 
   return (
-    <ContainerComponent isImageBackground isScroll>
+    <ContainerComponent isImageBackground isScroll styles={{ backgroundColor: appColors.primary4 }}>
       <SectionComponent
         styles={{
           justifyContent: 'center',
@@ -84,7 +80,7 @@ const SignInScreen = ({ navigation }: any) => {
           }}
         />
       </SectionComponent>
-      <SectionComponent>
+      <SectionComponent >
         <TextComponent text="Sign In" size={24} title />
         <SpaceComponent height={21} />
         <InputComponent
@@ -92,7 +88,6 @@ const SignInScreen = ({ navigation }: any) => {
           placeholder="Email"
           onChange={val => setEmail(val)}
           allowClear
-          affix={<Sms size={22} color={appColors.gray} />}
         />
         <InputComponent
           value={password}
@@ -100,12 +95,11 @@ const SignInScreen = ({ navigation }: any) => {
           onChange={val => setPassword(val)}
           isPassword
           allowClear
-          affix={<Lock1 size={22} color={appColors.gray} />}
         />
         <RowComponent justify="space-between">
           <RowComponent onPress={() => setIsRemember(!isRemember)}>
             <Switch
-              trackColor={{ true: appColors.primary }}
+              trackColor={{ true: appColors.primary3, false: appColors.white }}
               thumbColor={appColors.white}
               value={isRemember}
               onChange={() => setIsRemember(!isRemember)}
@@ -113,11 +107,10 @@ const SignInScreen = ({ navigation }: any) => {
             <SpaceComponent width={4} />
             <TextComponent text="Remember me" />
           </RowComponent>
-          <ButtonComponent
-            text="Forgotten Password?"
-            onPress={() => navigation.navigate('ForgottenPassword')}
-            type="text"
-          />
+
+          <TouchableOpacity onPress={() => navigation.navigate('ForgottenPassword')}>
+            <TextComponent text='Forgotten Password?' />
+          </TouchableOpacity>
         </RowComponent>
       </SectionComponent>
       <SpaceComponent height={16} />

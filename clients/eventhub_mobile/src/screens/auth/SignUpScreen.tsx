@@ -128,7 +128,7 @@ const SignUpScreen = ({ navigation }: any) => {
     };
     return (
         <>
-            <ContainerComponent isImageBackground isScroll back>
+            <ContainerComponent isImageBackground isScroll back styles={{ backgroundColor: appColors.primary4 }}>
                 <SectionComponent
                     styles={{
                         justifyContent: 'center',
@@ -211,8 +211,8 @@ const SignUpScreen = ({ navigation }: any) => {
                     <RowComponent justify="center">
                         <TextComponent text="Already have an account? " />
                         <ButtonComponent
-                            text="Login"
-                            onPress={() => navigation.navigate('LoginScreen')}
+                            text="Sign In"
+                            onPress={() => navigation.navigate('SignInScreen')}
                             type="link"
                         />
                     </RowComponent>

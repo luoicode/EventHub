@@ -18,8 +18,8 @@ const TabBarComponent = (props: Props) => {
             <TextComponent text={title} title flex={1} size={26} />
             {onPress && (
                 <RowComponent onPress={onPress}>
-                    <TextComponent text="See All " size={16} color={appColors.text2} />
-                    <ArrowRight2 size={24} color={appColors.text2} variant="Bold" />
+                    <TextComponent text="See All " size={16} color={appColors.primary5} />
+                    <ArrowRight2 size={24} color={appColors.primary5} variant="Bold" />
                 </RowComponent>
             )}
         </RowComponent>

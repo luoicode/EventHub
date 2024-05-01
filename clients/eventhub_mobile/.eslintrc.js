@@ -7,7 +7,9 @@ module.exports = {
     'react-native/no-inline-styles': 0,
     '@typescript-eslint/no-unused-vars': 'off',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn' // <--- THIS IS THE NEW RULE
+    'react-hooks/exhaustive-deps': 'warn',
+    "quotes": [1, "single"]
 
   },
+  requireConfigFile: false,
 };

@@ -98,11 +98,11 @@ const SocialLogin = () => {
       <TextComponent
         styles={{ textAlign: 'center' }}
         text="OR"
-        color={appColors.gray4}
+        color={appColors.gray}
         size={16}
         font={fontFamilies.medium}
       />
-      <SpaceComponent height={16} />
+      <SpaceComponent height={20} />
       <RowComponent>
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}
@@ -114,7 +114,7 @@ const SocialLogin = () => {
         <SpaceComponent width={30} />
         <ButtonComponent
           styles={{ width: 'auto', borderRadius: 100 }}
-          onPress={handlerLoginWithGoogle}
+          onPress={handlerLoginWithFacebook}
           color={appColors.white}
           iconFlex="left"
           icon={<Facebook />}
