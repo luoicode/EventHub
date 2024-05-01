@@ -70,7 +70,7 @@ const ModalSelectCategories = (props: Props) => {
                 ref={modalizeRef}
                 onClose={onClose}>
 
-                <SectionComponent styles={{ padding: 30, backgroundColor: appColors.primary8 }}>
+                <SectionComponent styles={{ padding: 30, backgroundColor: appColors.primary7 }}>
                     <RowComponent>
                         {categories.length > 0 &&
                             categories.map(category => (
@@ -83,25 +83,25 @@ const ModalSelectCategories = (props: Props) => {
                                             padding: 12,
                                             marginRight: 8,
                                             marginBottom: 8,
-                                            backgroundColor: appColors.primary6,
+                                            backgroundColor: appColors.primary7,
                                             borderRadius: 12,
                                             minWidth: 60,
                                             borderWidth: catsSelected?.includes(category._id)
                                                 ? 2
                                                 : 0,
                                             borderColor: catsSelected?.includes(category._id)
-                                                ? appColors.primary7
+                                                ? appColors.primary5
                                                 : appColors.gray2,
 
                                         },
                                     ]}
                                     key={category._id}>
-                                    <TextComponent text={category.title} color={appColors.primary7} font={fontFamilies.medium} />
+                                    <TextComponent text={category.title} font={fontFamilies.medium} />
                                 </TouchableOpacity>
                             ))}
                     </RowComponent>
                 </SectionComponent>
-                <SectionComponent styles={{ backgroundColor: appColors.primary8 }}>
+                <SectionComponent styles={{ backgroundColor: appColors.primary7 }}>
                     <ButtonComponent
                         text="Agree"
                         type="primary"

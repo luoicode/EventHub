@@ -1,11 +1,11 @@
 export const appColors = {
-  primary: '#5669FF',
+  primary: '#AFE0FF',
   primary2: '#7974E7',
   primary3: '#378CE7',
-  primary4: '#DFF5FF',
-  primary5: '#222831',
+  primary4: '#F6F2FA',
+  primary5: 'black',
   primary6: '#76ABAE',
-  primary7: '#EEEEEE',
+  primary7: '#ffffff',
   primary8: '#31363F',
 
   white: 'white',
@@ -19,7 +19,7 @@ export const appColors = {
   gray3: '#E4DFDF',
   gray4: '#9d9898',
   gray5: '#d9d9d9',
-  link: '#76ABAE',
+  link: '#378CE7',
   danger: '#e74c3c',
   danger2: '#F0635A',
 };

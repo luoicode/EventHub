@@ -1,11 +1,11 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose } = require('mongoose');
 
 const BillSchema = new mongoose.Schema({
-    createAt: {
+    createdAt: {
         type: Date,
         default: Date.now(),
     },
-    createBy: {
+    createdBy: {
         type: String,
         require: true,
     },
@@ -19,17 +19,16 @@ const BillSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        require: 'pending',
+        default: 'pending',
     },
     authorId: {
         type: String,
     },
-    updateAt: {
+    updatedAt: {
         type: Date,
         default: Date.now(),
+    },
+});
 
-    }
-})
-
-const BillModel = mongoose.model("bill", BillSchema);
+const BillModel = mongoose.model('bills', BillSchema);
 module.exports = BillModel;

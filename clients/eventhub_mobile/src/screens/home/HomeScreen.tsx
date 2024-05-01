@@ -184,7 +184,7 @@ const HomeScreen = ({ navigation }: any) => {
     }
 
     return (
-        <View style={[globalStyles.container, { backgroundColor: appColors.primary6 }]}>
+        <View style={[globalStyles.container]}>
             <StatusBar barStyle={'light-content'} />
 
             <View
@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation }: any) => {
                 <View style={{ paddingHorizontal: 16 }}>
                     <RowComponent>
                         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                            <HambergerMenu size={40} color={appColors.primary7} />
+                            <HambergerMenu size={36} color={appColors.primary7} />
                         </TouchableOpacity>
                         <View style={[{ flex: 1, alignItems: 'center' }]}>
                             <RowComponent>
@@ -229,12 +229,12 @@ const HomeScreen = ({ navigation }: any) => {
                                 <Notification size={28} color={appColors.primary7} />
                                 <View
                                     style={{
-                                        backgroundColor: appColors.danger,
+                                        backgroundColor: appColors.primary3,
                                         width: 6,
                                         height: 6,
                                         borderRadius: 4,
                                         borderWidth: 2,
-                                        borderColor: appColors.danger,
+                                        borderColor: appColors.primary3,
                                         position: 'absolute',
                                         top: 0,
                                         right: 1,
@@ -272,23 +272,17 @@ const HomeScreen = ({ navigation }: any) => {
                                 flex={1}
                             />
                         </RowComponent>
-                        <TagComponent
-                            label="Filters"
-                            icon={
-                                <CircleComponent size={20} color={appColors.primary6} >
-                                    <MaterialIcons
-                                        name="sort"
-                                        size={20}
-                                        color={appColors.primary7}
-                                    />
-                                </CircleComponent>
-                            }
-                            onPress={() =>
-                                navigation.navigate('SearchEvents', {
-                                    isFilter: true,
-                                })
-                            }
-                        />
+                        <TouchableOpacity onPress={() =>
+                            navigation.navigate('SearchEvents', {
+                                isFilter: true,
+                            })
+                        }>
+                            <MaterialIcons
+                                name="sort"
+                                size={30}
+                                color={appColors.primary7}
+                            />
+                        </TouchableOpacity>
                     </RowComponent>
                     <SpaceComponent height={30} />
                 </View>
@@ -302,7 +296,6 @@ const HomeScreen = ({ navigation }: any) => {
                     {
                         flex: 1,
                         marginTop: 18,
-                        backgroundColor: appColors.primary6
                     },
                 ]}>
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
@@ -332,8 +325,8 @@ const HomeScreen = ({ navigation }: any) => {
                             resizeMode: 'cover',
                             borderRadius: 12,
                         }}>
-                        <TextComponent text="Invite your friends" title />
-                        <TextComponent text="Get $20 for ticket" />
+                        <TextComponent text="Invite your friends" title color={appColors.primary7} />
+                        <TextComponent text="Get $20 for ticket" color={appColors.primary7} />
 
                         <RowComponent justify="flex-start">
                             <TouchableOpacity
@@ -342,7 +335,7 @@ const HomeScreen = ({ navigation }: any) => {
                                     globalStyles.button,
                                     {
                                         marginTop: 12,
-                                        backgroundColor: appColors.primary6,
+                                        backgroundColor: '#8E8FFA',
                                         paddingHorizontal: 28,
                                     },
                                 ]}>
@@ -356,7 +349,7 @@ const HomeScreen = ({ navigation }: any) => {
                     </ImageBackground>
                 </SectionComponent>
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
-                    <TabBarComponent title="Nearby You" onPress={() => { }} />
+                    <TabBarComponent title="Nearby You" onPress={() => navigation.navigate('NearbyScreen')} />
                     {nearbyEvents.length > 0 ? (
                         <FlatList
                             horizontal

@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const EventModel = require("../models/eventModel");
 const CategoryModel = require("../models/categoryModel");
 const { request } = require("express");
-const BillModel = require("../models/BillModel");
+const BillModel = require("../models/billModel");
 
 const nodemailer = require("nodemailer");
 require("dotenv").config();
@@ -204,45 +204,40 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
 });
 
 const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
-    const data = req.body
+    const data = req.body;
 
-    data.price = parseFloat(data.price)
+    data.price = parseFloat(data.price);
 
-    const bill = new BillModel(data)
-    bill.save()
+    const bill = new BillModel(data);
+    bill.save();
 
     res.status(200).json({
-        message: "Add new bill",
+        message: 'Add new bill info successfully',
         data: bill,
     });
-})
+});
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
-    const { billId } = req.query
-
+    const { billId } = req.query;
     await BillModel.findByIdAndUpdate(billId, {
         status: 'success',
-    })
+    });
 
     const data = {
-        from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
+        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
         to: 'huyhn045@gmail.com',
-        subject: "Your Verification Code for EventHub",
-        text: "Your code to verification email",
-        html: `
-        <html>
-        <h1>Your ticket</h1>
-        </html>
-    `,
+        subject: 'Verification email code',
+        text: 'Your code to verification email',
+        html: `<h1>Your ticket</h1>`,
     };
 
-    await handlerSendMail(data)
+    await handlerSendMail(data);
 
     res.status(200).json({
-        message: "Update bill successfully",
+        message: 'Update bill successfully',
         data: [],
     });
-})
+});
 
 module.exports = {
     updateEvent,

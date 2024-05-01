@@ -83,16 +83,17 @@ const ProfileScreen = ({ navigation, route }: any) => {
 
   return (
     <ContainerComponent
+      back
       title={profile?.name}
       isScroll
       right={
         <ButtonComponent
-          color={appColors.white}
+          color={appColors.primary7}
           icon={
             <MaterialIcons
               name="more-vert"
               size={28}
-              color={appColors.primary7}
+              color={appColors.primary5}
               onPress={() => { }}
             />
           }
