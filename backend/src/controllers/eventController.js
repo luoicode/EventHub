@@ -186,7 +186,6 @@ const getCategories = asyncHandler(async (req, res) => {
 const updateEvent = asyncHandler(async (req, res) => {
     const data = req.body;
     const { id } = req.query;
-
     const item = await EventModel.findByIdAndUpdate(id, data);
     res.status(200).json({
         message: "update events successfully!",

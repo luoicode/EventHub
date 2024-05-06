@@ -310,6 +310,7 @@ const EventDetail = ({ navigation, route }: any) => {
             borderTopRightRadius: 40,
           }}>
           <SectionComponent>
+
             {profile && (
               <RowComponent styles={{ marginVertical: 20 }}>
                 <TouchableOpacity
@@ -357,7 +358,7 @@ const EventDetail = ({ navigation, route }: any) => {
                     size={16}
                   />
                 </View>
-                <TagComponent
+                {item && auth.id !== item.authorId ? (<TagComponent
                   onPress={() => handlerToggleFollowing(item.authorId)}
                   label={
                     auth.following && auth.following.includes(item.authorId)
@@ -380,7 +381,8 @@ const EventDetail = ({ navigation, route }: any) => {
                       borderRadius: 12,
                     },
                   ]}
-                />
+                />) : <></>}
+
               </RowComponent>
             )}
           </SectionComponent>

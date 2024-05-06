@@ -9,7 +9,7 @@ import { TagComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { Category } from '../models/Category';
 import eventAPI from '../apis/eventApi';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 interface Props {
     isFill?: boolean;
 }
@@ -19,6 +19,7 @@ const CategoriesList = (props: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
 
     const navigation: any = useNavigation();
+
 
     useEffect(() => {
         getCategories();
@@ -102,10 +103,13 @@ const CategoriesList = (props: Props) => {
                         minWidth: 82,
                     }}
                     bgColor={isFill ? item.color : appColors.primary7}
-                    onPress={() => navigation.navigate('CategoryDetail', {
-                        id: item._id,
-                        title: item.title
-                    })}
+                    onPress={() =>
+                        navigation.navigate(
+                            'CategoryDetail', {
+                            id: item._id,
+                            title: item.title
+                        })
+                    }
                     icon={renderIcon(item.key)}
                     label={item.title}
                     textColor={isFill ? appColors.primary7 : appColors.text2}

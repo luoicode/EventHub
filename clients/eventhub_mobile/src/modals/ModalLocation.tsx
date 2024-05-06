@@ -109,8 +109,8 @@ const ModalLocation = (props: Props) => {
       });
       onClose();
       GeoCoder.from(latitude, longitude).then(data => {
-        console.log(data);
-        console.log(data.results[0].address_components[0]);
+        // console.log('data');
+        // console.log(data.results[0].address_components[0]);
 
       }).catch(error => console.log(error));
     };

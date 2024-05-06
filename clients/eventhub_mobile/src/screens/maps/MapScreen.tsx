@@ -20,12 +20,14 @@ import { globalStyles } from '../../styles/globalStyles';
 import { MusicIcon } from '../../assets/svgs';
 import eventAPI from '../../apis/eventApi';
 import { EventModel } from '../../models/EventModel';
+import { useIsFocused } from '@react-navigation/native';
 const MapScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
     long: number;
   }>();
   const [events, setEvents] = useState<EventModel[]>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -45,8 +47,8 @@ const MapScreen = ({ navigation }: any) => {
   }, []);
 
   useEffect(() => {
-    currentLocation && getNearbyEvents();
-  }, [currentLocation]);
+    currentLocation && isFocused && getNearbyEvents();
+  }, [currentLocation, isFocused]);
 
   const getNearbyEvents = async () => {
     const api = `/get-events?lat=${currentLocation?.lat}&long=${currentLocation?.long
@@ -81,7 +83,7 @@ const MapScreen = ({ navigation }: any) => {
               affix={
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('Explore', {
+                    navigation.navigate('Home', {
                       screen: 'HomeScreen',
                     });
                   }}>
@@ -133,7 +135,7 @@ const MapScreen = ({ navigation }: any) => {
                 key={`event${index}`}
                 title={event.title}
                 description=""
-                onPress={() => console.log('asdas')}
+                onPress={() => navigation.navigate('EventDetail', { id: event._id })}
                 coordinate={{
                   longitude: event.position.long,
                   latitude: event.position.lat,

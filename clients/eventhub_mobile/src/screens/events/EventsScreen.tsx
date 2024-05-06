@@ -17,24 +17,24 @@ const EventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    getEvents();
+    getData();
   }, []);
+
+  const getData = async () => {
+    setIsLoading(true);
+    await getEvents();
+
+    setIsLoading(false)
+  }
 
   const getEvents = async () => {
     const api = `/get-events`;
 
-    setIsLoading(true);
-
     try {
       const res = await eventAPI.HandlerEvent(api);
-
-      if (res.data) {
-        setEvents(res.data);
-      }
-      setIsLoading(false);
+      setEvents(res.data)
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
     }
   };
   return (
@@ -57,11 +57,12 @@ const EventsScreen = ({ navigation }: any) => {
             }
           />
         </RowComponent>
-      }>
+      }
+    >
       {events.length > 0 ? (
         <ListEventComponent items={events} />
       ) : (
-        <LoadingComponent isLoading={isLoading} values={events.length} />
+        <LoadingComponent isLoading={isLoading} mess='Loading....' values={events.length} />
       )}
     </ContainerComponent>
   );

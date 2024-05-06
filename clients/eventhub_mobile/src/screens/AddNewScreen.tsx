@@ -146,29 +146,28 @@ const AddNewScreen = ({ navigation }: any) => {
             .then(url => {
               eventData.photoUrl = url;
 
-              handlePustEvent(eventData);
+              handlerPustEvent(eventData);
             });
         },
       );
     } else {
-      handlePustEvent(eventData);
+      handlerPustEvent(eventData);
     }
   };
 
-  const handlePustEvent = async (event: EventModel) => {
+  const handlerPustEvent = async (event: EventModel) => {
     const api = `/add-new`;
 
-    setIsCreating(true)
+    setIsCreating(true);
     try {
       const res = await eventAPI.HandlerEvent(api, event, 'post');
-      setIsCreating(false)
 
-      navigation.navigate('Explore', {
+      setIsCreating(false);
+      navigation.navigate('Home', {
         screen: 'HomeScreen',
       });
     } catch (error) {
-      setIsCreating(false)
-
+      setIsCreating(false);
       console.log(error);
     }
   };

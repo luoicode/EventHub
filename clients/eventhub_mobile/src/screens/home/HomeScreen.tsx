@@ -1,11 +1,7 @@
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
-import {
-    HambergerMenu,
-    Notification,
-    SearchNormal1
-} from 'iconsax-react-native';
+import { HambergerMenu, Notification, SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
     FlatList,
@@ -13,7 +9,7 @@ import {
     ScrollView,
     StatusBar,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import Toast from 'react-native-toast-message';
@@ -30,7 +26,7 @@ import {
     SpaceComponent,
     TabBarComponent,
     TagComponent,
-    TextComponent
+    TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
@@ -85,10 +81,8 @@ const HomeScreen = ({ navigation }: any) => {
             .then((mess: any) => {
                 const id = mess && mess.data ? mess.data.id : '';
 
-                id && handlerLinking(`eventhub://app/detail/${mess.data.id}`)
-
-            })
-
+                id && handlerLinking(`eventhub://app/detail/${mess.data.id}`);
+            });
     }, []);
 
     useEffect(() => {
@@ -100,13 +94,13 @@ const HomeScreen = ({ navigation }: any) => {
             getEvents();
             getNearByEvents();
         }
-    }, [isFocused])
+    }, [isFocused]);
 
     const getNearByEvents = () => {
         currentLocation &&
             currentLocation.postion &&
             getEvents(currentLocation.postion.lat, currentLocation.postion.long);
-    }
+    };
 
     const reverseGeoCode = async ({ lat, long }: { lat: number; long: number }) => {
         const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&leng=vi-VI&apiKey=9xtPpCx-_XvOPAIXkPFPAn-fXs2HOa9mvitLme7Mit4`;
@@ -131,7 +125,6 @@ const HomeScreen = ({ navigation }: any) => {
 
         if (events.length === 0 || nearbyEvents.length === 0) {
             setIsLoading(true);
-
         }
 
         try {
@@ -145,44 +138,27 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(`Get event error in home screen line 74 ${error}`);
         }
     };
-    const getEventsData = async (lat?: number, long?: number, distance?: number) => {
+    const getEventsData = async (
+        lat?: number,
+        long?: number,
+        distance?: number,
+    ) => {
         const api = `/get-events`;
 
         try {
-            const res = await eventAPI.HandlerEvent(api)
+            const res = await eventAPI.HandlerEvent(api);
 
-            const data = res.data
+            const data = res.data;
 
-            const items: EventModel[] = []
+            const items: EventModel[] = [];
 
-            data.forEach((item: any) => items.push(item))
+            data.forEach((item: any) => items.push(item));
 
-            seteventsData(items)
+            seteventsData(items);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-
     };
-
-    const categories = [
-        { "label": "Music", "value": "662103c304c2c69a1036c29f" }, { "label": "Sports", "value": "662103c304c2c69a1036c2a1" }, { "label": "Food", "value": "662103c304c2c69a1036c2a3" }, { "label": "Games", "value": "662103c304c2c69a1036c2a7" }, { "label": "Arts", "value": "662103c304c2c69a1036c2a5" }
-    ]
-
-    const handlerFixDataEvent = async () => {
-        if (eventsData.length > 0)
-            eventsData.forEach(async event => {
-                const api = `/update-event?id=${event._id}`
-
-                const data = {
-                    categories: categories[Math.floor(Math.random() * 4)].value
-                }
-
-                const res = await eventAPI.HandlerEvent(api, data, 'put')
-
-                console.log(res.data)
-            })
-    }
-
     return (
         <View style={[globalStyles.container]}>
             <StatusBar barStyle={'light-content'} />
@@ -272,16 +248,13 @@ const HomeScreen = ({ navigation }: any) => {
                                 flex={1}
                             />
                         </RowComponent>
-                        <TouchableOpacity onPress={() =>
-                            navigation.navigate('SearchEvents', {
-                                isFilter: true,
-                            })
-                        }>
-                            <MaterialIcons
-                                name="sort"
-                                size={30}
-                                color={appColors.primary7}
-                            />
+                        <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('SearchEvents', {
+                                    isFilter: true,
+                                })
+                            }>
+                            <MaterialIcons name="sort" size={30} color={appColors.primary7} />
                         </TouchableOpacity>
                     </RowComponent>
                     <SpaceComponent height={30} />
@@ -301,7 +274,6 @@ const HomeScreen = ({ navigation }: any) => {
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
-
                         onPress={() => navigation.navigate('ExploreEvents')}
                     />
                     {events.length > 0 ? (
@@ -325,8 +297,15 @@ const HomeScreen = ({ navigation }: any) => {
                             resizeMode: 'cover',
                             borderRadius: 12,
                         }}>
-                        <TextComponent text="Invite your friends" title color={appColors.primary7} />
-                        <TextComponent text="Get $20 for ticket" color={appColors.primary7} />
+                        <TextComponent
+                            text="Invite your friends"
+                            title
+                            color={appColors.primary7}
+                        />
+                        <TextComponent
+                            text="Get $20 for ticket"
+                            color={appColors.primary7}
+                        />
 
                         <RowComponent justify="flex-start">
                             <TouchableOpacity
@@ -349,7 +328,10 @@ const HomeScreen = ({ navigation }: any) => {
                     </ImageBackground>
                 </SectionComponent>
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
-                    <TabBarComponent title="Nearby You" onPress={() => navigation.navigate('NearbyScreen')} />
+                    <TabBarComponent
+                        title="Nearby You"
+                        onPress={() => navigation.navigate('NearbyScreen')}
+                    />
                     {nearbyEvents.length > 0 ? (
                         <FlatList
                             horizontal
@@ -367,7 +349,6 @@ const HomeScreen = ({ navigation }: any) => {
                     )}
                 </SectionComponent>
             </ScrollView>
-            <ButtonComponent text='FixData' type='primary' onPress={handlerFixDataEvent} />
         </View>
     );
 };
