@@ -17,6 +17,7 @@ import HomeScreen from './home/HomeScreen';
 import CategoryDetail from './events/CategoryDetail';
 import PaymentScreen from './events/PaymentScreen';
 import NearbyScreen from './events/NearbyScreen';
+import Review from './profiles/components/Review';
 
 export {
   SignInScreen,
@@ -38,4 +39,5 @@ export {
   CategoryDetail,
   PaymentScreen,
   NearbyScreen,
+  Review,
 };

@@ -1,8 +1,11 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {
   ButtonComponent,
   ContainerComponent,
+  EventItem,
+  ListEventComponent,
+  LoadingComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -21,6 +24,9 @@ import {
 import { ProfileModel } from '../../../models/ProfileModel';
 import userAPI from '../../../apis/userApi';
 import { LoadingModal } from '../../../modals';
+import eventAPI from '../../../apis/eventApi';
+import { EventModel } from '../../../models/EventModel';
+import Review from './Review';
 
 interface Props {
   profile: ProfileModel;
@@ -28,9 +34,19 @@ interface Props {
 
 const AboutProfile = (props: Props) => {
   const { profile } = props;
+  const [events, setEvents] = useState<EventModel[]>([]);
   const [tabSelected, setTabSelected] = useState('about');
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    setIsLoading(true);
+    await getEvents();
+
+    setIsLoading(false)
+  }
   const tabs = [
     {
       key: 'about',
@@ -60,7 +76,32 @@ const AboutProfile = (props: Props) => {
           </>
         );
         break;
-
+      case 'event':
+        content = (
+          <>
+            <TextComponent text='My events' title />
+            {events.length > 0 ? (
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={events.filter(event => event.authorId === profile.uid)}
+                renderItem={({ item, index }) => (
+                  <EventItem key={`event${index}`} item={item} type="card" />
+                )}
+              />
+            ) : (
+              <LoadingComponent isLoading={isLoading} values={events.length} />
+            )}
+          </>
+        );
+        break;
+      case 'reviews':
+        content = (
+          <>
+            <Review />
+          </>
+        );
+        break;
       default:
         content = <></>;
         break;
@@ -68,7 +109,16 @@ const AboutProfile = (props: Props) => {
 
     return content;
   };
+  const getEvents = async () => {
+    const api = `/get-events`;
 
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+      setEvents(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handlerToggleFollowing = async () => {
     const api = `/update-following`;
     setIsLoading(true);
