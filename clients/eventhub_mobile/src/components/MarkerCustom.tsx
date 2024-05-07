@@ -1,44 +1,42 @@
-import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
-import React from 'react';
+import {
+    View,
+    Text,
+    ImageBackground,
+    TouchableOpacity,
+    Image,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import TextComponent from './TextComponent';
 import { globalStyles } from '../styles/globalStyles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { appColors } from '../constants/appColors';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import eventAPI from '../apis/eventApi';
+import { Category } from '../models/Category';
 
 interface Props {
-    type: string;
+    categoryId: string;
 }
 
 const MarkerCustom = (props: Props) => {
-    const { type } = props;
+    const { categoryId } = props;
+    const [category, setCategory] = useState<Category>();
+    useEffect(() => {
+        categoryId && getCategoryById();
+    }, [categoryId]);
 
-    const renderIcon = (type: string) => {
-        let icon;
+    const getCategoryById = async () => {
+        const api = `/get-category-detail?id=${categoryId}`;
 
-        switch (type) {
-            case 'art':
-                icon = <Ionicons name="color-palette-outline" size={24} color="#46CDFB" />;
-                break;
-            case 'sport':
-                icon = <FontAwesome5 name="basketball-ball" size={24} color="#F0635A" />;
-                break;
-            case 'food':
-                icon = <FontAwesome6 name="bowl-food" size={24} color="#29D697" />;
-                break;
-            case 'game':
-                icon = <Ionicons name="game-controller" size={24} color="#E1AFD1" />;
-                break;
-            default:
-                icon = <FontAwesome5 name="music" size={24} color="#F59762" />;
-                break;
+        try {
+            const res = await eventAPI.HandlerEvent(api);
+            setCategory(res.data);
+        } catch (error: any) {
+            console.log(error);
         }
-
-        return icon;
     };
-
-    return (
+    return category ? (
         <ImageBackground
             source={require('../assets/images/Union.png')}
             style={[
@@ -50,13 +48,32 @@ const MarkerCustom = (props: Props) => {
                     alignItems: 'center',
                 },
             ]}
-            imageStyle={{
-                resizeMode: 'contain',
-                width: 56,
-                height: 56,
-            }}>
-            {renderIcon(type)}
-        </ImageBackground>
+            imageStyle={
+                {
+                    resizeMode: 'contain',
+                    width: 56,
+                    height: 56,
+                }
+            }>
+            <View
+                style={[
+                    globalStyles.center,
+                    {
+                        top: -3,
+                        width: 38,
+                        height: 38,
+                        backgroundColor: category.color,
+                        borderRadius: 12,
+                    },
+                ]}>
+                <Image
+                    source={{ uri: category.iconWhite }}
+                    style={{ width: 24, height: 24 }}
+                />
+            </View>
+        </ImageBackground >
+    ) : (
+        <></>
     );
 };
 

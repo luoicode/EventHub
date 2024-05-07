@@ -238,6 +238,25 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
     });
 });
 
+const updateCategory = asyncHandler(async (req, res) => {
+    const data = req.body;
+    const { id } = req.query;
+    const item = await CategoryModel.findByIdAndUpdate(id, data);
+    res.status(200).json({
+        message: "update category successfully!",
+        data: item,
+    });
+})
+
+const getCategoryDetail = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+    const item = await CategoryModel.findById(id);
+    res.status(200).json({
+        message: "get category successfully!",
+        data: item,
+    });
+})
+
 module.exports = {
     updateEvent,
     addNewEvent,
@@ -250,5 +269,7 @@ module.exports = {
     searchEvents,
     getEventsByCategoryId,
     handlerAddNewBillDetail,
-    handlerUpdatePaymentSuccess
+    handlerUpdatePaymentSuccess,
+    updateCategory,
+    getCategoryDetail
 };

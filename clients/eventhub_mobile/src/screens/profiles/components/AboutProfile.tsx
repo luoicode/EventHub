@@ -79,7 +79,6 @@ const AboutProfile = (props: Props) => {
       case 'event':
         content = (
           <>
-            <TextComponent text='My events' title />
             {events.length > 0 ? (
               <FlatList
                 showsHorizontalScrollIndicator={false}

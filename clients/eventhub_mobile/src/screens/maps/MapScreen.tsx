@@ -140,7 +140,7 @@ const MapScreen = ({ navigation }: any) => {
                   longitude: event.position.long,
                   latitude: event.position.lat,
                 }}>
-                <MarkerCustom type={event.category} />
+                <MarkerCustom categoryId={event.categories} />
               </Marker>
 
             ))}

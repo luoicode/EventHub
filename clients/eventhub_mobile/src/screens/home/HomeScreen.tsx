@@ -1,5 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
+import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import { HambergerMenu, Notification, SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
@@ -25,8 +26,7 @@ import {
     SectionComponent,
     SpaceComponent,
     TabBarComponent,
-    TagComponent,
-    TextComponent,
+    TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
@@ -34,7 +34,6 @@ import { AddressModel } from '../../models/AddressModel';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
-import { useIsFocused } from '@react-navigation/native';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
@@ -159,6 +158,8 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(error);
         }
     };
+
+
     return (
         <View style={[globalStyles.container]}>
             <StatusBar barStyle={'light-content'} />

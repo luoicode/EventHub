@@ -2,7 +2,7 @@ export interface EventModel {
   __v: number;
   _id: string;
   authorId: string;
-  category: string;
+  categories: string;
   createdAt: string;
   description: string;
   endAt: number;

@@ -5,13 +5,19 @@ import eventAPI from '../../apis/eventApi';
 import {
   ButtonComponent,
   ContainerComponent,
+  EventItem,
   ListEventComponent,
   LoadingComponent,
   RowComponent,
-  SpaceComponent
+  SectionComponent,
+  SpaceComponent,
+  TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
+import { FlatList } from 'react-native-gesture-handler';
+import { globalStyles } from '../../styles/globalStyles';
+import { Image, View } from 'react-native';
 
 const EventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);
@@ -32,7 +38,7 @@ const EventsScreen = ({ navigation }: any) => {
 
     try {
       const res = await eventAPI.HandlerEvent(api);
-      setEvents(res.data)
+      // setEvents(res.data)
     } catch (error) {
       console.log(error);
     }
@@ -59,11 +65,30 @@ const EventsScreen = ({ navigation }: any) => {
         </RowComponent>
       }
     >
-      {events.length > 0 ? (
-        <ListEventComponent items={events} />
-      ) : (
-        <LoadingComponent isLoading={isLoading} mess='Loading....' values={events.length} />
-      )}
+
+      <FlatList
+        contentContainerStyle={{ flex: 1 }}
+        ListEmptyComponent={
+          <View style={[globalStyles.center, { flex: 1 }]}>
+            <Image source={require('../../assets/images/empty_event.png')}
+              style={{ width: 302, height: 302 }} />
+            <TextComponent text='No Upcoming Event' title size={26} styles={{ marginVertical: 12 }} />
+            <View style={{ width: '50%' }}>
+              <TextComponent text='No Upcoming Event' size={18} color={appColors.gray} />
+            </View>
+          </View>
+        }
+        data={events}
+        renderItem={({ item }) => (
+          <EventItem
+            item={item}
+            key={item._id}
+            type="list"
+            styles={{ flex: 1, width: undefined, backgroundColor: appColors.primary7 }}
+          />
+        )}
+      />
+
     </ContainerComponent>
   );
 };
