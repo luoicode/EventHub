@@ -21,12 +21,14 @@ import { MusicIcon } from '../../assets/svgs';
 import eventAPI from '../../apis/eventApi';
 import { EventModel } from '../../models/EventModel';
 import { useIsFocused } from '@react-navigation/native';
+import { LoadingModal } from '../../modals';
 const MapScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
     long: number;
   }>();
   const [events, setEvents] = useState<EventModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -50,16 +52,20 @@ const MapScreen = ({ navigation }: any) => {
     currentLocation && isFocused && getNearbyEvents();
   }, [currentLocation, isFocused]);
 
-  const getNearbyEvents = async () => {
+  const getNearbyEvents = async (categoryId?: string) => {
+    setIsLoading(true)
     const api = `/get-events?lat=${currentLocation?.lat}&long=${currentLocation?.long
-      }&distance=${5}`;
+      }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
 
       setEvents(res.data);
+      setIsLoading(false)
+
     } catch (error) {
       console.log(error);
+      setIsLoading(false)
     }
   };
   return (
@@ -104,7 +110,7 @@ const MapScreen = ({ navigation }: any) => {
           </CardComponent>
         </RowComponent>
         <SpaceComponent height={20} />
-        <CategoriesList />
+        <CategoriesList onFilter={catId => getNearbyEvents(catId)} />
       </View>
 
       {currentLocation ? (
@@ -164,6 +170,7 @@ const MapScreen = ({ navigation }: any) => {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };
