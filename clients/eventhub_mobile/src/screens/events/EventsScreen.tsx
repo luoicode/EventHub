@@ -45,36 +45,42 @@ const EventsScreen = ({ navigation }: any) => {
   };
   return (
     <ContainerComponent
-      back
       title="Events"
+      back
       right={
-        <RowComponent >
-          <ButtonComponent onPress={() => navigation.navigate('SearchEvents')}
-            icon={<SearchNormal1 size={26} color={appColors.primary5} />}
-          />
-          <SpaceComponent width={16} />
-          <ButtonComponent
-            icon={
-              <MaterialIcons
-                name="more-vert"
-                size={26}
-                color={appColors.primary5}
-              />
-            }
-          />
-        </RowComponent>
-      }
-    >
 
+        <ButtonComponent
+          icon={
+            <MaterialIcons
+              name="more-vert"
+              size={26}
+              color={appColors.primary5}
+            />
+          }
+        />
+      }>
       <FlatList
         contentContainerStyle={{ flex: 1 }}
         ListEmptyComponent={
           <View style={[globalStyles.center, { flex: 1 }]}>
-            <Image source={require('../../assets/images/empty_event.png')}
-              style={{ width: 302, height: 302 }} />
-            <TextComponent text='No Upcoming Event' title size={26} styles={{ marginVertical: 12 }} />
-            <View style={{ width: '50%' }}>
-              <TextComponent text='No Upcoming Event' size={18} color={appColors.gray} />
+            <Image
+              source={require('../../assets/images/empty_event.png')}
+              style={{ width: 202, height: 202 }}
+            />
+            <TextComponent
+              text="No Upcoming Event"
+              title
+              size={24}
+              styles={{ marginVertical: 12 }}
+            />
+
+            <View style={{ width: '70%' }}>
+              <TextComponent
+                text="There Are Currently No Events in the Calendar"
+                size={16}
+                color={appColors.gray4}
+                styles={{ textAlign: 'center' }}
+              />
             </View>
           </View>
         }
@@ -84,11 +90,19 @@ const EventsScreen = ({ navigation }: any) => {
             item={item}
             key={item._id}
             type="list"
-            styles={{ flex: 1, width: undefined, backgroundColor: appColors.primary7 }}
+            styles={{ flex: 1, width: undefined }}
           />
         )}
       />
-
+      {events.length === 0 && (
+        <SectionComponent styles={{}}>
+          <ButtonComponent
+            onPress={() => navigation.navigate('ExploreEvents')}
+            text="EXPLORE EVENTS"
+            type="primary"
+          />
+        </SectionComponent>
+      )}
     </ContainerComponent>
   );
 };

@@ -9,6 +9,9 @@ import { Host } from 'react-native-portalize';
 import { HandlerNotification } from './src/utils/handlerNotification';
 import Toast from 'react-native-toast-message';
 import linking from './src/linking';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(process.env.MAP_API_KEY as string);
 
 const App = () => {
 

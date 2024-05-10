@@ -12,12 +12,10 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Geocoder from 'react-native-geocoding';
 import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
 import {
-    ButtonComponent,
     CategoriesList,
     CircleComponent,
     EventItem,
@@ -35,7 +33,6 @@ import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
 
-Geocoder.init(process.env.MAP_API_KEY as string);
 
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
@@ -118,7 +115,7 @@ const HomeScreen = ({ navigation }: any) => {
     const getEvents = async (lat?: number, long?: number, distance?: number) => {
         const api = `${lat && long
             ? `/get-events?lat=${lat}&long=${long}&distance=${distance ?? 5
-            }&limit=5`
+            }&limit=5 `
             : `/get-events?limit=5`
             }`;
 
@@ -275,7 +272,10 @@ const HomeScreen = ({ navigation }: any) => {
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
-                        onPress={() => navigation.navigate('ExploreEvents')}
+                        onPress={() => navigation.navigate('ExploreEvents', {
+                            key: 'upcoming',
+                            title: "Upcoming Events"
+                        })}
                     />
                     {events.length > 0 ? (
                         <FlatList
@@ -331,7 +331,10 @@ const HomeScreen = ({ navigation }: any) => {
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Nearby You"
-                        onPress={() => navigation.navigate('NearbyScreen')}
+                        onPress={() => navigation.navigate('ExploreEvents', {
+                            key: 'nearby',
+                            title: "Nearby You"
+                        })}
                     />
                     {nearbyEvents.length > 0 ? (
                         <FlatList

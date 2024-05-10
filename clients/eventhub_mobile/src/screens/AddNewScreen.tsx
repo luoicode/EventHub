@@ -27,6 +27,7 @@ import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { Validate } from '../utils/validate';
+import { dateTime } from '../utils/dateTime';
 
 const initValues = {
   title: '',
@@ -146,20 +147,23 @@ const AddNewScreen = ({ navigation }: any) => {
             .then(url => {
               eventData.photoUrl = url;
 
-              handlerPustEvent(eventData);
+              handlerPushEvent(eventData);
             });
         },
       );
     } else {
-      handlerPustEvent(eventData);
+      handlerPushEvent(eventData);
     }
   };
 
-  const handlerPustEvent = async (event: EventModel) => {
+  const handlerPushEvent = async (event: EventModel) => {
     const api = `/add-new`;
 
     setIsCreating(true);
     try {
+      event.startAt = dateTime.getEventTime(event.date, event.startAt)
+      event.endAt = dateTime.getEventTime(event.date, event.endAt)
+
       const res = await eventAPI.HandlerEvent(api, event, 'post');
 
       setIsCreating(false);
@@ -248,14 +252,13 @@ const AddNewScreen = ({ navigation }: any) => {
         <SpaceComponent height={20} />
         <RowComponent>
           <DateTimePicker
-            label='Time start:'
             type="time"
             onSelect={val => handlerChangeValue('startAt', val)}
             selected={eventData.startAt}
           />
-          <SpaceComponent width={20} />
+          <TextComponent text='to' />
+          <SpaceComponent width={70} />
           <DateTimePicker
-            label='Time end:'
             type="time"
             onSelect={val => handlerChangeValue('endAt', val)}
             selected={eventData.endAt}

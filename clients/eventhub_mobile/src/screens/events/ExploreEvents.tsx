@@ -8,21 +8,58 @@ import {
     ListEventComponent,
     LoadingComponent,
     RowComponent,
-    SpaceComponent
+    SpaceComponent,
+    TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
+import Geolocation from '@react-native-community/geolocation';
 
-const ExploreEvents = ({ navigation }: any) => {
+const ExploreEvents = ({ navigation, route }: any) => {
+
+
+
     const [events, setEvents] = useState<EventModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [filterCondition, setFilterCondition] = useState<{
+        title: string,
+        key: string,
+    }>();
+
+    useEffect(() => { }, []);
 
     useEffect(() => {
-        getEvents();
-    }, []);
+        if (route.params) {
+            setFilterCondition(route.params)
+            const { key } = route.params
 
-    const getEvents = async () => {
-        const api = `/get-events`;
+            if (key === 'upcoming') {
+
+                getEvents(`/get-events?isUpcoming=true`)
+            } else {
+                Geolocation.getCurrentPosition(
+                    (position: any) => {
+                        if (position.coords) {
+                            const lat = position.coords.latitude
+                            const long = position.coords.longitude
+
+                            const api = `/get-events?lat=${lat}&long=${long}&distance=5&limit=5&isUpcoming=true`;
+
+                            getEvents(api)
+
+                        }
+                    },
+                    (error: any) => {
+                        console.log(error);
+                    },
+                );
+            }
+        } else {
+            getEvents(`/get-events`)
+        }
+    }, [route])
+
+    const getEvents = async (api: string) => {
 
         setIsLoading(true);
 
@@ -42,7 +79,7 @@ const ExploreEvents = ({ navigation }: any) => {
     return (
         <ContainerComponent
             back
-            title="Upcoming Events"
+            title={filterCondition ? filterCondition.title : "Events"}
             right={
                 <RowComponent >
                     <ButtonComponent onPress={() => navigation.navigate('SearchEvents')}
@@ -60,6 +97,7 @@ const ExploreEvents = ({ navigation }: any) => {
                     />
                 </RowComponent>
             }>
+
             {events.length > 0 ? (
                 <ListEventComponent items={events} />
             ) : (
