@@ -1,16 +1,16 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import {
   StyleProp,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
 
-import { TextComponent } from '.';
-import { appColors } from '../constants/appColors';
-import { fontFamilies } from '../constants/fontFamilies';
-import { globalStyles } from '../styles/globalStyles';
+import {TextComponent} from '.';
+import {appColors} from '../constants/appColors';
+import {fontFamilies} from '../constants/fontFamilies';
+import {globalStyles} from '../styles/globalStyles';
 
 interface Props {
   text?: string;
@@ -41,7 +41,7 @@ const ButtonComponent = (props: Props) => {
     disabled,
   } = props;
   return type === 'primary' ? (
-    <View style={{ alignItems: 'center' }}>
+    <View style={{alignItems: 'center'}}>
       <TouchableOpacity
         disabled={disabled}
         onPress={onPress}
@@ -52,16 +52,15 @@ const ButtonComponent = (props: Props) => {
             backgroundColor: color
               ? color
               : disabled
-                ? appColors.gray4
-                : appColors.primary5,
+              ? appColors.gray4
+              : appColors.primary5,
             marginBottom: 17,
             width: '80%',
           },
           styles,
         ]}>
         {icon && iconFlex === 'left' && icon}
-        {
-          text &&
+        {text && (
           <TextComponent
             text={text}
             color={textColor ?? appColors.primary7}
@@ -76,22 +75,20 @@ const ButtonComponent = (props: Props) => {
             flex={icon && iconFlex === 'right' ? 1 : 0}
             font={textFont ?? fontFamilies.medium}
           />
-        }
+        )}
         {icon && iconFlex === 'right' && icon}
       </TouchableOpacity>
     </View>
   ) : (
     <TouchableOpacity onPress={onPress}>
-      {
-        icon && icon
-      }
-      {text &&
+      {icon && icon}
+      {text && (
         <TextComponent
           flex={0}
           text={text}
           color={type === 'link' ? appColors.link : appColors.text5}
         />
-      }
+      )}
     </TouchableOpacity>
   );
 };
