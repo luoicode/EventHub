@@ -19,14 +19,15 @@ import { EventModel } from '../../models/EventModel';
 import { FlatList } from 'react-native-gesture-handler';
 import { globalStyles } from '../../styles/globalStyles';
 import { Image, View } from 'react-native';
+import { LoadingModal } from '../../modals';
 
 const EventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);
-  const [filterKey, setfilterKey] = useState('upcoming');
   const [isLoading, setIsLoading] = useState(false);
+  const [eventType, setEventType] = useState<string>('upcoming');
   useEffect(() => {
     getData();
-  }, []);
+  }, [eventType]);
 
   const getData = async () => {
     setIsLoading(true);
@@ -36,15 +37,49 @@ const EventsScreen = ({ navigation }: any) => {
   }
 
   const getEvents = async () => {
-    const api = `/get-events`;
+    const api = `/get-events${eventType === 'upcoming' ? '?isUpcoming=true' : '?isPastEvents'}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
-      // setEvents(res.data)
+      setEvents(res.data)
     } catch (error) {
       console.log(error);
     }
   };
+
+  const renderEmptyComponent = (
+    <View style={{ flex: 1 }}>
+      <View style={[globalStyles.center, { flex: 1 }]}>
+        <Image
+          source={require('../../assets/images/empty_event.png')}
+          style={{ width: 202, height: 202 }}
+        />
+        <TextComponent
+          text="No Upcoming Event"
+          title
+          size={24}
+          styles={{ marginVertical: 12 }}
+        />
+
+        <View style={{ width: '70%' }}>
+          <TextComponent
+            text="There Are Currently No Events in the Calendar"
+            size={16}
+            color={appColors.gray4}
+            styles={{ textAlign: 'center' }}
+          />
+        </View>
+      </View>
+      <SectionComponent styles={{}}>
+        <ButtonComponent
+          styles={{}}
+          onPress={() => navigation.navigate('ExploreEvents')}
+          text="EXPLORE EVENTS"
+          type="primary"
+        />
+      </SectionComponent>
+    </View>)
+
   return (
     <ContainerComponent
       title="Events"
@@ -61,7 +96,7 @@ const EventsScreen = ({ navigation }: any) => {
           }
         />
       }>
-      <RadioButton selected={filterKey} onSelect={(id: string) => setfilterKey(id)} data={[
+      <RadioButton selected={eventType} onSelect={(id: string) => setEventType(id)} data={[
         {
           label: "Upcoming", value: 'upcoming'
         },
@@ -70,29 +105,8 @@ const EventsScreen = ({ navigation }: any) => {
         },
       ]} />
       <FlatList
-        contentContainerStyle={{ flex: 1 }}
         ListEmptyComponent={
-          <View style={[globalStyles.center, { flex: 1 }]}>
-            <Image
-              source={require('../../assets/images/empty_event.png')}
-              style={{ width: 202, height: 202 }}
-            />
-            <TextComponent
-              text="No Upcoming Event"
-              title
-              size={24}
-              styles={{ marginVertical: 12 }}
-            />
-
-            <View style={{ width: '70%' }}>
-              <TextComponent
-                text="There Are Currently No Events in the Calendar"
-                size={16}
-                color={appColors.gray4}
-                styles={{ textAlign: 'center' }}
-              />
-            </View>
-          </View>
+          renderEmptyComponent
         }
         data={events}
         renderItem={({ item }) => (
@@ -104,15 +118,7 @@ const EventsScreen = ({ navigation }: any) => {
           />
         )}
       />
-      {events.length === 0 && (
-        <SectionComponent styles={{}}>
-          <ButtonComponent
-            onPress={() => navigation.navigate('ExploreEvents')}
-            text="EXPLORE EVENTS"
-            type="primary"
-          />
-        </SectionComponent>
-      )}
+      <LoadingModal visible={isLoading} />
     </ContainerComponent>
   );
 };

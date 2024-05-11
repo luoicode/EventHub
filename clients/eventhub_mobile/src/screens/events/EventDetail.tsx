@@ -24,8 +24,7 @@ import {
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
-import { LoadingModal } from '../../modals';
-import ModalInvite from '../../modals/ModalInvite';
+import { LoadingModal, ModalInvite } from '../../modals';
 import { EventModel } from '../../models/EventModel';
 import { ProfileModel } from '../../models/ProfileModel';
 import {

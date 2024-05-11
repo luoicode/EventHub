@@ -32,6 +32,7 @@ import { AddressModel } from '../../models/AddressModel';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
+import { ModalFilterEvents } from '../../modals';
 
 
 const HomeScreen = ({ navigation }: any) => {
@@ -39,7 +40,7 @@ const HomeScreen = ({ navigation }: any) => {
     const [events, setEvents] = useState<EventModel[]>([]);
     const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [isVisibleModalFilter, setIsVisibleModalFilter] = useState(false);
     const [eventsData, seteventsData] = useState<EventModel[]>([]);
 
     const isFocused = useIsFocused();
@@ -67,7 +68,6 @@ const HomeScreen = ({ navigation }: any) => {
                 text2: mess.notification.body,
                 onPress: () => {
                     const id = mess.data ? mess.data.id : '';
-                    // console.log(id);
                     id && navigation.navigate('EventDetail', { id });
                 },
             });
@@ -248,9 +248,7 @@ const HomeScreen = ({ navigation }: any) => {
                         </RowComponent>
                         <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate('SearchEvents', {
-                                    isFilter: true,
-                                })
+                                setIsVisibleModalFilter(true)
                             }>
                             <MaterialIcons name="sort" size={30} color={appColors.primary7} />
                         </TouchableOpacity>
@@ -353,6 +351,7 @@ const HomeScreen = ({ navigation }: any) => {
                     )}
                 </SectionComponent>
             </ScrollView>
+            <ModalFilterEvents visible={isVisibleModalFilter} onClose={() => setIsVisibleModalFilter(false)} />
         </View>
     );
 };

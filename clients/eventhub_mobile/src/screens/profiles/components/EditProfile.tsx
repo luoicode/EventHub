@@ -12,11 +12,11 @@ import {
 } from '../../../components';
 import { appColors } from '../../../constants/appColors';
 import { fontFamilies } from '../../../constants/fontFamilies';
-import ModalSelectCategories from '../../../modals/ModalSelectCategories';
 import { Category } from '../../../models/Category';
 import { ProfileModel } from '../../../models/ProfileModel';
 import { globalStyles } from '../../../styles/globalStyles';
 import { View } from 'react-native';
+import { ModalSelectCategories } from '../../../modals';
 
 interface Props {
   profile: ProfileModel;
