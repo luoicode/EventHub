@@ -21,6 +21,7 @@ import { ArrowRight, Calendar } from 'iconsax-react-native';
 import DatePicker from 'react-native-date-picker';
 import { dateTime } from '../utils/dateTime';
 import { numberToString } from '../utils/numberToString';
+import moment from 'moment';
 
 interface Props {
   visible: boolean;
@@ -32,7 +33,7 @@ const ModalFilterEvents = (props: Props) => {
   const { visible, onClose, onFilter } = props;
   const [categories, setCategories] = useState<Category[]>([]);
   const [categorySelected, setCategorySelected] = useState<string[]>([]);
-  const [isVisibleModalDate, setisVisibleModalDate] = useState(false);
+  const [isVisibleModalDate, setIsVisibleModalDate] = useState(false);
   const [datetime, setDatetime] = useState<{
     startAt: string;
     endAt: string;
@@ -89,6 +90,16 @@ const ModalFilterEvents = (props: Props) => {
         endAt: `${date} 23:59:59`,
       });
     } else {
+      const week = moment(new Date()).week();
+      const now = moment(new Date()).week(week);
+
+      const start = now.weekday(1).toISOString();
+      const end = now.weekday(7).toISOString();
+
+      setDatetime({
+        startAt: start,
+        endAt: end,
+      });
     }
   }, [timeChoice]);
   const getCategories = async () => {
@@ -222,7 +233,10 @@ const ModalFilterEvents = (props: Props) => {
               ))}
             </RowComponent>
             <RowComponent
-              onPress={() => setisVisibleModalDate(true)}
+              onPress={() => {
+                settimeChoice(undefined);
+                setIsVisibleModalDate(true);
+              }}
               styles={[
                 globalStyles.button,
                 locaStyles.button,
@@ -264,12 +278,22 @@ const ModalFilterEvents = (props: Props) => {
       </Portal>
 
       <DatePicker
-        onCancel={() => setisVisibleModalDate(false)}
-        onConfirm={val => console.log(val)}
+        onCancel={() => setIsVisibleModalDate(false)}
         open={isVisibleModalDate}
         mode={'date'}
         date={new Date()}
         modal
+        onConfirm={val => {
+          const date = `${val.getFullYear()}-${numberToString(
+            val.getMonth() + 1,
+          )}-${numberToString(val.getDate())}`;
+          setDatetime({
+            startAt: `${date} 00:00:00`,
+            endAt: `${date} 23:59:59`,
+          });
+
+          setIsVisibleModalDate(false);
+        }}
       />
     </>
   );

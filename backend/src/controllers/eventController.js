@@ -79,7 +79,7 @@ const getEventById = asyncHandler(async (req, res) => {
 });
 
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance, limit, date, categoryId, isUpcoming, isPastEvents, title } = req.query;
+    const { lat, long, distance, limit, date, categoryId, startAt, endAt, isUpcoming, isPastEvents, title } = req.query;
     const filter = {};
     if (categoryId) {
         if (categoryId.includes(',')) {
@@ -99,10 +99,11 @@ const getEvents = asyncHandler(async (req, res) => {
             filter.categories = { $eq: categoryId }
         }
     }
-    // if (startAt && endAt) {
-    //     filter.startAt = { $gt: new Date(startAt).getTime() }
-    //     filter.endAt = { $lt: new Date(endAt).getTime() }
-    // }
+    if (startAt && endAt) {
+        filter.startAt = { $gt: new Date(startAt).getTime() }
+        filter.endAt = { $lt: new Date(endAt).getTime() }
+    }
+
 
 
     if (isUpcoming) {
