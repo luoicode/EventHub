@@ -24,7 +24,7 @@ import {
     SectionComponent,
     SpaceComponent,
     TabBarComponent,
-    TextComponent
+    TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
@@ -34,7 +34,6 @@ import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
 import { ModalFilterEvents } from '../../modals';
 
-
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
     const [events, setEvents] = useState<EventModel[]>([]);
@@ -42,7 +41,7 @@ const HomeScreen = ({ navigation }: any) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isVisibleModalFilter, setIsVisibleModalFilter] = useState(false);
     const [eventsData, seteventsData] = useState<EventModel[]>([]);
-
+    const [AllEvents, setAllEvents] = useState<EventModel[]>([]);
     const isFocused = useIsFocused();
 
     useEffect(() => {
@@ -81,6 +80,7 @@ const HomeScreen = ({ navigation }: any) => {
             });
     }, []);
 
+
     useEffect(() => {
         getNearByEvents();
     }, [currentLocation]);
@@ -91,7 +91,6 @@ const HomeScreen = ({ navigation }: any) => {
             getNearByEvents();
         }
     }, [isFocused]);
-
     const getNearByEvents = () => {
         currentLocation &&
             currentLocation.postion &&
@@ -111,12 +110,38 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(error);
         }
     };
+    useEffect(() => {
+        if (isFocused) {
+            getAllEvents();
+        }
+    }, [isFocused]);
+    const getAllEvents = async (lat?: number, long?: number, distance?: number) => {
+        const api = `${lat && long
+            ? `/get-events?lat=${lat}&long=${long}&distance=${distance ?? 5
+            }&limit=5&`
+            : `/get-events?limit=5`
+            }`;
+
+        setIsLoading(true);
+
+        try {
+            const res = await eventAPI.HandlerEvent(api);
+            setIsLoading(false);
+
+            if (res && res.data) {
+                setAllEvents(res.data);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            console.log(`Get all events error: ${error}`);
+        }
+    };
 
     const getEvents = async (lat?: number, long?: number, distance?: number) => {
         const api = `${lat && long
             ? `/get-events?lat=${lat}&long=${long}&distance=${distance ?? 5
-            }&limit=5 `
-            : `/get-events?limit=5`
+            }&limit=5&isUpcoming=true`
+            : `/get-events?limit=5&isUpcoming=true`
             }`;
 
         if (events.length === 0 || nearbyEvents.length === 0) {
@@ -124,14 +149,14 @@ const HomeScreen = ({ navigation }: any) => {
         }
 
         try {
-            const res = await eventAPI.HandlerEvent(api);
+            const res: any = await eventAPI.HandlerEvent(api);
             setIsLoading(false);
             res &&
                 res.data &&
                 (lat && long ? setNearbyEvents(res.data) : setEvents(res.data));
         } catch (error) {
             setIsLoading(false);
-            console.log(`Get event error in home screen line 74 ${error}`);
+            console.log(`Get event error in home screen line 155 ${error}`);
         }
     };
     const getEventsData = async (
@@ -155,7 +180,6 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(error);
         }
     };
-
 
     return (
         <View style={[globalStyles.container]}>
@@ -221,11 +245,8 @@ const HomeScreen = ({ navigation }: any) => {
                     <RowComponent>
                         <RowComponent
                             styles={{ flex: 1 }}
-                            onPress={() =>
-                                navigation.navigate('SearchEvents', {
-                                    isFilter: false,
-                                })
-                            }>
+                            onPress={() => navigation.navigate('SearchEvents')}
+                        >
                             <SearchNormal1
                                 variant="TwoTone"
                                 size={30}
@@ -246,10 +267,9 @@ const HomeScreen = ({ navigation }: any) => {
                                 flex={1}
                             />
                         </RowComponent>
-                        <TouchableOpacity
-                            onPress={() =>
-                                setIsVisibleModalFilter(true)
-                            }>
+                        <TouchableOpacity onPress={() =>
+                            navigation.navigate('SearchEvents', { isFilter: true })
+                        }>
                             <MaterialIcons name="sort" size={30} color={appColors.primary7} />
                         </TouchableOpacity>
                     </RowComponent>
@@ -267,19 +287,45 @@ const HomeScreen = ({ navigation }: any) => {
                         marginTop: 18,
                     },
                 ]}>
+
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
-                        onPress={() => navigation.navigate('ExploreEvents', {
-                            key: 'upcoming',
-                            title: "Upcoming Events"
-                        })}
+                        onPress={() =>
+                            navigation.navigate('ExploreEvents', {
+                                key: 'upcoming',
+                                title: 'Upcoming Events',
+                            })
+                        }
                     />
                     {events.length > 0 ? (
                         <FlatList
                             showsHorizontalScrollIndicator={false}
                             horizontal
                             data={events}
+                            renderItem={({ item, index }) => (
+                                <EventItem key={`event${index} `} item={item} type="card" />
+                            )}
+                        />
+                    ) : (
+                        <LoadingComponent isLoading={isLoading} values={events.length} />
+                    )}
+                </SectionComponent>
+                <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
+                    <TabBarComponent
+                        title="Events"
+                        onPress={() =>
+                            navigation.navigate('ExploreEvents', {
+                                key: 'allevents',
+                                title: 'All Events',
+                            })
+                        }
+                    />
+                    {AllEvents.length > 0 ? (
+                        <FlatList
+                            showsHorizontalScrollIndicator={false}
+                            horizontal
+                            data={AllEvents}
                             renderItem={({ item, index }) => (
                                 <EventItem key={`event${index} `} item={item} type="card" />
                             )}
@@ -329,10 +375,12 @@ const HomeScreen = ({ navigation }: any) => {
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Nearby You"
-                        onPress={() => navigation.navigate('ExploreEvents', {
-                            key: 'nearby',
-                            title: "Nearby You"
-                        })}
+                        onPress={() =>
+                            navigation.navigate('ExploreEvents', {
+                                key: 'nearby',
+                                title: 'Nearby You',
+                            })
+                        }
                     />
                     {nearbyEvents.length > 0 ? (
                         <FlatList
@@ -351,7 +399,11 @@ const HomeScreen = ({ navigation }: any) => {
                     )}
                 </SectionComponent>
             </ScrollView>
-            <ModalFilterEvents visible={isVisibleModalFilter} onClose={() => setIsVisibleModalFilter(false)} />
+            <ModalFilterEvents
+                visible={isVisibleModalFilter}
+                onClose={() => setIsVisibleModalFilter(false)}
+                onFilter={vals => navigation.navigate('SearchEvents', { filters: vals })}
+            />
         </View>
     );
 };

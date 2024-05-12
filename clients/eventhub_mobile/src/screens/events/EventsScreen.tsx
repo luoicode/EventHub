@@ -37,7 +37,7 @@ const EventsScreen = ({ navigation }: any) => {
   }
 
   const getEvents = async () => {
-    const api = `/get-events${eventType === 'upcoming' ? '?isUpcoming=true' : '?isPastEvents'}`;
+    const api = `/get-events${eventType === 'upcoming' ? '?isUpcoming=true' : '?isPastEvents=true'}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
@@ -72,7 +72,6 @@ const EventsScreen = ({ navigation }: any) => {
       </View>
       <SectionComponent styles={{}}>
         <ButtonComponent
-          styles={{}}
           onPress={() => navigation.navigate('ExploreEvents')}
           text="EXPLORE EVENTS"
           type="primary"
@@ -95,7 +94,8 @@ const EventsScreen = ({ navigation }: any) => {
             />
           }
         />
-      }>
+      }
+      isScroll={false}>
       <RadioButton selected={eventType} onSelect={(id: string) => setEventType(id)} data={[
         {
           label: "Upcoming", value: 'upcoming'
@@ -104,20 +104,21 @@ const EventsScreen = ({ navigation }: any) => {
           label: "Past event", value: 'pastEvent'
         },
       ]} />
-      <FlatList
-        ListEmptyComponent={
-          renderEmptyComponent
-        }
-        data={events}
-        renderItem={({ item }) => (
-          <EventItem
-            item={item}
-            key={item._id}
-            type="list"
-            styles={{ flex: 1, width: undefined }}
-          />
-        )}
-      />
+      {events.length > 0 ? (
+        <FlatList
+          data={events}
+          renderItem={({ item }) => (
+            <EventItem
+              item={item}
+              key={item._id}
+              type="list"
+              styles={{ flex: 1, width: undefined }}
+            />
+          )}
+        />
+      ) : (
+        renderEmptyComponent
+      )}
       <LoadingModal visible={isLoading} />
     </ContainerComponent>
   );

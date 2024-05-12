@@ -77,32 +77,43 @@ const getEventById = asyncHandler(async (req, res) => {
         data: item,
     });
 });
-const searchEvents = asyncHandler(async (req, res) => {
-    const { title } = req.query;
 
-    const events = await EventModel.find({});
-
-    const items = events.filter((element) =>
-        element.title.toLowerCase().includes(title.toLocaleLowerCase())
-    );
-
-    res.status(200).json({
-        message: "get events ok",
-        data: items,
-    });
-});
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance, limit, date, categoryId, isUpcoming, isPastEvents } = req.query;
-    const filter = {}
-    categoryId ? {
-        categories: { $eq: categoryId }
-    } : {}
+    const { lat, long, distance, limit, date, categoryId, isUpcoming, isPastEvents, title } = req.query;
+    const filter = {};
+    if (categoryId) {
+        if (categoryId.includes(',')) {
+
+            const values = []
+
+
+            categoryId.split(',').forEach(id => values.push({
+                categories: { $eq: id }
+            }))
+
+            console.log(values)
+            // filter = {$or: [...values]}
+
+        } else {
+
+            filter.categories = { $eq: categoryId }
+        }
+    }
+    // if (startAt && endAt) {
+    //     filter.startAt = { $gt: new Date(startAt).getTime() }
+    //     filter.endAt = { $lt: new Date(endAt).getTime() }
+    // }
+
 
     if (isUpcoming) {
         filter.startAt = { $gt: Date.now() }
     }
     if (isPastEvents) {
         filter.endAt = { $lt: Date.now() }
+    }
+
+    if (title) {
+        filter.title = { $regex: title }
     }
 
     const events = await EventModel.find(filter)
@@ -128,9 +139,7 @@ const getEvents = asyncHandler(async (req, res) => {
 
         res.status(200).json({
             message: "get events ok",
-            data: date
-                ? items.filter((element) => element.date > new Date(date))
-                : items,
+            data: items,
         });
     } else {
         res.status(200).json({
@@ -277,7 +286,6 @@ module.exports = {
     createCategory,
     getCategories,
     getEventById,
-    searchEvents,
     getEventsByCategoryId,
     handlerAddNewBillDetail,
     handlerUpdatePaymentSuccess,
