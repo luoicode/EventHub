@@ -53,19 +53,17 @@ const MapScreen = ({ navigation }: any) => {
   }, [currentLocation, isFocused]);
 
   const getNearbyEvents = async (categoryId?: string) => {
-    setIsLoading(true)
-    const api = `/get-events?lat=${currentLocation?.lat}&long=${currentLocation?.long
+    setIsLoading(true);
+    const api = `/get-events?isUpcoming=true&lat=${currentLocation?.lat}&long=${currentLocation?.long
       }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
-
     try {
       const res = await eventAPI.HandlerEvent(api);
 
       setEvents(res.data);
-      setIsLoading(false)
-
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
   return (
@@ -106,7 +104,11 @@ const MapScreen = ({ navigation }: any) => {
             onPress={getNearbyEvents}
             styles={[globalStyles.noSpaceCard, { width: 56, height: 56 }]}
             color={appColors.primary7}>
-            <Foundation name="target-two" color={appColors.primary5} size={32} />
+            <Foundation
+              name="target-two"
+              color={appColors.primary5}
+              size={32}
+            />
           </CardComponent>
         </RowComponent>
         <SpaceComponent height={20} />
@@ -141,14 +143,15 @@ const MapScreen = ({ navigation }: any) => {
                 key={`event${index}`}
                 title={event.title}
                 description=""
-                onPress={() => navigation.navigate('EventDetail', { id: event._id })}
+                onPress={() =>
+                  navigation.navigate('EventDetail', { id: event._id })
+                }
                 coordinate={{
                   longitude: event.position.long,
                   latitude: event.position.lat,
                 }}>
                 <MarkerCustom categoryId={event.categories} />
               </Marker>
-
             ))}
         </MapView>
       ) : (
