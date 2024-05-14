@@ -79,7 +79,7 @@ const getEventById = asyncHandler(async (req, res) => {
 });
 
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance, limit, date, categoryId, startAt, endAt, isUpcoming, isPastEvents, title } = req.query;
+    const { lat, long, distance, limit, date, categoryId, startAt, endAt, isUpcoming, isPastEvents, title, minPrice, maxPrice } = req.query;
     const filter = {};
     if (categoryId) {
         if (categoryId.includes(',')) {
@@ -90,9 +90,6 @@ const getEvents = asyncHandler(async (req, res) => {
             categoryId.split(',').forEach(id => values.push({
                 categories: { $eq: id }
             }))
-
-            console.log(values)
-            // filter = {$or: [...values]}
 
         } else {
 
@@ -117,6 +114,15 @@ const getEvents = asyncHandler(async (req, res) => {
         filter.title = { $regex: title }
     }
 
+    if (minPrice) {
+        filter.price = { $gte: parseFloat(minPrice) }
+    }
+
+
+    if (maxPrice) {
+        filter.price = { $lte: parseInt(maxPrice) }
+    }
+
     const events = await EventModel.find(filter)
         .sort({ createAt: -1 })
         .limit(limit ?? 0);
@@ -132,7 +138,7 @@ const getEvents = asyncHandler(async (req, res) => {
                     addressLong: event.position.long,
                 });
 
-                if (eventDistance < distance) {
+                if (eventDistance < parseFloat(distance)) {
                     items.push(event);
                 }
             });

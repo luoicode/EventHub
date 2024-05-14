@@ -101,6 +101,7 @@ const getAccessToken = () => {
 const handlerSendNotification = async ({ token, title, subtitle, body, data }) => {
     const accesstoken = await getAccessToken();
 
+    console.log(accesstoken)
     const axios = require('axios')
     let newdata = JSON.stringify({
         message: {

@@ -56,7 +56,7 @@ const SearchEvents = ({ navigation, route }: any) => {
     try {
       const res = await eventAPI.HandlerEvent(api)
 
-      setResults(res.data)
+      setResults(res.data && res.data.length > 0 ? res.data : []);
       setIsSearching(false)
     } catch (error) {
       console.log(error)
