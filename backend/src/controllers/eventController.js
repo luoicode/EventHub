@@ -114,13 +114,8 @@ const getEvents = asyncHandler(async (req, res) => {
         filter.title = { $regex: title }
     }
 
-    if (minPrice) {
-        filter.price = { $gte: parseFloat(minPrice) }
-    }
-
-
-    if (maxPrice) {
-        filter.price = { $lte: parseInt(maxPrice) }
+    if (maxPrice && minPrice) {
+        filter.price = { $lte: parseInt(maxPrice), $gte: parseFloat(minPrice) }
     }
 
     const events = await EventModel.find(filter)
