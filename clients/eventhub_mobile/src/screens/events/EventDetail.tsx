@@ -47,6 +47,8 @@ const EventDetail = ({ navigation, route }: any) => {
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
+  // console.log(id)
+
   useEffect(() => {
     if (id) {
       getEventById();

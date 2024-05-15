@@ -8,6 +8,8 @@ export const appInfo = {
   // BASE_URL: 'http://192.168.1.5:3001',
   // BASE_URL: 'http://localhost:3001',
 
+  domain: 'https://comfy-belekoy-415395.netlify.app',
+
   monthNames: [
     'January',
     'February',
