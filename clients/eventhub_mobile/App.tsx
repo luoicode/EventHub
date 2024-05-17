@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import AppRouters from './src/navigators/AppRouters';
 import store from './src/redux/store';
@@ -28,7 +28,8 @@ const App = () => {
   useEffect(() => {
     deviceType === 'Handset' && Orientation.lockToPortrait();
   }, [deviceType])
-
+  LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+  LogBox.ignoreAllLogs();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
