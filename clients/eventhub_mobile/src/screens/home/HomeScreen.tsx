@@ -7,8 +7,11 @@ import React, { useEffect, useState } from 'react';
 import {
     FlatList,
     ImageBackground,
+    Modal,
     ScrollView,
     StatusBar,
+    StyleSheet,
+    Text,
     TouchableOpacity,
     View,
 } from 'react-native';
@@ -33,6 +36,7 @@ import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
 import { ModalFilterEvents } from '../../modals';
+import NetInfo from '@react-native-community/netinfo';
 
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
@@ -42,8 +46,8 @@ const HomeScreen = ({ navigation }: any) => {
     const [isVisibleModalFilter, setIsVisibleModalFilter] = useState(false);
     const [eventsData, seteventsData] = useState<EventModel[]>([]);
     const [AllEvents, setAllEvents] = useState<EventModel[]>([]);
+    const [isOnline, setIsOnline] = useState<boolean>();
     const isFocused = useIsFocused();
-
     useEffect(() => {
         Geolocation.getCurrentPosition(
             (position: any) => {
@@ -78,6 +82,7 @@ const HomeScreen = ({ navigation }: any) => {
 
                 id && handlerLinking(`eventhub://app/detail/${mess.data.id}`);
             });
+        checkNetWork();
     }, []);
 
 
@@ -91,6 +96,11 @@ const HomeScreen = ({ navigation }: any) => {
             getNearByEvents();
         }
     }, [isFocused]);
+    const checkNetWork = () => {
+        NetInfo.addEventListener(state => {
+            setIsOnline(state.isConnected ?? false);
+        });
+    };
     const getNearByEvents = () => {
         currentLocation &&
             currentLocation.postion &&
@@ -399,13 +409,53 @@ const HomeScreen = ({ navigation }: any) => {
                     )}
                 </SectionComponent>
             </ScrollView>
-            <ModalFilterEvents
-                visible={isVisibleModalFilter}
-                onClose={() => setIsVisibleModalFilter(false)}
-                onFilter={vals => navigation.navigate('SearchEvents', { filters: vals })}
-            />
-        </View>
+            <Modal animationType="fade" transparent={true} visible={!isOnline}>
+                <View style={styles.overlay}>
+                    <View style={styles.container}>
+                        <Text style={styles.title}>Network Error</Text>
+                        <Text style={styles.message}>Please check your internet connection and try again.</Text>
+                    </View>
+                </View>
+            </Modal >
+        </View >
     );
 };
 
 export default HomeScreen;
+const styles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    container: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: '#333',
+    },
+    message: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 20,
+        color: '#666',
+    },
+    button: {
+        backgroundColor: '#007BFF',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+});

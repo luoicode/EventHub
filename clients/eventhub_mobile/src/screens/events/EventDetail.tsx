@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Heart, Location } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Heart, Location, Share } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -35,6 +35,8 @@ import {
 import { globalStyles } from '../../styles/globalStyles';
 import { UserHandler } from '../../utils/UserHandlers';
 import { dateTime } from '../../utils/dateTime';
+import { ShareEvent } from '../../utils/shareEvent';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const EventDetail = ({ navigation, route }: any) => {
   const { id }: { id: string } = route.params;
@@ -212,6 +214,13 @@ const EventDetail = ({ navigation, route }: any) => {
                 title
                 color={appColors.primary7}
               />
+              <ButtonComponent onPress={() => ShareEvent({
+                title: item.title,
+                description: item.description,
+                id,
+
+              })} icon={<AntDesign name='sharealt' size={28} color='white' />} />
+              <SpaceComponent width={12} />
               <CardComponent
                 onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
@@ -229,6 +238,7 @@ const EventDetail = ({ navigation, route }: any) => {
                   }
                   variant="Bold"
                 />
+
               </CardComponent>
             </RowComponent>
           </RowComponent>
