@@ -37,6 +37,9 @@ import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
 import { ModalFilterEvents } from '../../modals';
 import NetInfo from '@react-native-community/netinfo';
+import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
+import { authSelector } from '../../redux/reducers/authReducer';
 
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
@@ -47,7 +50,13 @@ const HomeScreen = ({ navigation }: any) => {
     const [eventsData, seteventsData] = useState<EventModel[]>([]);
     const [AllEvents, setAllEvents] = useState<EventModel[]>([]);
     const [isOnline, setIsOnline] = useState<boolean>();
+    const [unReadNotification, setUnReadNotification] = useState([]);
+
+
     const isFocused = useIsFocused();
+    const user = useSelector(authSelector)
+
+
     useEffect(() => {
         Geolocation.getCurrentPosition(
             (position: any) => {
@@ -83,8 +92,29 @@ const HomeScreen = ({ navigation }: any) => {
                 id && handlerLinking(`eventhub://app/detail/${mess.data.id}`);
             });
         checkNetWork();
-    }, []);
 
+        firestore()
+            .collection('notifications')
+            .where('isRead', '==', false)
+            .where('uid', '==', user.id)
+            .onSnapshot(snap => {
+                if (snap.empty) {
+                    setUnReadNotification([]);
+                } else {
+                    const items: any = [];
+
+                    snap.forEach(item =>
+                        items.push({
+                            id: item.id,
+                            ...item.data(),
+                        }),
+                    );
+
+                    setUnReadNotification(items);
+                }
+            });
+
+    }, []);
 
     useEffect(() => {
         getNearByEvents();
@@ -125,7 +155,11 @@ const HomeScreen = ({ navigation }: any) => {
             getAllEvents();
         }
     }, [isFocused]);
-    const getAllEvents = async (lat?: number, long?: number, distance?: number) => {
+    const getAllEvents = async (
+        lat?: number,
+        long?: number,
+        distance?: number,
+    ) => {
         const api = `${lat && long
             ? `/get-events?lat=${lat}&long=${long}&distance=${distance ?? 5
             }&limit=5&`
@@ -232,22 +266,28 @@ const HomeScreen = ({ navigation }: any) => {
                             )}
                         </View>
 
-                        <CircleComponent size={40} color={appColors.primary5}>
+                        <CircleComponent
+                            onPress={() => navigation.navigate('NotificationScreen')}
+                            size={40}
+                            color={appColors.primary5}>
                             <View>
                                 <Notification size={28} color={appColors.primary7} />
-                                <View
-                                    style={{
-                                        backgroundColor: appColors.primary3,
-                                        width: 6,
-                                        height: 6,
-                                        borderRadius: 4,
-                                        borderWidth: 2,
-                                        borderColor: appColors.primary3,
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 1,
-                                    }}
-                                />
+                                {
+                                    unReadNotification.length > 0 &&
+                                    <View
+                                        style={{
+                                            backgroundColor: appColors.danger,
+                                            width: 6,
+                                            height: 6,
+                                            borderRadius: 4,
+                                            borderWidth: 2,
+                                            borderColor: appColors.danger,
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 1,
+                                        }}
+                                    />
+                                }
                             </View>
                         </CircleComponent>
                     </RowComponent>
@@ -255,8 +295,7 @@ const HomeScreen = ({ navigation }: any) => {
                     <RowComponent>
                         <RowComponent
                             styles={{ flex: 1 }}
-                            onPress={() => navigation.navigate('SearchEvents')}
-                        >
+                            onPress={() => navigation.navigate('SearchEvents')}>
                             <SearchNormal1
                                 variant="TwoTone"
                                 size={30}
@@ -277,9 +316,10 @@ const HomeScreen = ({ navigation }: any) => {
                                 flex={1}
                             />
                         </RowComponent>
-                        <TouchableOpacity onPress={() =>
-                            navigation.navigate('SearchEvents', { isFilter: true })
-                        }>
+                        <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('SearchEvents', { isFilter: true })
+                            }>
                             <MaterialIcons name="sort" size={30} color={appColors.primary7} />
                         </TouchableOpacity>
                     </RowComponent>
@@ -297,7 +337,6 @@ const HomeScreen = ({ navigation }: any) => {
                         marginTop: 18,
                     },
                 ]}>
-
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
@@ -413,11 +452,13 @@ const HomeScreen = ({ navigation }: any) => {
                 <View style={styles.overlay}>
                     <View style={styles.container}>
                         <Text style={styles.title}>Network Error</Text>
-                        <Text style={styles.message}>Please check your internet connection and try again.</Text>
+                        <Text style={styles.message}>
+                            Please check your internet connection and try again.
+                        </Text>
                     </View>
                 </View>
-            </Modal >
-        </View >
+            </Modal>
+        </View>
     );
 };
 

@@ -51,9 +51,10 @@ const AvatarComponent = (props: Props) => {
                         },
                     ]}>
                     <TextComponent
-                        size={size ? size / 2 : 30}
                         text={name.substring(0, 1).toLocaleUpperCase()}
-                        font={fontFamilies.semiBold}
+                        font={fontFamilies.bold}
+                        color={appColors.white}
+                        size={size ? size / 3 : 14}
                     />
                 </View>
             )}

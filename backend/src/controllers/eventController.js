@@ -246,7 +246,7 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
 
     const data = {
         from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
-        to: 'huyhn045@gmail.com',
+        to: email,
         subject: 'Verification email code',
         text: 'Your code to verification email',
         html: `<h1>Your ticket</h1>`,

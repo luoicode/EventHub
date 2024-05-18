@@ -64,7 +64,7 @@ const EventsScreen = ({ navigation }: any) => {
         <View style={{ width: '70%' }}>
           <TextComponent
             text="There Are Currently No Events in the Calendar"
-            size={16}
+            size={18}
             color={appColors.gray4}
             styles={{ textAlign: 'center' }}
           />

@@ -277,60 +277,78 @@ const pushInviteNotification = asyncHandler(async (req, res) => {
     ids.forEach(async (id) => {
         const user = await UserModel.findById(id)
 
-        const fcmTokens = user.fcmTokens
+        if (user) {
+            const fcmTokens = user.fcmTokens
 
-        if (fcmTokens > 0) {
-            fcmTokens.forEach(async token => await handlerSendNotification({
-                fcmTokens: token,
-                title: 'asd',
-                subtitle: '',
-                body: 'You have been invited to participate in the event!',
-                data: {
-                    eventId,
-                }
-            }))
+            if (fcmTokens > 0) {
+                fcmTokens.forEach(async token => await handlerSendNotification({
+                    fcmTokens: token,
+                    title: 'asd',
+                    subtitle: '',
+                    body: 'You have been invited to participate in the event!',
+                    data: {
+                        eventId,
+                    }
+                }))
 
+            } else {
+                //send mail
+                const data = {
+                    from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
+                    to: user.email,
+                    subject: "Your Verification Code for EventHub",
+                    text: "Your code to verification email",
+                    html: `
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    background-color: #212429;
+                                    color: #ffffff;
+                                    font-family: Arial, sans-serif;
+                                }
+                                .container {
+                                    padding: 20px;
+                                    text-align: center;
+                                }
+                                img {
+                                    max-width: 200px;
+                                    height: auto;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <div class="container" style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+                        <img src="https://i.imgur.com/kPChuuE.png" alt="EventHub Logo" style="display: block; margin: auto; width: 150px; height: auto;">
+                        <h2 style="color: #333;">Dear ${user.name},</h2>
+                        <p style="color: #555; font-size: 16px;">We are thrilled to invite you to our exclusive event, <strong>${eventId}</strong>. This is a fantastic opportunity to connect with like-minded individuals, share ideas, and engage in exciting discussions.</p>
+                        <p style="color: #555; font-size: 16px;">Here are the details of the event:</p>
+                        <ul style="color: #555; font-size: 16px; list-style-type: none; padding: 0;">
+                            <li><strong>Date:</strong> ${eventId} </li>
+                            <li><strong>Time:</strong></li>
+                            <li><strong>Location:</strong> </li>
+                        </ul>
+                        <p style="color: #555; font-size: 16px;">To confirm your attendance, please click the link below:</p>
+                        <a href="" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Confirm Your Attendance</a>
+                        <p style="color: #555; font-size: 16px; margin-top: 20px;">If you have any questions or need further information, please do not hesitate to contact us.</p>
+                        <p style="color: #555; font-size: 16px;">We look forward to seeing you at the event!</p>
+                        <p style="color: #555; font-size: 16px;">Best regards,<br>The EventHub Team</p>
+                    </div>
+                        </body>
+                    </html>
+                `,
+                };
+
+
+                await handlerSendMail(data);
+            }
         } else {
-            //send mail
-            const data = {
-                from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
-                to: email,
-                subject: "Your Verification Code for EventHub",
-                text: "Your code to verification email",
-                html: `
-                <html>
-                    <head>
-                        <style>
-                            body {
-                                background-color: #212429;
-                                color: #ffffff;
-                                font-family: Arial, sans-serif;
-                            }
-                            .container {
-                                padding: 20px;
-                                text-align: center;
-                            }
-                            img {
-                                max-width: 200px;
-                                height: auto;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="container">
-                            <img src="https://i.imgur.com/kPChuuE.png" alt="EventHub Logo">
-                            <h2>Dear User,</h2>
-                            <p><strong>${eventId}</strong></p>
-                            <p>Best regards,<br>The EventHub Team</p>
-                        </div>
-                    </body>
-                </html>
-            `,
-            };
-
-            await handlerSendMail(data);
+            console.log('User not found!')
+            res.sendStatus(401)
+            throw new Error('User not found')
         }
+
     })
 
     res.status(200).json({

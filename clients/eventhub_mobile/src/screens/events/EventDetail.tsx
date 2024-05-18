@@ -49,7 +49,6 @@ const EventDetail = ({ navigation, route }: any) => {
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
 
-  // console.log(id)
 
   useEffect(() => {
     if (id) {
@@ -472,6 +471,7 @@ const EventDetail = ({ navigation, route }: any) => {
       <LoadingModal visible={isLoading} />
 
       <ModalInvite
+        title={item.title}
         visible={isVisibleModalInvite}
         onClose={() => setIsVisibleModalInvite(false)}
         eventId={item._id}
