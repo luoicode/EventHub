@@ -45,6 +45,7 @@ const EventDetail = ({ navigation, route }: any) => {
   const [profile, setProfile] = useState<ProfileModel>();
   const [isVisibleModalInvite, setIsVisibleModalInvite] = useState(false);
   const [item, setItem] = useState<EventModel>();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
@@ -124,7 +125,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
   const handlerToggleFollowing = async (id: string) => {
     const api = `/update-following`;
-    setIsLoading(true);
+    setIsUpdating(true);
 
     try {
       const res = await userAPI.HandlerUser(
@@ -137,9 +138,9 @@ const EventDetail = ({ navigation, route }: any) => {
       );
 
       dispatch(updateFollowing(res.data));
-      setIsLoading(false);
+      setIsUpdating(false);
     } catch (error) {
-      setIsLoading(false);
+      setIsUpdating(false);
 
       console.log(error);
     }
@@ -167,12 +168,17 @@ const EventDetail = ({ navigation, route }: any) => {
     };
 
     const api = `/buy-ticket`;
+    setIsUpdating(true)
 
     try {
       const res = await eventAPI.HandlerEvent(api, data, 'post');
       navigation.navigate('PaymentScreen', { billDetail: res.data });
+      setIsUpdating(false)
+
     } catch (error) {
+      setIsUpdating(false)
       console.log(error);
+
     }
   };
 
@@ -398,7 +404,7 @@ const EventDetail = ({ navigation, route }: any) => {
           </SectionComponent>
           <TabBarComponent title="Members" />
           <SectionComponent styles={{}}>
-            {item.users && item.users.length > 0 ? (
+            {item.joined && item.joined.length > 0 ? (
               <View
                 style={{
                   justifyContent: 'center',
@@ -416,7 +422,7 @@ const EventDetail = ({ navigation, route }: any) => {
                       width: '100%',
                     },
                   ]}>
-                  <AvatarGroup userIds={item.users} size={50} />
+                  <AvatarGroup userIds={item.joined} size={50} />
                   <SpaceComponent width={16} />
                   <TouchableOpacity
                     onPress={() => setIsVisibleModalInvite(true)}
@@ -468,13 +474,14 @@ const EventDetail = ({ navigation, route }: any) => {
         />
       </LinearGradient>
 
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isUpdating} />
 
       <ModalInvite
         title={item.title}
         visible={isVisibleModalInvite}
         onClose={() => setIsVisibleModalInvite(false)}
         eventId={item._id}
+        joined={item.joined}
       />
     </View>
   ) : (

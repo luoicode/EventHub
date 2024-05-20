@@ -7,16 +7,17 @@ import App from './App';
 import { name as appName } from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import { handlerLinking } from './src/utils/handlerLinking';
+import { appInfo } from './src/constants/appInfos';
 
 messaging().setBackgroundMessageHandler(async mess => {
-    // handlerLinking(`eventhub://app/detail/${mess.data.id}`)
+    handlerLinking(`${appInfo.domain}/detail/${mess.data.eventId}`);
 
 
 });
 
 messaging().onNotificationOpenedApp(mess => {
 
-    handlerLinking(`eventhub://app/detail/${mess.data.id}`)
+    handlerLinking(`${appInfo.domain}/detail/${mess.data.eventId}`);
 });
 
 AppRegistry.registerComponent(appName, () => App);

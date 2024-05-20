@@ -40,6 +40,7 @@ import NetInfo from '@react-native-community/netinfo';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/reducers/authReducer';
+import { appInfo } from '../../constants/appInfos';
 
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
@@ -79,8 +80,9 @@ const HomeScreen = ({ navigation }: any) => {
                 text1: mess.notification.title,
                 text2: mess.notification.body,
                 onPress: () => {
-                    const id = mess.data ? mess.data.id : '';
+                    const id = mess.data ? mess.data.eventId : '';
                     id && navigation.navigate('EventDetail', { id });
+
                 },
             });
         });
@@ -89,7 +91,8 @@ const HomeScreen = ({ navigation }: any) => {
             .then((mess: any) => {
                 const id = mess && mess.data ? mess.data.id : '';
 
-                id && handlerLinking(`eventhub://app/detail/${mess.data.id}`);
+                id && handlerLinking(`${appInfo.domain}/detail/${mess.data.eventId}`);
+
             });
         checkNetWork();
 

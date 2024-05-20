@@ -117,7 +117,7 @@ const DrawerCustom = ({ navigation }: any) => {
         <View style={[localStyles.container, { backgroundColor: appColors.primary7, marginTop: 30 }]}>
             <AvatarComponent
                 onPress={() => handlerNavigation('MyProfile')}
-                photoUrl={auth.photo}
+                photoURL={auth.photo}
                 name={auth.name ? auth.name : auth.email}
             />
             <FlatList

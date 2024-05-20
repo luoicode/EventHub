@@ -23,10 +23,11 @@ interface Props {
   onClose: () => void;
   eventId?: string;
   title: string;
+  joined: string[]
 }
 
 const ModalInvite = (props: Props) => {
-  const { visible, onClose, eventId, title } = props;
+  const { visible, onClose, eventId, title, joined } = props;
   const [friendId, setFriendId] = useState<string[]>([]);
   const [isDissable, setIsDissable] = useState(true);
   const [userSelected, setUserSelected] = useState<string[]>([]);
@@ -134,26 +135,27 @@ const ModalInvite = (props: Props) => {
             onChange={val => console.log('')}
           />
           {friendId.length ? (
-            friendId.map((id: string) => (
-              <RowComponent key={id}>
-                <View style={{ flex: 1 }}>
-                  <UserComponent
-                    types="Invite"
-                    onPress={() => handlerSelectedId(id)}
-                    userId={id}
+            friendId.map((id: string) =>
+              !joined.includes(id) && id !== auth.id && (
+                <RowComponent key={id} styles={{ marginBottom: 16 }}>
+                  <View style={{ flex: 1 }}>
+                    <UserComponent
+                      types="Invite"
+                      onPress={() => handlerSelectedId(id)}
+                      userId={id}
+                    />
+                  </View>
+                  <TickCircle
+                    size={24}
+                    variant="Bold"
+                    color={
+                      userSelected.includes(id)
+                        ? appColors.primary3
+                        : appColors.gray2
+                    }
                   />
-                </View>
-                <TickCircle
-                  size={24}
-                  variant="Bold"
-                  color={
-                    userSelected.includes(id)
-                      ? appColors.primary3
-                      : appColors.gray2
-                  }
-                />
-              </RowComponent>
-            ))
+                </RowComponent>
+              ))
           ) : (
             <TextComponent
               text="No friends to invite"

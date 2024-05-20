@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Text, Alert, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { NotificationModel } from '../models/NotificationModel'
 import RowComponent from './RowComponent'
@@ -13,6 +13,11 @@ import userAPI from '../apis/userApi'
 import { ProfileModel } from '../models/ProfileModel'
 import { dateTime } from '../utils/dateTime'
 import firestore from '@react-native-firebase/firestore'
+import { useSelector } from 'react-redux'
+import { authSelector } from '../redux/reducers/authReducer'
+import eventAPI from '../apis/eventApi'
+import { useNavigation } from '@react-navigation/native'
+import { EventModel } from '../models/EventModel'
 
 interface Props {
     item: NotificationModel
@@ -23,9 +28,14 @@ const NotificationItem = (props: Props) => {
     const [profile, setProfile] = useState<ProfileModel>();
     const [isLoading, setIsLoading] = useState(false);
 
+    const ref = firestore().collection('notifications').doc(item.id)
+
+    const user = useSelector(authSelector)
+
     useEffect(() => {
         getUserDetail();
     }, [item.from])
+
 
     const getUserDetail = async () => {
         const api = `/get-profile?uid=${item.from}`
@@ -43,10 +53,27 @@ const NotificationItem = (props: Props) => {
         }
     }
 
+
     const handlerRemoveNotification = async () => {
         try {
-            await firestore().collection('notifications').doc(item.id).delete();
+            await ref.delete();
             console.log('Done')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handlerJoinEvent = async () => {
+        const api = `/join-event?eventId=${item.eventId}&uid=${user.id}`
+
+
+        try {
+            const res = await eventAPI.HandlerEvent(api)
+
+            await ref.update({
+                isRead: true
+            })
 
         } catch (error) {
             console.log(error)
@@ -62,11 +89,13 @@ const NotificationItem = (props: Props) => {
                 paddingHorizontal: 16,
                 alignItems: 'flex-start',
             }}>
+
             <AvatarComponent
                 size={45}
                 name={profile && profile.name ? `${profile.name} ` : ' '}
-                photoUrl={profile && profile.photoUrl ? `${profile.photoUrl}` : ''}
+                photoURL={profile && profile.photoUrl ? `${profile.photoUrl}` : ''}
             />
+
             <View
                 style={{ flex: 1, paddingHorizontal: 12, paddingRight: 28 }}>
                 <Text
@@ -104,6 +133,7 @@ const NotificationItem = (props: Props) => {
                             type='primary'
                         />
                         <ButtonComponent text='Accept'
+                            onPress={handlerJoinEvent}
                             type='primary' color=''
                             styles={{ paddingVertical: 10 }} />
 
