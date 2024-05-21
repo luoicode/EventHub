@@ -7,6 +7,7 @@ export const appInfo = {
   BASE_URL: 'http://192.168.0.101:3001',
   // BASE_URL: 'http://192.168.1.5:3001',
   // BASE_URL: 'http://localhost:3001',
+  // BASE_URL: 'https://eventhub-server.onrender.com',
 
   domain: 'https://comfy-belekoy-415395.netlify.app',
 

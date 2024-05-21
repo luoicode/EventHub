@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
     Image,
-    ImageProps,
     StyleProp,
     TouchableOpacity,
     View,
-    ViewProps,
+    ImageStyle,
 } from 'react-native';
 import { appColors } from '../constants/appColors';
 import TextComponent from './TextComponent';
 import { globalStyles } from '../styles/globalStyles';
 import { fontFamilies } from '../constants/fontFamilies';
-import { ImageStyle } from 'react-native';
 import userAPI from '../apis/userApi';
 
 interface Props {
@@ -25,34 +23,30 @@ interface Props {
 
 const AvatarComponent = (props: Props) => {
     const { photoURL, name, size, styles, onPress, uid } = props;
-
-    const [profile, setProfile] = useState<{ name?: string, photoUrl?: string }>({
+    const [profile, setProfile] = useState<{ name?: string; photoUrl?: string }>({
         name: name ?? '',
-        photoUrl: photoURL ?? ''
+        photoUrl: photoURL ?? '',
     });
-
-
 
     useEffect(() => {
         if (!photoURL && uid) {
             getUserProfile();
         }
-    }, [photoURL, uid])
+    }, [photoURL, uid]);
 
     const getUserProfile = async () => {
-        const api = `/get-profile?uid=${uid}`
-
+        const api = `/get-profile?uid=${uid}`;
         try {
-            const res: any = await userAPI.HandlerUser(api)
-
+            const res: any = await userAPI.HandlerUser(api);
             setProfile({
                 name: res.data.name,
                 photoUrl: res.data.photoUrl,
-            })
+            });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+
 
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress}>
@@ -75,8 +69,8 @@ const AvatarComponent = (props: Props) => {
                     style={[
                         globalStyles.center,
                         {
-                            width: size ?? 60,
-                            height: size ?? 60,
+                            width: size ?? 24,
+                            height: size ?? 24,
                             borderRadius: 100,
                             borderWidth: 1,
                             borderColor: appColors.white,

@@ -80,12 +80,12 @@ const updateFcmToken = asyncHandler(async (req, res) => {
 
 const getAccessToken = () => {
     return new Promise(function (resolve, reject) {
-        const key = require("../eventhub-accesstoken.json");
+        const key = require('../eventhub-accesstoken.json');
         const jwtClient = new JWT(
             key.client_email,
             null,
             key.private_key,
-            ["https://www.googleapis.com/auth/cloud-platform"],
+            ['https://www.googleapis.com/auth/cloud-platform'],
             null
         );
         jwtClient.authorize(function (err, tokens) {
@@ -98,6 +98,7 @@ const getAccessToken = () => {
     });
 };
 
+
 const handlerSendNotification = async ({
     fcmTokens,
     title,
@@ -108,10 +109,11 @@ const handlerSendNotification = async ({
     var request = require('request');
     var options = {
         method: 'POST',
-        url: 'https://fcm.googleapis.com/v1/projects/evenhub-f8c6e/messages:send',
+        url: "https://fcm.googleapis.com/v1/projects/eventhub-ed7f7/messages:send",
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${await getAccessToken()}`,
+
         },
         body: JSON.stringify({
             message: {
@@ -125,11 +127,15 @@ const handlerSendNotification = async ({
             },
         }),
     };
+    console.log(getAccessToken)
+
+
     request(options, function (error, response) {
         if (error) throw new Error(error);
         console.log(error);
     });
 };
+
 const getProfile = asyncHandler(async (req, res) => {
     const { uid } = req.query;
 
@@ -277,13 +283,13 @@ const pushInviteNotification = asyncHandler(async (req, res) => {
         if (user) {
 
             const fcmTokens = user.fcmTokens;
-
             if (fcmTokens.length > 0) {
                 fcmTokens.forEach(
                     async (token) => {
+
                         await handlerSendNotification({
                             fcmTokens: token,
-                            title: 'fasfasf',
+                            title: 'Eventhub',
                             subtitle: '',
                             body: 'You have a request!',
                             data: {

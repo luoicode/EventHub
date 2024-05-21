@@ -79,7 +79,7 @@ const EventItem = (props: Props) => {
                         </RowComponent>
                     </ImageBackground>
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
-                    {/* <AvatarGroup userIds={item.users} /> */}
+                    <AvatarGroup userIds={item.users} />
                     <RowComponent>
                         <Location size={18} color={appColors.primary5} variant="Bold" />
                         <SpaceComponent width={8} />

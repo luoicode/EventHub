@@ -22,7 +22,8 @@ const AvatarGroup = (props: Props) => {
                         <AvatarComponent
                             key={item}
                             uid={item} styles={{
-                                borderColor: appColors.primary5,
+                                borderWidth: 1,
+                                borderColor: appColors.white,
                                 marginLeft: index > 0 ? -8 : 0,
                             }} />
                         // <Image
