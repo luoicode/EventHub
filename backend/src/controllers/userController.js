@@ -136,6 +136,7 @@ const handlerSendNotification = async ({
     });
 };
 
+
 const getProfile = asyncHandler(async (req, res) => {
     const { uid } = req.query;
 
@@ -163,6 +164,7 @@ const getProfile = asyncHandler(async (req, res) => {
         throw new Error("Missing uid");
     }
 });
+
 
 const getFollowers = asyncHandler(async (req, res) => {
     const { uid } = req.query;

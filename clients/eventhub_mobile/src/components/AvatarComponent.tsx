@@ -47,7 +47,6 @@ const AvatarComponent = (props: Props) => {
         }
     };
 
-
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress}>
             {photoURL ? (
