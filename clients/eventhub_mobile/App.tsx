@@ -25,11 +25,11 @@ const App = () => {
   }, []);
 
 
-  useEffect(() => {
-    deviceType === 'Handset' && Orientation.lockToPortrait();
-  }, [deviceType])
-  LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
-  LogBox.ignoreAllLogs();
+  // useEffect(() => {
+  //   deviceType === 'Handset' && Orientation.lockToPortrait();
+  // }, [deviceType])
+  // LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+  // LogBox.ignoreAllLogs();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>

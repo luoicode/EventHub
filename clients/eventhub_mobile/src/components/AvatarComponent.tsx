@@ -68,8 +68,8 @@ const AvatarComponent = (props: Props) => {
                     style={[
                         globalStyles.center,
                         {
-                            width: size ?? 24,
-                            height: size ?? 24,
+                            width: size ?? 60,
+                            height: size ?? 60,
                             borderRadius: 100,
                             borderWidth: 1,
                             borderColor: appColors.white,
