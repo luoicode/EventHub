@@ -125,18 +125,22 @@ const ModalFilterEvents = (props: Props) => {
     }
   };
 
+  // const handlerSelectCategory = (id: string) => {
+  //   const items = [...categorySelected];
+
+  //   const index = items.findIndex(element => element === id);
+  //   if (items && items.includes(id)) {
+  //     items.splice(index, 1);
+  //   } else {
+  //     items.push(id);
+  //   }
+
+  //   setCategorySelected(items);
+  // };
   const handlerSelectCategory = (id: string) => {
-    const items = [...categorySelected];
-
-    const index = items.findIndex(element => element === id);
-    if (items && items.includes(id)) {
-      items.splice(index, 1);
-    } else {
-      items.push(id);
-    }
-
-    setCategorySelected(items);
+    setCategorySelected([id]);
   };
+
   const handlerValueChange = useCallback((low: number, high: number) => {
     setPriceRange({
       low,
@@ -200,7 +204,8 @@ const ModalFilterEvents = (props: Props) => {
                           : appColors.gray2,
                       },
                     ]}
-                    onPress={() => handlerSelectCategory(item._id)}>
+                    onPress={() => handlerSelectCategory(item._id)}
+                  >
                     <Image
                       source={{
                         uri: categorySelected.includes(item._id)

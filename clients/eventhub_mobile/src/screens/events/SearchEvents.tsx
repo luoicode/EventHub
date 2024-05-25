@@ -18,7 +18,7 @@ import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
 import { LoadingModal, ModalFilterEvents } from '../../modals';
 
-const eventBaseUrl = '/get-events?title='
+const eventBaseUrl = '/get-events';
 
 const SearchEvents = ({ navigation, route }: any) => {
   const [searchKey, setSearchKey] = useState('');
