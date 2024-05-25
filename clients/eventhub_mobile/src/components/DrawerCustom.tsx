@@ -3,6 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
     Bookmark2,
     Calendar,
+    Heart,
     Logout,
     Message2,
     MessageQuestion,
@@ -51,9 +52,9 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <Calendar size={size} color={color} />,
         },
         {
-            key: 'Bookmark',
-            title: 'Bookmark',
-            icon: <Bookmark2 size={size} color={color} />,
+            key: 'Favourite',
+            title: 'Favourite',
+            icon: <Heart size={size} color={color} />,
         },
         {
             key: 'ContactUs',
@@ -90,12 +91,14 @@ const DrawerCustom = ({ navigation }: any) => {
         }
         await GoogleSignin.signOut();
         LoginManager.logOut();
-        // clear local storage
         await AsyncStorage.removeItem('auth');
         dispatch(removeAuth({}));
     };
     const handlerNavigation = (key: string) => {
         switch (key) {
+            case 'HelpAndFAQs':
+                navigation.navigate('HelpAndFAQsScreen')
+                break;
             case 'SignOut':
                 handlerLogout();
                 break;

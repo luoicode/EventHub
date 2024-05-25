@@ -64,7 +64,7 @@ const EventItem = (props: Props) => {
                                     text={appInfo.monthNames[new Date(item.date).getMonth()].substring(0, 3)}
                                 />
                             </CardComponent>
-                            {
+                            {/* {
                                 auth.follow_events && auth.follow_events.includes(item._id) &&
                                 (<CardComponent
                                     styles={[globalStyles.noSpaceCard]}
@@ -75,11 +75,11 @@ const EventItem = (props: Props) => {
                                         variant='Bold'
                                     />
                                 </CardComponent>)
-                            }
+                            } */}
                         </RowComponent>
                     </ImageBackground>
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
-                    {/* <AvatarGroup userIds={item.users} /> */}
+                    <AvatarGroup userIds={item.users} />
                     <RowComponent>
                         <Location size={18} color={appColors.primary5} variant="Bold" />
                         <SpaceComponent width={8} />

@@ -34,10 +34,14 @@ const AvatarComponent = (props: Props) => {
         }
     }, [photoURL, uid]);
 
+
+
+
     const getUserProfile = async () => {
         const api = `/get-profile?uid=${uid}`;
         try {
             const res: any = await userAPI.HandlerUser(api);
+            console.log(res.data)
             setProfile({
                 name: res.data.name,
                 photoUrl: res.data.photoUrl,

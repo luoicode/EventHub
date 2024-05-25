@@ -19,6 +19,7 @@ import PaymentScreen from './events/PaymentScreen';
 import NearbyScreen from './events/NearbyScreen';
 import Review from './profiles/components/Review';
 import NotificationScreen from './NotificationScreen';
+import HelpAndFAQsScreen from './Drawer/HelpAndFAQsScreen';
 
 export {
   SignInScreen,
@@ -42,4 +43,5 @@ export {
   NearbyScreen,
   Review,
   NotificationScreen,
+  HelpAndFAQsScreen,
 };

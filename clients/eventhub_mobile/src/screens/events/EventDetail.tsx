@@ -226,7 +226,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
               })} icon={<AntDesign name='sharealt' size={28} color='white' />} />
               <SpaceComponent width={12} />
-              <CardComponent
+              {/* <CardComponent
                 onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
                 color={
@@ -244,7 +244,7 @@ const EventDetail = ({ navigation, route }: any) => {
                   variant="Bold"
                 />
 
-              </CardComponent>
+              </CardComponent> */}
             </RowComponent>
           </RowComponent>
         </LinearGradient>

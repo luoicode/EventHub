@@ -94,7 +94,7 @@ const MapScreen = ({ navigation }: any) => {
                   <ArrowLeft2 size={22} color={appColors.primary5} />
                 </TouchableOpacity>
               }
-              placeholder="Search"
+              placeholder="Search place"
               value=""
               onChange={val => console.log(val)}
             />

@@ -19,25 +19,25 @@ const AvatarGroup = (props: Props) => {
                 userIds.length > 0 && (<>
 
                     {userIds.map((item, index) => (
-                        <AvatarComponent
-                            key={item}
-                            uid={item} styles={{
-                                borderWidth: 1,
-                                borderColor: appColors.white,
-                                marginLeft: index > 0 ? -8 : 0,
-                            }} />
-                        // <Image
-                        //     key={`img-${index}`}
-                        //     source={{ uri: photoUrl }}
-                        //     style={{
-                        //         width: size ?? 24,
-                        //         height: size ?? 24,
-                        //         borderRadius: 100,
+                        // <AvatarComponent
+                        //     key={item}
+                        //     uid={item} styles={{
                         //         borderWidth: 1,
-                        //         borderColor: appColors.primary5,
+                        //         borderColor: appColors.white,
                         //         marginLeft: index > 0 ? -8 : 0,
-                        //     }}
-                        // />
+                        //     }} />
+                        <Image
+                            key={`img-${index}`}
+                            source={{ uri: photoUrl }}
+                            style={{
+                                width: size ?? 24,
+                                height: size ?? 24,
+                                borderRadius: 100,
+                                borderWidth: 1,
+                                borderColor: appColors.primary5,
+                                marginLeft: index > 0 ? -8 : 0,
+                            }}
+                        />
                     ))}
 
                     <SpaceComponent width={12} />
