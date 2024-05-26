@@ -252,7 +252,6 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
     const data = req.body;
 
     data.price = parseFloat(data.price);
-
     const bill = new BillModel(data);
     bill.save();
 
@@ -263,7 +262,8 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
 });
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
-    const { billId } = req.query;
+    const { billId } = req.body;
+
     await BillModel.findByIdAndUpdate(billId, {
         status: 'success',
     });

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -12,15 +11,19 @@ import { fontFamilies } from '../../constants/fontFamilies';
 import { dateTime } from '../../utils/dateTime';
 import { appColors } from '../../constants/appColors';
 import eventAPI from '../../apis/eventApi';
+import { Image } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const { billDetail } = route.params;
+
 
   const handlerPaySuccessfully = async () => {
     const api = `/update-payment-success?billId=${billDetail._id}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
+      console.log(res)
     } catch (error) {
       console.log(error);
     }
@@ -28,30 +31,109 @@ const PaymentScreen = ({ navigation, route }: any) => {
 
   return (
     <ContainerComponent back title='Payment'>
+      <RowComponent justify='center'>
+        <Entypo name='paypal' size={50} color={appColors.primary5} />
+
+      </RowComponent>
       <SectionComponent>
-        <RowComponent justify="flex-end">
+        <RowComponent justify='center' >
+          <TextComponent
+            text={` ${billDetail._id}`}
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+
+        </RowComponent>
+        <RowComponent justify='flex-end'>
           <TagComponent
             label={billDetail.status === 'success' ? 'Success' : 'Unpaid'}
           />
         </RowComponent>
       </SectionComponent>
-      <SectionComponent styles={{ alignItems: 'center' }}>
-        <TextComponent
-          text={`ID: ${billDetail._id}`}
-          font={fontFamilies.bold}
-          size={20}
-        />
-        <TextComponent
-          text={`Date: ${dateTime.GetDayString(billDetail.createdAt)}`}
-        />
+      <Image
+        source={{ uri: billDetail.photoUrl }}
+        style={{
+          width: 420,
+          height: 300,
+          resizeMode: 'cover',
+          margin: 10,
+          borderRadius: 40,
+
+        }}
+      />
+      <SectionComponent >
+
+        <RowComponent justify='space-between' >
+          <TextComponent text='Event Name:' title font={fontFamilies.medium} />
+          <TextComponent
+            text={` ${billDetail.title}`}
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+        </RowComponent>
         <SpaceComponent height={16} />
-        <TextComponent
-          text={`$${parseFloat(billDetail.price).toLocaleString()}`}
-          font={fontFamilies.bold}
-          size={24}
-          color={appColors.primary3}
-        />
+
+        <RowComponent justify='space-between' >
+          <TextComponent text='Time:' title font={fontFamilies.medium} />
+          <TextComponent
+            text={` ${dateTime.GetTime(billDetail.startAt)}`}
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+        </RowComponent>
+        <SpaceComponent height={16} />
+
+        <RowComponent justify='space-between' >
+          <TextComponent text='Date:' title font={fontFamilies.medium} />
+          <TextComponent
+            text={` ${dateTime.GetDayString(billDetail.createdAt)}`}
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+        </RowComponent>
+        <SpaceComponent height={16} />
+
+        <RowComponent justify='space-between' >
+          <TextComponent text='Location:' title font={fontFamilies.medium} />
+          <TextComponent
+            text={`${billDetail.locationTitle}`}
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+        </RowComponent>
+        <SpaceComponent height={16} />
+        <RowComponent justify='space-between' >
+          <TextComponent text='Quantity:' title font={fontFamilies.medium} />
+          <TextComponent
+            text="01"
+            size={18}
+            color={appColors.gray}
+            font={fontFamilies.medium}
+          />
+        </RowComponent>
+        <SpaceComponent height={16} />
+        <RowComponent justify='space-between' >
+          <TextComponent text='Price:' title font={fontFamilies.medium} />
+          <TextComponent
+            text={`$${parseFloat(billDetail.price).toLocaleString()}`}
+            font={fontFamilies.bold}
+            size={24}
+            color={appColors.primary3}
+          />
+        </RowComponent>
+        <SpaceComponent height={16} />
+
       </SectionComponent>
+
+
+
+
+
       <SectionComponent
         styles={{
           position: 'absolute',
