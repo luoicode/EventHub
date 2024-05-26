@@ -457,22 +457,24 @@ const EventDetail = ({ navigation, route }: any) => {
         </View>
         <SpaceComponent height={80} />
       </ScrollView>
+      {
+        item && auth.id !== item.authorId ? (<LinearGradient
+          colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: 12,
+          }}>
+          <ButtonComponent
+            onPress={handlerCreateBillPayment}
+            text="BUY TICKET "
+            type="primary"
+          />
+        </LinearGradient>) : <></>
+      }
 
-      <LinearGradient
-        colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: 12,
-        }}>
-        <ButtonComponent
-          onPress={handlerCreateBillPayment}
-          text="BUY TICKET "
-          type="primary"
-        />
-      </LinearGradient>
 
       <LoadingModal visible={isUpdating} />
 

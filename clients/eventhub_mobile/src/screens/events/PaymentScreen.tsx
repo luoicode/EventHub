@@ -42,7 +42,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           size={20}
         />
         <TextComponent
-          text={`Date: ${dateTime.GetDayString(billDetail.updateAt)}`}
+          text={`Date: ${dateTime.GetDayString(billDetail.createdAt)}`}
         />
         <SpaceComponent height={16} />
         <TextComponent
