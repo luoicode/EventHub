@@ -20,6 +20,7 @@ import Review from './profiles/components/Review';
 import NotificationScreen from './NotificationScreen';
 import HelpAndFAQsScreen from './Drawer/HelpAndFAQsScreen';
 import PaymentScreen from './events/PaymentScreen';
+import ContactScreen from './Drawer/ContactScreen';
 
 export {
   SignInScreen,
@@ -44,4 +45,5 @@ export {
   Review,
   NotificationScreen,
   HelpAndFAQsScreen,
+  ContactScreen,
 };

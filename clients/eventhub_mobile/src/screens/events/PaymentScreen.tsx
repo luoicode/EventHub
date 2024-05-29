@@ -11,19 +11,34 @@ import { fontFamilies } from '../../constants/fontFamilies';
 import { dateTime } from '../../utils/dateTime';
 import { appColors } from '../../constants/appColors';
 import eventAPI from '../../apis/eventApi';
-import { Image } from 'react-native';
+import { Alert, Image } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo'
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const { billDetail } = route.params;
 
-
   const handlerPaySuccessfully = async () => {
-    const api = `/update-payment-success?billId=${billDetail._id}`;
+    const api = `/update-payment-success?eventId=${billDetail._id}`;
 
     try {
       const res = await eventAPI.HandlerEvent(api);
-      console.log(res)
+      console.log(res);
+
+      // Hiển thị thông báo mua vé thành công
+      Alert.alert(
+        "Payment Successful",
+        "Your ticket has been purchased successfully!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              // Sau khi người dùng nhấn OK, quay trở lại màn hình trước đó
+              navigation.goBack();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       console.log(error);
     }

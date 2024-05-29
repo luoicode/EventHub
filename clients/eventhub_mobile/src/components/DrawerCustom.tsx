@@ -99,6 +99,9 @@ const DrawerCustom = ({ navigation }: any) => {
             case 'HelpAndFAQs':
                 navigation.navigate('HelpAndFAQsScreen')
                 break;
+            case 'ContactUs':
+                navigation.navigate('ContactScreen')
+                break;
             case 'SignOut':
                 handlerLogout();
                 break;
@@ -123,6 +126,8 @@ const DrawerCustom = ({ navigation }: any) => {
                 photoURL={auth.photo}
                 name={auth.name ? auth.name : auth.email}
             />
+            <SpaceComponent height={16} />
+            <TextComponent text={auth.name} title size={22} />
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={profileMenu}
@@ -143,7 +148,7 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: appColors.primary5, height: 'auto' },
+                        { backgroundColor: appColors.primary3, height: 'auto' },
                     ]}>
                     <MaterialCommunityIcons name="crown" size={22} color="yellow" />
                     <SpaceComponent width={8} />

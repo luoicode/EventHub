@@ -250,8 +250,6 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
 
 const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
     const data = req.body;
-
-    data.price = parseFloat(data.price);
     const bill = new BillModel(data);
     bill.save();
 
@@ -262,18 +260,21 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
 });
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
-    const { billId } = req.body;
-
-    await BillModel.findByIdAndUpdate(billId, {
+    const { eventId, email } = req.body;
+    await BillModel.findByIdAndUpdate(eventId, {
         status: 'success',
     });
 
     const data = {
-        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
-        to: email,
-        subject: 'Verification email code',
-        text: 'Your code to verification email',
-        html: `<h1>Your ticket</h1>`,
+        from: `"Support EventHub Application" <${process.env.USERNAME_EMAIL}>`,
+        to: "huyhn045@gmail.com",
+        subject: 'Payment Confirmation for Your Event Ticket',
+        text: 'Your ticket purchase has been confirmed.',
+        html: `
+            <h1>Payment Confirmation</h1>
+            <p>Your ticket purchase has been successfully confirmed.</p>
+            <p>Thank you for choosing EventHub!</p>
+        `,
     };
 
     await handlerSendMail(data);
