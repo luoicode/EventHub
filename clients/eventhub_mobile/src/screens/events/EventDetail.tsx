@@ -165,6 +165,11 @@ const EventDetail = ({ navigation, route }: any) => {
       eventId: id,
       price: item?.price,
       authorId: item?.authorId,
+      photoUrl: item?.photoUrl,
+      title: item?.title,
+      locationTitle: item?.locationTitle,
+      startAt: item?.startAt,
+      date: item?.date
     };
 
     const api = `/buy-ticket`;
@@ -181,6 +186,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
     }
   };
+  const isEventOver = item && new Date(item.startAt) < new Date();
 
   return isLoading ? (
     <View style={[globalStyles.container, globalStyles.center, { flex: 1 }]}>
@@ -295,7 +301,7 @@ const EventDetail = ({ navigation, route }: any) => {
                 <Location variant="Bold" color={appColors.gray2} size={20} />
                 <SpaceComponent width={5} />
                 <TextComponent
-                  text={`${dateTime.GetDate(new Date(item.date))}`}
+                  text={item.locationTitle}
                   size={14}
                   color={appColors.gray}
                 />
@@ -458,7 +464,7 @@ const EventDetail = ({ navigation, route }: any) => {
         <SpaceComponent height={80} />
       </ScrollView>
       {
-        item && auth.id !== item.authorId ? (<LinearGradient
+        !isEventOver && item && auth.id !== item.authorId ? (<LinearGradient
           colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
           style={{
             position: 'absolute',

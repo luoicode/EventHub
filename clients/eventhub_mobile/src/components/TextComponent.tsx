@@ -13,16 +13,18 @@ interface Props {
   styles?: StyleProp<TextStyle>;
   title?: boolean;
   numberOfLine?: number;
+  ellipsizeMode?: 'head' | 'middle' | 'tail' | 'clip';
 }
 
 const TextComponent = (props: Props) => {
-  const { text, size, flex, font, color, styles, title, numberOfLine } = props;
+  const { text, size, flex, font, color, styles, title, numberOfLine, ellipsizeMode } = props;
 
   const fontSizeDefault = 16;
 
   return (
     <Text
       numberOfLines={numberOfLine}
+      ellipsizeMode={ellipsizeMode}
       style={[
         globalStyles.text,
         {

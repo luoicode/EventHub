@@ -28,6 +28,25 @@ const BillSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    title: {
+        type: String,
+        required: true,
+    },
+    locationTitle: {
+        type: String,
+        required: true,
+    },
+    photoUrl: {
+        type: String,
+    },
+    startAt: {
+        type: Number,
+        required: true,
+    },
+    date: {
+        type: Number,
+        required: true,
+    },
 });
 
 const BillModel = mongoose.model('bills', BillSchema);
