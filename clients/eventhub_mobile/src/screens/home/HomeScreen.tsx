@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
 import {
+    ButtonComponent,
     CategoriesList,
     CircleComponent,
     EventItem,
@@ -41,6 +42,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import { authSelector } from '../../redux/reducers/authReducer';
 import { appInfo } from '../../constants/appInfos';
+import { ShareApp } from '../../utils/shareApp';
 
 const HomeScreen = ({ navigation }: any) => {
     const [currentLocation, setCurrentLocation] = useState<AddressModel>();
@@ -406,7 +408,7 @@ const HomeScreen = ({ navigation }: any) => {
 
                         <RowComponent justify="flex-start">
                             <TouchableOpacity
-                                onPress={() => console.log('asdasdasd')}
+                                onPress={ShareApp}
                                 style={[
                                     globalStyles.button,
                                     {

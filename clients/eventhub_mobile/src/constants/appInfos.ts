@@ -10,7 +10,9 @@ export const appInfo = {
   // BASE_URL: 'https://eventhub-server.onrender.com',
 
   domain: 'https://comfy-belekoy-415395.netlify.app',
-
+  name: 'Event Hub',
+  dowloadapp:
+    'https://play.google.com/store/apps/details?id=net.crystalinteractive.ahapp&hl=en_US',
   monthNames: [
     'January',
     'February',

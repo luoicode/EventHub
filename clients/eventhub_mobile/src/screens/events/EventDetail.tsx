@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Heart, Location, Share } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Location } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,19 +8,19 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
 import userAPI from '../../apis/userApi';
 import {
   AvatarGroup,
   ButtonComponent,
-  CardComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
   TabBarComponent,
   TagComponent,
-  TextComponent,
+  TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
@@ -36,7 +36,6 @@ import { globalStyles } from '../../styles/globalStyles';
 import { UserHandler } from '../../utils/UserHandlers';
 import { dateTime } from '../../utils/dateTime';
 import { ShareEvent } from '../../utils/shareEvent';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const EventDetail = ({ navigation, route }: any) => {
   const { id }: { id: string } = route.params;
