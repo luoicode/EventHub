@@ -186,6 +186,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
     }
   };
+  const isEventOver = item && new Date(item.startAt) < new Date();
 
   return isLoading ? (
     <View style={[globalStyles.container, globalStyles.center, { flex: 1 }]}>
@@ -463,7 +464,7 @@ const EventDetail = ({ navigation, route }: any) => {
         <SpaceComponent height={80} />
       </ScrollView>
       {
-        item && auth.id !== item.authorId ? (<LinearGradient
+        !isEventOver && item && auth.id !== item.authorId ? (<LinearGradient
           colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
           style={{
             position: 'absolute',

@@ -40,7 +40,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           <TextComponent
             text={` ${billDetail._id}`}
             size={18}
-            color={appColors.gray}
+            color={appColors.primary3}
             font={fontFamilies.medium}
           />
 
@@ -48,6 +48,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
         <RowComponent justify='flex-end'>
           <TagComponent
             label={billDetail.status === 'success' ? 'Success' : 'Unpaid'}
+
           />
         </RowComponent>
       </SectionComponent>
@@ -65,12 +66,15 @@ const PaymentScreen = ({ navigation, route }: any) => {
       <SectionComponent >
 
         <RowComponent justify='space-between' >
-          <TextComponent text='Event Name:' title font={fontFamilies.medium} />
+          <TextComponent text='Event Name:   ' title font={fontFamilies.medium} />
           <TextComponent
             text={` ${billDetail.title}`}
             size={18}
+            styles={{ flex: 1 }}
             color={appColors.gray}
             font={fontFamilies.medium}
+            numberOfLine={2}
+            ellipsizeMode='tail'
           />
         </RowComponent>
         <SpaceComponent height={16} />
