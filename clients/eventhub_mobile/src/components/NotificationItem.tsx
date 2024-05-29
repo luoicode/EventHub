@@ -111,24 +111,34 @@ const NotificationItem = (props: Props) => {
                 {
                     !item.isRead &&
                     <RowComponent justify='center' styles={{ alignItems: 'center' }}>
-                        <ButtonComponent text='Reject'
-                            onPress={() => Alert.alert('Confirm', 'Are you sure you want to reject?', [{
-                                text: 'Cancel',
-                                onPress: () => console.log('Cancel remove')
-                            },
-                            {
-                                text: 'Reject',
-                                style: 'destructive',
-                                onPress: () => handlerRemoveNotification
+                        <ButtonComponent
+                            text='Reject'
+                            onPress={() =>
+                                Alert.alert(
+                                    'Confirm',
+                                    'Are you sure you want to reject?',
+                                    [
+                                        {
+                                            text: 'Cancel',
+                                            onPress: () => console.log('Cancel remove')
+                                        },
+                                        {
+                                            text: 'Reject',
+                                            style: 'destructive',
+                                            onPress: handlerRemoveNotification // Thêm dấu ngoặc tròn sau tên hàm
+                                        }
+                                    ]
+                                )
                             }
-                            ])
-                            }
-                            styles={[globalStyles.center, {
-                                borderWidth: 1,
-                                backgroundColor: appColors.primary7,
-                                borderColor: appColors.gray2,
-                                paddingVertical: 10,
-                            }]}
+                            styles={[
+                                globalStyles.center,
+                                {
+                                    borderWidth: 1,
+                                    backgroundColor: appColors.primary7,
+                                    borderColor: appColors.gray2,
+                                    paddingVertical: 10
+                                }
+                            ]}
                             textColor={appColors.gray}
                             type='primary'
                         />
@@ -140,7 +150,12 @@ const NotificationItem = (props: Props) => {
                     </RowComponent>
                 }
             </View>
-            <TextComponent color={appColors.gray} text={dateTime.GetDateUpdate(item.createAt)} />
+            <View >
+                <TextComponent color={appColors.gray} text={dateTime.GetDateUpdate(item.createAt)} />
+                <SpaceComponent height={8} />
+                <View style={{ marginLeft: 80, width: 10, height: 10, borderRadius: 100, backgroundColor: item.isRead ? 'white' : appColors.primary3, }} />
+            </View>
+
 
 
 

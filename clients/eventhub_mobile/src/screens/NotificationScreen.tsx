@@ -26,30 +26,41 @@ const NotificationScreen = () => {
     const user = useSelector(authSelector);
 
     useEffect(() => {
-        setIsLoading(true)
-        firestore()
+        setIsLoading(true);
+        const unsubscribe = firestore()
             .collection('notifications')
             .where('uid', '==', user.id)
+            .orderBy('createAt', 'desc') // Thêm dòng này để sắp xếp thông báo theo thứ tự thời gian giảm dần
             .onSnapshot(snap => {
+                if (!snap) {
+                    setNotification([]);
+                    setIsLoading(false);
+                    return;
+                }
+
                 if (snap.empty) {
                     setNotification([]);
-                    setIsLoading(false)
+                    setIsLoading(false);
                 } else {
                     const items: any = [];
-
                     snap.forEach(item =>
                         items.push({
                             id: item.id,
                             ...item.data(),
                         }),
                     );
-
                     setNotification(items);
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }
+            }, error => {
+                console.error(error);
+                setIsLoading(false);
             });
 
-    }, [])
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [user.id]);
+
 
     const handlerChecktoReadAllNotification = () => {
         setIsUpdating(true)
