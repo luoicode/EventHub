@@ -21,6 +21,8 @@ import NotificationScreen from './NotificationScreen';
 import HelpAndFAQsScreen from './Drawer/HelpAndFAQsScreen';
 import PaymentScreen from './events/PaymentScreen';
 import ContactScreen from './Drawer/ContactScreen';
+import Privacy from './Drawer/Privacy';
+import CalendarScreen from './Drawer/CalendarScreen';
 
 export {
   SignInScreen,
@@ -46,4 +48,6 @@ export {
   NotificationScreen,
   HelpAndFAQsScreen,
   ContactScreen,
+  Privacy,
+  CalendarScreen,
 };

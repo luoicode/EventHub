@@ -4,6 +4,7 @@ import {
     Bookmark2,
     Calendar,
     Heart,
+    Lock1,
     Logout,
     Message2,
     MessageQuestion,
@@ -62,9 +63,9 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <Sms size={size} color={color} />,
         },
         {
-            key: 'Settings',
-            title: 'Settings',
-            icon: <Setting2 size={size} color={color} />,
+            key: 'Privacy',
+            title: 'Privacy',
+            icon: <Lock1 size={size} color={color} />,
         },
         {
             key: 'HelpAndFAQs',
@@ -101,6 +102,12 @@ const DrawerCustom = ({ navigation }: any) => {
                 break;
             case 'ContactUs':
                 navigation.navigate('ContactScreen')
+                break;
+            case 'Privacy':
+                navigation.navigate('Privacy')
+                break;
+            case 'Calendar':
+                navigation.navigate('Calendar')
                 break;
             case 'SignOut':
                 handlerLogout();

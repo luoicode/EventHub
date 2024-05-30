@@ -7,7 +7,6 @@ import ChoiceLocation from './ChoiceLocation';
 import CircleComponent from './CircleComponent';
 import ContainerComponent from './ContainerComponent';
 import DateTimePicker from './DateTimePicker';
-import DrawerSetting from './DrawerSetting';
 import DropdownPicker from './DropdownPicker';
 import EventItem from './EventItem';
 import InputAddNewScreen from './InputAddNewScreen';
@@ -51,7 +50,6 @@ export {
   UserComponent,
   ListEventComponent,
   InputAddNewScreen,
-  DrawerSetting,
   RadioButton,
   NotificationItem,
 };
