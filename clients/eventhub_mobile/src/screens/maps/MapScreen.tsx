@@ -1,9 +1,10 @@
 import Geolocation from '@react-native-community/geolocation';
-import { ArrowLeft2 } from 'iconsax-react-native';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Foundation from 'react-native-vector-icons/Foundation';
+import eventAPI from '../../apis/eventApi';
 import {
   CardComponent,
   CategoriesList,
@@ -11,17 +12,13 @@ import {
   InputComponent,
   MarkerCustom,
   RowComponent,
-  SpaceComponent,
-  TextComponent,
+  SpaceComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { appInfo } from '../../constants/appInfos';
-import { globalStyles } from '../../styles/globalStyles';
-import { MusicIcon } from '../../assets/svgs';
-import eventAPI from '../../apis/eventApi';
-import { EventModel } from '../../models/EventModel';
-import { useIsFocused } from '@react-navigation/native';
 import { LoadingModal } from '../../modals';
+import { EventModel } from '../../models/EventModel';
+import { globalStyles } from '../../styles/globalStyles';
 const MapScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
@@ -84,16 +81,6 @@ const MapScreen = ({ navigation }: any) => {
           <View style={{ flex: 1 }}>
             <InputComponent
               styles={{ marginBottom: 0, backgroundColor: appColors.primary7 }}
-              affix={
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Home', {
-                      screen: 'HomeScreen',
-                    });
-                  }}>
-                  <ArrowLeft2 size={22} color={appColors.primary5} />
-                </TouchableOpacity>
-              }
               placeholder="Search place"
               value=""
               onChange={val => console.log(val)}

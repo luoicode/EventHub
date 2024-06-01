@@ -82,7 +82,6 @@ const EventsScreen = ({ navigation }: any) => {
   return (
     <ContainerComponent
       title="Events"
-      back
       right={
 
         <ButtonComponent

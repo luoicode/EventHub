@@ -77,15 +77,8 @@ const getEventById = asyncHandler(async (req, res) => {
         data: item,
     });
 });
-const getEventsByDate = async (desiredDate) => {
 
-    const events = await EventModel.find({ date: desiredDate });
 
-    res.status(200).json({
-        message: "Event date",
-        data: events,
-    });
-};
 
 const getEvents = asyncHandler(async (req, res) => {
     const { lat, long, distance, limit, date, categoryId, startAt, endAt, isUpcoming, isPastEvents, title, minPrice, maxPrice } = req.query;
@@ -125,6 +118,14 @@ const getEvents = asyncHandler(async (req, res) => {
 
     if (maxPrice && minPrice) {
         filter.price = { $lte: parseInt(maxPrice), $gte: parseFloat(minPrice) }
+    }
+
+    if (date) {
+        const selectedDate = new Date(date);
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1);
+
+        filter.startAt = { $gte: selectedDate, $lt: nextDay };
     }
 
     const events = await EventModel.find(filter)
@@ -329,5 +330,4 @@ module.exports = {
     updateCategory,
     getCategoryDetail,
     joinEvent,
-    getEventsByDate
 };

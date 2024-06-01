@@ -190,12 +190,8 @@ const AddNewScreen = ({ navigation }: any) => {
   };
 
   return (
-    <ContainerComponent isScroll>
+    <ContainerComponent back isScroll title="Create New Event">
       <SectionComponent>
-        <TextComponent text="Create New Event" title />
-      </SectionComponent>
-      <SectionComponent>
-
         <InputAddNewScreen
           styles={{}}
           placeholder="Add title"

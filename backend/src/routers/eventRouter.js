@@ -33,6 +33,5 @@ eventRouter.get("/update-payment-success", handlerUpdatePaymentSuccess);
 eventRouter.put("/update-category", updateCategory);
 eventRouter.get("/get-category-detail", getCategoryDetail);
 eventRouter.get("/join-event", joinEvent);
-eventRouter.get("/get-event-by-date", getEventsByDate);
 
 module.exports = eventRouter;
