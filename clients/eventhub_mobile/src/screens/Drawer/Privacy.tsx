@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ArrowCircleRight2, Sms } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
@@ -13,17 +14,40 @@ import {
 import { appColors } from '../../constants/appColors';
 import { LoadingModal } from '../../modals';
 import { Validate } from '../../utils/validate';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, removeAuth } from '../../redux/reducers/authReducer';
+import { HandlerNotification } from '../../utils/handlerNotification';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { LoginManager } from 'react-native-fbsdk-next';
 
 const Privacy = () => {
     const [email, setEmail] = useState('');
     const [isDissble, setIsDissable] = useState(true);
     const [isLoading, setiIsLoading] = useState(false);
+    const auth = useSelector(authSelector);
+    const dispatch = useDispatch();
 
     const handlerCheckEmail = () => {
         const isValidEmail = Validate.email(email);
         setIsDissable(!isValidEmail);
     };
-
+    const handlerLogout = async () => {
+        const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+        if (fcmtoken) {
+            if (auth.fcmTokens && auth.fcmTokens.length > 0) {
+                const items = [...auth.fcmTokens];
+                const index = items.findIndex(element => element === fcmtoken);
+                if (index !== -1) {
+                    items.splice(index, 1);
+                }
+                await HandlerNotification.Update(auth.id, items);
+            }
+        }
+        await GoogleSignin.signOut();
+        LoginManager.logOut();
+        await AsyncStorage.removeItem('auth');
+        dispatch(removeAuth({}));
+    };
     const handlerForgottenPassword = async () => {
         const api = `/forgottenPassword`;
 
@@ -34,9 +58,9 @@ const Privacy = () => {
                 { email },
                 'post',
             );
-            console.log(res);
 
             Alert.alert('Send mail', 'We sended a email includes new password');
+            await handlerLogout();
 
             setiIsLoading(false);
         } catch (error) {

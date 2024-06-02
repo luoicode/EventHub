@@ -73,6 +73,8 @@ const ModalLocation = (props: Props) => {
     }).catch(error => console.log(error));
   }, [addressSelected]);
 
+
+
   useEffect(() => {
     if (!searchKey) {
       setLocations([]);

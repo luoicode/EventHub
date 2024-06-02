@@ -23,7 +23,7 @@ const MapScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
     long: number;
-  }>();
+  } | null>(null);
   const [events, setEvents] = useState<EventModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
@@ -46,20 +46,22 @@ const MapScreen = ({ navigation }: any) => {
   }, []);
 
   useEffect(() => {
-    currentLocation && isFocused && getNearbyEvents();
+    if (currentLocation && isFocused) {
+      getNearbyEvents();
+    }
   }, [currentLocation, isFocused]);
 
   const getNearbyEvents = async (categoryId?: string) => {
+    if (!currentLocation) return;
     setIsLoading(true);
     const api = `/get-events?isUpcoming=true&lat=${currentLocation?.lat}&long=${currentLocation?.long
       }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
     try {
       const res = await eventAPI.HandlerEvent(api);
-
       setEvents(res.data);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setIsLoading(false);
     }
   };

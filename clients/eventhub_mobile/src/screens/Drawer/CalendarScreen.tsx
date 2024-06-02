@@ -3,18 +3,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
     Dimensions,
     FlatList,
+    Image,
     StyleSheet,
     Text,
-    TouchableOpacity,
     TouchableWithoutFeedback,
     View
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { ButtonComponent, ContainerComponent, EventItem, SectionComponent, SpaceComponent, TextComponent } from '../../components';
 import eventAPI from '../../apis/eventApi';
+import { ButtonComponent, ContainerComponent, EventItem, SectionComponent, SpaceComponent, TextComponent } from '../../components';
+import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
-import { appColors } from '../../constants/appColors';
 import { dateTime } from '../../utils/dateTime';
 
 const { width } = Dimensions.get('window');
@@ -167,7 +167,32 @@ const Calendar = ({ navigation }: any) => {
                         renderItem={({ item, index }) => (
                             <EventItem key={`event${index}`} item={item} type="card" />
                         )}
-                        ListEmptyComponent={<Text>No events for this date.</Text>}
+                        ListEmptyComponent={
+                            <View style={{ marginTop: 20, flex: 1, marginLeft: 20 }}>
+                                <View style={[globalStyles.center, { flex: 1 }]}>
+                                    <Image
+                                        source={require('../../assets/images/empty_event.png')}
+                                        style={{ width: 202, height: 202 }}
+                                    />
+                                    <TextComponent
+                                        text="No Upcoming Event"
+                                        title
+                                        size={24}
+                                        styles={{ marginVertical: 12 }}
+                                    />
+
+                                    <View style={{ width: '70%' }}>
+                                        <TextComponent
+                                            text="There are currently no Events in the Calendar"
+                                            size={18}
+                                            color={appColors.gray4}
+                                            styles={{ textAlign: 'center' }}
+                                        />
+                                    </View>
+                                </View>
+
+                            </View>
+                        }
                     />
                 )}
             </SectionComponent>

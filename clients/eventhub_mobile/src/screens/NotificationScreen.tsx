@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import { LoadingModal } from '../modals';
 import { NotificationModel } from '../models/NotificationModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
+import { ListRenderItem } from 'react-native';
 
 const NotificationScreen = () => {
     const [notifications, setNotification] = useState<NotificationModel[]>([]);
@@ -30,7 +31,7 @@ const NotificationScreen = () => {
         const unsubscribe = firestore()
             .collection('notifications')
             .where('uid', '==', user.id)
-            .orderBy('createAt', 'desc') // Thêm dòng này để sắp xếp thông báo theo thứ tự thời gian giảm dần
+            .orderBy('createAt', 'desc')
             .onSnapshot(snap => {
                 if (!snap) {
                     setNotification([]);
@@ -76,7 +77,12 @@ const NotificationScreen = () => {
             setIsUpdating(false)
         }
     }
-
+    const NotificationItemMemoized = memo(({ item }: { item: NotificationModel }) => (
+        <NotificationItem item={item} />
+    ));
+    const renderItem: ListRenderItem<NotificationModel> = ({ item }) => (
+        <NotificationItemMemoized item={item} />
+    );
     return (
         <ContainerComponent
             isScroll={false}
@@ -98,9 +104,8 @@ const NotificationScreen = () => {
                     <FlatList
                         style={{ paddingTop: 20 }}
                         data={notifications}
-                        renderItem={({ item, index }) => (
-                            <NotificationItem item={item} key={item.id} />
-                        )}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
                     />
                 </>
             ) : (
