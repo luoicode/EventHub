@@ -14,6 +14,8 @@ import InputComponent from './InputComponent';
 import ListEventComponent from './ListEventComponent';
 import LoadingComponent from './LoadingComponent';
 import MarkerCustom from './MarkerCustom';
+import NotificationItem from './NotificationItem';
+import RadioButton from './RadioButton';
 import RowComponent from './RowComponent';
 import SectionComponent from './SectionComponent';
 import SpaceComponent from './SpaceComponent';
@@ -48,4 +50,6 @@ export {
   UserComponent,
   ListEventComponent,
   InputAddNewScreen,
+  RadioButton,
+  NotificationItem,
 };

@@ -2,7 +2,7 @@ export interface EventModel {
   __v: number;
   _id: string;
   authorId: string;
-  category: string;
+  categories: string;
   createdAt: string;
   description: string;
   endAt: number;
@@ -17,6 +17,7 @@ export interface EventModel {
   updateAt: string;
   users: string[];
   followers?: string[];
+  joined: string[];
 }
 
 export interface Position {

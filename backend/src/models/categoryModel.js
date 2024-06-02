@@ -1,22 +1,30 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose } = require('mongoose');
 
 const CategorySchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
   },
   key: {
     type: String,
-    required: true,
+  },
+  iconColor: {
+    type: String,
+  },
+  iconWhite: {
+    type: String,
   },
   color: {
-    type: String
+    type: String,
   },
-  description: {
-    type: String
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
-
+  updatedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
-const CategoryModel = mongoose.model("category", CategorySchema);
+const CategoryModel = mongoose.model('categories', CategorySchema);
 module.exports = CategoryModel;

@@ -2,13 +2,13 @@ import {
     useAsyncStorage,
 } from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
+import { Linking } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import userAPI from '../apis/userApi';
-import { AuthState, addAuth, addFollowedEvent, authSelector } from '../redux/reducers/authReducer';
+import { AuthState, addAuth, authSelector } from '../redux/reducers/authReducer';
 import { SplashScreen } from '../screens';
+import { UserHandler } from '../utils/UserHandlers';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
-import { UserHandler } from '../utils/UserHandlers';
 const AppRouters = () => {
     const [isShowSplash, setIsShowSplash] = useState(true);
     const { getItem } = useAsyncStorage('auth');
@@ -20,8 +20,8 @@ const AppRouters = () => {
     useEffect(() => {
         handlerGetDatas();
 
+        handlerInitiaUrl()
     }, []);
-
     useEffect(() => {
         if (auth.id) {
             UserHandler.getFollowersById(auth.id, dispatch);
@@ -31,6 +31,23 @@ const AppRouters = () => {
 
 
     }, [auth.id]);
+
+    const handlerInitiaUrl = async () => {
+
+        try {
+            const url = await Linking.getInitialURL();
+
+            if (url) {
+                Linking.canOpenURL(url).then(isCanOpen =>
+                    isCanOpen ? Linking.openURL(url) : console.log('Can not open link'),
+                );
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
 
     const handlerGetDatas = async () => {
         await checkLogin();

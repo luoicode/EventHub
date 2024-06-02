@@ -156,6 +156,7 @@ const DropdownPicker = (props: Props) => {
                 <Modalize
                     handlePosition="inside"
                     ref={modalieRef}
+                    adjustToContentHeight
                     FooterComponent={
                         multible && (
                             <View style={{ paddingHorizontal: 20, paddingBottom: 30 }}>

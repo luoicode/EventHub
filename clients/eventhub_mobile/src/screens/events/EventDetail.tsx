@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Heart, Location } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Location } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,24 +8,23 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
 import userAPI from '../../apis/userApi';
 import {
   AvatarGroup,
   ButtonComponent,
-  CardComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
   TabBarComponent,
   TagComponent,
-  TextComponent,
+  TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
-import { LoadingModal } from '../../modals';
-import ModalInvite from '../../modals/ModalInvite';
+import { LoadingModal, ModalInvite } from '../../modals';
 import { EventModel } from '../../models/EventModel';
 import { ProfileModel } from '../../models/ProfileModel';
 import {
@@ -36,6 +35,7 @@ import {
 import { globalStyles } from '../../styles/globalStyles';
 import { UserHandler } from '../../utils/UserHandlers';
 import { dateTime } from '../../utils/dateTime';
+import { ShareEvent } from '../../utils/shareEvent';
 
 const EventDetail = ({ navigation, route }: any) => {
   const { id }: { id: string } = route.params;
@@ -44,9 +44,11 @@ const EventDetail = ({ navigation, route }: any) => {
   const [profile, setProfile] = useState<ProfileModel>();
   const [isVisibleModalInvite, setIsVisibleModalInvite] = useState(false);
   const [item, setItem] = useState<EventModel>();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (id) {
@@ -122,7 +124,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
   const handlerToggleFollowing = async (id: string) => {
     const api = `/update-following`;
-    setIsLoading(true);
+    setIsUpdating(true);
 
     try {
       const res = await userAPI.HandlerUser(
@@ -135,9 +137,9 @@ const EventDetail = ({ navigation, route }: any) => {
       );
 
       dispatch(updateFollowing(res.data));
-      setIsLoading(false);
+      setIsUpdating(false);
     } catch (error) {
-      setIsLoading(false);
+      setIsUpdating(false);
 
       console.log(error);
     }
@@ -162,17 +164,28 @@ const EventDetail = ({ navigation, route }: any) => {
       eventId: id,
       price: item?.price,
       authorId: item?.authorId,
+      photoUrl: item?.photoUrl,
+      title: item?.title,
+      locationTitle: item?.locationTitle,
+      startAt: item?.startAt,
+      date: item?.date
     };
 
     const api = `/buy-ticket`;
+    setIsUpdating(true)
 
     try {
       const res = await eventAPI.HandlerEvent(api, data, 'post');
       navigation.navigate('PaymentScreen', { billDetail: res.data });
+      setIsUpdating(false)
+
     } catch (error) {
+      setIsUpdating(false)
       console.log(error);
+
     }
   };
+  const isEventOver = item && new Date(item.startAt) < new Date();
 
   return isLoading ? (
     <View style={[globalStyles.container, globalStyles.center, { flex: 1 }]}>
@@ -211,7 +224,14 @@ const EventDetail = ({ navigation, route }: any) => {
                 title
                 color={appColors.primary7}
               />
-              <CardComponent
+              <ButtonComponent onPress={() => ShareEvent({
+                title: item.title,
+                description: item.description,
+                id,
+
+              })} icon={<AntDesign name='sharealt' size={28} color='white' />} />
+              <SpaceComponent width={12} />
+              {/* <CardComponent
                 onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
                 color={
@@ -228,7 +248,8 @@ const EventDetail = ({ navigation, route }: any) => {
                   }
                   variant="Bold"
                 />
-              </CardComponent>
+
+              </CardComponent> */}
             </RowComponent>
           </RowComponent>
         </LinearGradient>
@@ -279,7 +300,7 @@ const EventDetail = ({ navigation, route }: any) => {
                 <Location variant="Bold" color={appColors.gray2} size={20} />
                 <SpaceComponent width={5} />
                 <TextComponent
-                  text={`${dateTime.GetDate(new Date(item.date))}`}
+                  text={item.locationTitle}
                   size={14}
                   color={appColors.gray}
                 />
@@ -310,6 +331,7 @@ const EventDetail = ({ navigation, route }: any) => {
             borderTopRightRadius: 40,
           }}>
           <SectionComponent>
+
             {profile && (
               <RowComponent styles={{ marginVertical: 20 }}>
                 <TouchableOpacity
@@ -357,7 +379,7 @@ const EventDetail = ({ navigation, route }: any) => {
                     size={16}
                   />
                 </View>
-                <TagComponent
+                {item && auth.id !== item.authorId ? (<TagComponent
                   onPress={() => handlerToggleFollowing(item.authorId)}
                   label={
                     auth.following && auth.following.includes(item.authorId)
@@ -380,13 +402,14 @@ const EventDetail = ({ navigation, route }: any) => {
                       borderRadius: 12,
                     },
                   ]}
-                />
+                />) : <></>}
+
               </RowComponent>
             )}
           </SectionComponent>
           <TabBarComponent title="Members" />
           <SectionComponent styles={{}}>
-            {item.users && item.users.length > 0 ? (
+            {item.joined && item.joined.length > 0 ? (
               <View
                 style={{
                   justifyContent: 'center',
@@ -404,7 +427,7 @@ const EventDetail = ({ navigation, route }: any) => {
                       width: '100%',
                     },
                   ]}>
-                  <AvatarGroup userIds={item.users} size={50} />
+                  <AvatarGroup userIds={item.joined} size={50} />
                   <SpaceComponent width={16} />
                   <TouchableOpacity
                     onPress={() => setIsVisibleModalInvite(true)}
@@ -439,29 +462,33 @@ const EventDetail = ({ navigation, route }: any) => {
         </View>
         <SpaceComponent height={80} />
       </ScrollView>
+      {
+        !isEventOver && item && auth.id !== item.authorId ? (<LinearGradient
+          colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: 12,
+          }}>
+          <ButtonComponent
+            onPress={handlerCreateBillPayment}
+            text="BUY TICKET "
+            type="primary"
+          />
+        </LinearGradient>) : <></>
+      }
 
-      <LinearGradient
-        colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: 12,
-        }}>
-        <ButtonComponent
-          onPress={handlerCreateBillPayment}
-          text="BUY TICKET "
-          type="primary"
-        />
-      </LinearGradient>
 
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isUpdating} />
 
       <ModalInvite
+        title={item.title}
         visible={isVisibleModalInvite}
         onClose={() => setIsVisibleModalInvite(false)}
         eventId={item._id}
+        joined={item.joined}
       />
     </View>
   ) : (

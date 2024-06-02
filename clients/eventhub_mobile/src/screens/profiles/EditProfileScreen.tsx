@@ -111,7 +111,7 @@ const EditProfileScreen = ({ navigation, route }: any) => {
             <SectionComponent>
                 <RowComponent>
                     <AvatarComponent
-                        photoUrl={profileData.photoUrl}
+                        photoURL={profileData.photoUrl}
                         name={profileData.name ? profileData.name : profileData.email}
                         size={120}
                     />

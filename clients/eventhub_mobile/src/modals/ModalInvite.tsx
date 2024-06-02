@@ -16,15 +16,18 @@ import {
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 import { authSelector } from '../redux/reducers/authReducer';
+import firestore from '@react-native-firebase/firestore';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
-  eventId?: string
+  eventId?: string;
+  title: string;
+  joined: string[]
 }
 
 const ModalInvite = (props: Props) => {
-  const { visible, onClose, eventId } = props;
+  const { visible, onClose, eventId, title, joined } = props;
   const [friendId, setFriendId] = useState<string[]>([]);
   const [isDissable, setIsDissable] = useState(true);
   const [userSelected, setUserSelected] = useState<string[]>([]);
@@ -58,27 +61,6 @@ const ModalInvite = (props: Props) => {
     setUserSelected(items);
     setIsDissable(items.length === 0);
   };
-  const onShare = async () => {
-    try {
-      const eventLink = 'https://example.com/eventhub';
-
-      const result = await Share.share({
-        message: `Join the event right here: ${eventLink}`,
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Chia sẻ với loại hoạt động result.activityType
-        } else {
-          // Chia sẻ thành công
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // Người dùng đã hủy chia sẻ
-      }
-    } catch (error: any) {
-      Alert.alert(error.message);
-    }
-  };
 
   const handlerSendInviteNotification = async () => {
     if (userSelected.length > 0) {
@@ -89,10 +71,27 @@ const ModalInvite = (props: Props) => {
           api,
           {
             ids: userSelected,
-            eventId: '',
+            eventId,
           },
           'post',
         );
+
+        const data = {
+          from: auth.id,
+          // to: id,
+          createAt: Date.now(),
+          content: ` Invite A virtual Evening of ${title}`,
+          eventId,
+          isRead: false,
+        };
+
+        userSelected.forEach(async id => {
+          await firestore()
+            .collection('notifications')
+            .add({ ...data, uid: id });
+
+        });
+        onClose();
       } catch (error) {
         console.log(error);
       }
@@ -114,7 +113,6 @@ const ModalInvite = (props: Props) => {
               type="primary"
               disabled={isDissable}
               onPress={() => {
-                onShare();
                 handlerSendInviteNotification();
               }}
             />
@@ -137,29 +135,32 @@ const ModalInvite = (props: Props) => {
             onChange={val => console.log('')}
           />
           {friendId.length ? (
-            friendId.map((id: string) => (
-              <RowComponent key={id}>
-                <View style={{ flex: 1 }}>
-                  <UserComponent
-
-                    types="Invite"
-                    onPress={() => handlerSelectedId(id)}
-                    userId={id}
+            friendId.map((id: string) =>
+              !joined.includes(id) && id !== auth.id && (
+                <RowComponent key={id} styles={{ marginBottom: 16 }}>
+                  <View style={{ flex: 1 }}>
+                    <UserComponent
+                      types="Invite"
+                      onPress={() => handlerSelectedId(id)}
+                      userId={id}
+                    />
+                  </View>
+                  <TickCircle
+                    size={24}
+                    variant="Bold"
+                    color={
+                      userSelected.includes(id)
+                        ? appColors.primary3
+                        : appColors.gray2
+                    }
                   />
-                </View>
-                <TickCircle
-                  size={24}
-                  variant="Bold"
-                  color={
-                    userSelected.includes(id)
-                      ? appColors.primary3
-                      : appColors.gray2
-                  }
-                />
-              </RowComponent>
-            ))
+                </RowComponent>
+              ))
           ) : (
-            <TextComponent text="No friends to invite" color={appColors.primary5} />
+            <TextComponent
+              text="No friends to invite"
+              color={appColors.primary5}
+            />
           )}
         </SectionComponent>
       </Modalize>

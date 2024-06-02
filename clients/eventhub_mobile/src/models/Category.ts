@@ -4,4 +4,6 @@ export interface Category {
   color: string;
   label: string;
   key: string;
+  iconWhite: string;
+  iconColor: string;
 }

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import eventAPI from '../../../apis/eventApi';
 import {
   ButtonComponent,
+  EventItem,
+  LoadingComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -12,11 +14,12 @@ import {
 } from '../../../components';
 import { appColors } from '../../../constants/appColors';
 import { fontFamilies } from '../../../constants/fontFamilies';
-import ModalSelectCategories from '../../../modals/ModalSelectCategories';
 import { Category } from '../../../models/Category';
 import { ProfileModel } from '../../../models/ProfileModel';
 import { globalStyles } from '../../../styles/globalStyles';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { ModalSelectCategories } from '../../../modals';
+import { EventModel } from '../../../models/EventModel';
 
 interface Props {
   profile: ProfileModel;
@@ -27,11 +30,30 @@ const EditProfile = (props: Props) => {
 
   const [isVisibleModalCategory, setIsVisibleModalCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-
+  const [events, setEvents] = useState<EventModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getCategories();
   }, []);
+  useEffect(() => {
+    getData();
+  }, []);
+  const getData = async () => {
+    setIsLoading(true);
+    await getEvents();
 
+    setIsLoading(false)
+  }
+  const getEvents = async () => {
+    const api = `/get-events`;
+
+    try {
+      const res = await eventAPI.HandlerEvent(api);
+      setEvents(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const getCategories = async () => {
     const api = `/get-categories`;
 
@@ -117,6 +139,31 @@ const EditProfile = (props: Props) => {
                   </View>
                 ),
             )}
+        </RowComponent>
+      </>
+      <>
+        <RowComponent>
+          <TextComponent
+            flex={1}
+            text="My Events"
+            size={26}
+            title
+            styles={{ paddingVertical: 10 }}
+          />
+        </RowComponent>
+        <RowComponent styles={{ flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+          {events.length > 0 ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={events.filter(event => event.authorId === profile.uid)}
+              renderItem={({ item, index }) => (
+                <EventItem key={`event${index}`} item={item} type="card" />
+              )}
+            />
+          ) : (
+            <LoadingComponent isLoading={isLoading} values={events.length} />
+          )}
         </RowComponent>
       </>
 

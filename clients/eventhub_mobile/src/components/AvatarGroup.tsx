@@ -1,6 +1,6 @@
-import { View, Text, Image } from 'react-native';
 import React from 'react';
-import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '.';
+import { Image } from 'react-native';
+import { AvatarComponent, RowComponent, SpaceComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 
@@ -12,12 +12,20 @@ interface Props {
 const AvatarGroup = (props: Props) => {
     const { size, userIds } = props;
     const photoUrl = 'https://cdn-icons-png.flaticon.com/512/5556/5556468.png';
+
     return (
         <RowComponent justify="flex-start" styles={{ marginVertical: 12 }}>
             {
                 userIds.length > 0 && (<>
 
-                    {Array.from({ length: 3 }).map((item, index) => (
+                    {userIds.map((item, index) => (
+                        // <AvatarComponent
+                        //     key={item}
+                        //     uid={item} styles={{
+                        //         borderWidth: 1,
+                        //         borderColor: appColors.white,
+                        //         marginLeft: index > 0 ? -8 : 0,
+                        //     }} />
                         <Image
                             key={`img-${index}`}
                             source={{ uri: photoUrl }}
@@ -31,9 +39,10 @@ const AvatarGroup = (props: Props) => {
                             }}
                         />
                     ))}
+
                     <SpaceComponent width={12} />
                     <TextComponent
-                        text="+20 Going"
+                        text={`${userIds.length > 3 ? `+${userIds.length - 3}` : ' '} Going`}
                         size={12 + (size ? (size - 24) / 5 : 0)}
                         color={appColors.primary5}
                         font={fontFamilies.semiBold}

@@ -106,7 +106,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
           <SectionComponent styles={[globalStyles.center]}>
             <RowComponent>
               <AvatarComponent
-                photoUrl={profile.photoUrl}
+                photoURL={profile.photoUrl}
                 name={profile.name ? profile.name : profile.email}
                 size={100}
               />

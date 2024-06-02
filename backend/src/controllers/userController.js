@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const UserModel = require("../models/userModel");
 const EventModel = require("../models/eventModel");
-const { JWT } = require('google-auth-library')
-const axios = require('axios')
+const { JWT } = require("google-auth-library");
+const axios = require("axios");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -96,42 +96,45 @@ const getAccessToken = () => {
             resolve(tokens.access_token);
         });
     });
-}
+};
 
-const handlerSendNotification = async ({ token, title, subtitle, body, data }) => {
-    const accesstoken = await getAccessToken();
 
-    const axios = require('axios')
-    let newdata = JSON.stringify({
-        message: {
-            token,
-            notfication: {
-                title,
-                body,
-            },
-            data,
-        }
-    });
-    let config = {
-        method: "post",
-        maxBodyLength: Infinity,
+const handlerSendNotification = async ({
+    fcmTokens,
+    title,
+    body,
+    data,
+}) => {
+
+    var request = require('request');
+    var options = {
+        method: 'POST',
         url: "https://fcm.googleapis.com/v1/projects/eventhub-ed7f7/messages:send",
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accesstoken}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getAccessToken()}`,
 
         },
-        data: newdata,
+        body: JSON.stringify({
+            message: {
+                token: fcmTokens,
+                notification: {
+                    title,
+                    body,
+
+                },
+                data,
+            },
+        }),
     };
 
-    await axios
-        .request(config)
-        .then((reponse) => {
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+    request(options, function (error, response) {
+        if (error) throw new Error(error);
+        // console.log(error);
+    });
 };
+
+
 const getProfile = asyncHandler(async (req, res) => {
     const { uid } = req.query;
 
@@ -159,6 +162,7 @@ const getProfile = asyncHandler(async (req, res) => {
         throw new Error("Missing uid");
     }
 });
+
 
 const getFollowers = asyncHandler(async (req, res) => {
     const { uid } = req.query;
@@ -226,19 +230,18 @@ const toggleFollowing = asyncHandler(async (req, res) => {
         if (user) {
             const { following } = user;
 
-            const items = following ?? []
+            const items = following ?? [];
 
-            const index = following.findIndex(element => element === authorId)
+            const index = following.findIndex((element) => element === authorId);
             if (index !== -1) {
-                items.splice(index, 1)
+                items.splice(index, 1);
             } else {
-                items.push(`${authorId}`)
+                items.push(`${authorId}`);
             }
 
-
             await UserModel.findByIdAndUpdate(uid, {
-                following: items
-            })
+                following: items,
+            });
 
             res.status(200).json({
                 message: "Update following successfully!",
@@ -253,11 +256,12 @@ const toggleFollowing = asyncHandler(async (req, res) => {
         throw new Error("Missing data!");
     }
 });
+
 const getFollowing = asyncHandler(async (req, res) => {
     const { uid } = req.query;
 
     if (uid) {
-        const user = await UserModel.findById(uid)
+        const user = await UserModel.findById(uid);
 
         res.status(200).json({
             message: "",
@@ -270,91 +274,71 @@ const getFollowing = asyncHandler(async (req, res) => {
 });
 
 const pushInviteNotification = asyncHandler(async (req, res) => {
-
     const { ids, eventId } = req.body;
 
+
     ids.forEach(async (id) => {
-        const user = await UserModel.findById(id)
+        const user = await UserModel.findById(id);
 
-        const fcmTokens = user.fcmTokens
+        if (user) {
 
-        if (fcmTokens > 0) {
-            fcmTokens.forEach(async token => await handlerSendNotification({
-                fcmTokens: token,
-                title: 'asd',
-                subtitle: '',
-                body: 'You have been invited to participate in the event!',
-                data: {
-                    eventId,
-                }
-            }))
+            const fcmTokens = user.fcmTokens;
+            if (fcmTokens.length > 0) {
+                fcmTokens.forEach(
+                    async (token) => {
 
+                        await handlerSendNotification({
+                            fcmTokens: token,
+                            title: 'Eventhub',
+                            subtitle: '',
+                            body: 'You have a request!',
+                            data: {
+                                eventId,
+                            },
+                        })
+
+                    }
+                );
+            } else {
+                // Send mail
+                const data = {
+                    from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
+                    to: user.email,
+                    subject: 'Verification email code',
+                    text: 'Your code to verification email',
+                    html: `<h1>${eventId}</h1>`,
+                };
+                await handlerSendMail(data);
+            }
         } else {
-            //send mail
-            const data = {
-                from: `"EventHub Team" <${process.env.USERNAME_EMAIL}>`,
-                to: email,
-                subject: "Your Verification Code for EventHub",
-                text: "Your code to verification email",
-                html: `
-                <html>
-                    <head>
-                        <style>
-                            body {
-                                background-color: #212429;
-                                color: #ffffff;
-                                font-family: Arial, sans-serif;
-                            }
-                            .container {
-                                padding: 20px;
-                                text-align: center;
-                            }
-                            img {
-                                max-width: 200px;
-                                height: auto;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="container">
-                            <img src="https://i.imgur.com/kPChuuE.png" alt="EventHub Logo">
-                            <h2>Dear User,</h2>
-                            <p><strong>${eventId}</strong></p>
-                            <p>Best regards,<br>The EventHub Team</p>
-                        </div>
-                    </body>
-                </html>
-            `,
-            };
-
-            await handlerSendMail(data);
+            console.log('User not found')
+            res.sendStatus(401)
+            throw new Error('User not found')
         }
-    })
 
-    res.status(200).json({
-        message: "asds",
-        data: [],
     });
 
+    res.status(200).json({
+        message: 'fafaf',
+        data: [],
+    });
 });
 
 const pushNotification = asyncHandler(async (req, res) => {
+    const { title, body, data } = req.body;
 
-    const { title, body, data } = req.body
-
-    await handlerSendNotification({
-        token: 'cuY-FnV-RjiDcejQhyZXBw:APA91bEBKU0H7DO3mD-Em7IFUsKUOfDfCNl2D3oBAJhSKPIgABuggUVqMqfTaCjGRIapvnyF0B1IYPH0cNK_PoACaXnE6eLpmWBVPjpVXOiyYRu5Ph8UgkwZebmjDeMkXFErMDagdN9C',
-        data,
-        title,
-        body,
-    })
+    // await handlerSendNotification({
+    //     token:
+    //         "cuY-FnV-RjiDcejQhyZXBw:APA91bEBKU0H7DO3mD-Em7IFUsKUOfDfCNl2D3oBAJhSKPIgABuggUVqMqfTaCjGRIapvnyF0B1IYPH0cNK_PoACaXnE6eLpmWBVPjpVXOiyYRu5Ph8UgkwZebmjDeMkXFErMDagdN9C",
+    //     data,
+    //     title,
+    //     body,
+    // });
 
     res.status(200).json({
-        message: 'asdasd',
+        message: "asdasd",
         data: [],
-    })
-
+    });
 });
 module.exports = {
     getAllUsers,
@@ -367,5 +351,5 @@ module.exports = {
     toggleFollowing,
     getFollowing,
     pushInviteNotification,
-    pushNotification
+    pushNotification,
 };

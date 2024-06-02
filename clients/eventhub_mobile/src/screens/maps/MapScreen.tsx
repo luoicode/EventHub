@@ -1,9 +1,10 @@
 import Geolocation from '@react-native-community/geolocation';
-import { ArrowLeft2 } from 'iconsax-react-native';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Foundation from 'react-native-vector-icons/Foundation';
+import eventAPI from '../../apis/eventApi';
 import {
   CardComponent,
   CategoriesList,
@@ -11,21 +12,21 @@ import {
   InputComponent,
   MarkerCustom,
   RowComponent,
-  SpaceComponent,
-  TextComponent,
+  SpaceComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { appInfo } from '../../constants/appInfos';
-import { globalStyles } from '../../styles/globalStyles';
-import { MusicIcon } from '../../assets/svgs';
-import eventAPI from '../../apis/eventApi';
+import { LoadingModal } from '../../modals';
 import { EventModel } from '../../models/EventModel';
+import { globalStyles } from '../../styles/globalStyles';
 const MapScreen = ({ navigation }: any) => {
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
     long: number;
-  }>();
+  } | null>(null);
   const [events, setEvents] = useState<EventModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -45,19 +46,23 @@ const MapScreen = ({ navigation }: any) => {
   }, []);
 
   useEffect(() => {
-    currentLocation && getNearbyEvents();
-  }, [currentLocation]);
+    if (currentLocation && isFocused) {
+      getNearbyEvents();
+    }
+  }, [currentLocation, isFocused]);
 
-  const getNearbyEvents = async () => {
-    const api = `/get-events?lat=${currentLocation?.lat}&long=${currentLocation?.long
-      }&distance=${5}`;
-
+  const getNearbyEvents = async (categoryId?: string) => {
+    if (!currentLocation) return;
+    setIsLoading(true);
+    const api = `/get-events?isUpcoming=true&lat=${currentLocation?.lat}&long=${currentLocation?.long
+      }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
     try {
       const res = await eventAPI.HandlerEvent(api);
-
       setEvents(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -78,17 +83,7 @@ const MapScreen = ({ navigation }: any) => {
           <View style={{ flex: 1 }}>
             <InputComponent
               styles={{ marginBottom: 0, backgroundColor: appColors.primary7 }}
-              affix={
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Explore', {
-                      screen: 'HomeScreen',
-                    });
-                  }}>
-                  <ArrowLeft2 size={22} color={appColors.primary5} />
-                </TouchableOpacity>
-              }
-              placeholder="Search"
+              placeholder="Search place"
               value=""
               onChange={val => console.log(val)}
             />
@@ -98,11 +93,15 @@ const MapScreen = ({ navigation }: any) => {
             onPress={getNearbyEvents}
             styles={[globalStyles.noSpaceCard, { width: 56, height: 56 }]}
             color={appColors.primary7}>
-            <Foundation name="target-two" color={appColors.primary5} size={32} />
+            <Foundation
+              name="target-two"
+              color={appColors.primary5}
+              size={32}
+            />
           </CardComponent>
         </RowComponent>
         <SpaceComponent height={20} />
-        <CategoriesList />
+        <CategoriesList onFilter={catId => getNearbyEvents(catId)} />
       </View>
 
       {currentLocation ? (
@@ -133,14 +132,15 @@ const MapScreen = ({ navigation }: any) => {
                 key={`event${index}`}
                 title={event.title}
                 description=""
-                onPress={() => console.log('asdas')}
+                onPress={() =>
+                  navigation.navigate('EventDetail', { id: event._id })
+                }
                 coordinate={{
                   longitude: event.position.long,
                   latitude: event.position.lat,
                 }}>
-                <MarkerCustom type={event.category} />
+                <MarkerCustom categoryId={event.categories} />
               </Marker>
-
             ))}
         </MapView>
       ) : (
@@ -162,6 +162,7 @@ const MapScreen = ({ navigation }: any) => {
           showsHorizontalScrollIndicator={false}
         />
       </View>
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };

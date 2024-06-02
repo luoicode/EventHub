@@ -1,31 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Image,
-    ImageProps,
     StyleProp,
     TouchableOpacity,
     View,
+    ImageStyle,
 } from 'react-native';
 import { appColors } from '../constants/appColors';
 import TextComponent from './TextComponent';
 import { globalStyles } from '../styles/globalStyles';
 import { fontFamilies } from '../constants/fontFamilies';
+import userAPI from '../apis/userApi';
 
 interface Props {
-    photoUrl?: string;
-    name: string;
+    photoURL?: string;
+    uid?: string
+    name?: string;
     size?: number;
-    styles?: StyleProp<ImageProps>;
+    styles?: StyleProp<ImageStyle>;
     onPress?: () => void;
 }
 
 const AvatarComponent = (props: Props) => {
-    const { photoUrl, name, size, styles, onPress } = props;
+    const { photoURL, name, size, styles, onPress, uid } = props;
+    const [profile, setProfile] = useState<{ name?: string; photoUrl?: string }>({
+        name: name ?? '',
+        photoUrl: photoURL ?? '',
+    });
+
+    useEffect(() => {
+        if (!photoURL && uid) {
+            getUserProfile();
+        }
+    }, [photoURL, uid]);
+
+
+
+
+    const getUserProfile = async () => {
+        const api = `/get-profile?uid=${uid}`;
+        try {
+            const res: any = await userAPI.HandlerUser(api);
+            console.log(res.data)
+            setProfile({
+                name: res.data.name,
+                photoUrl: res.data.photoUrl,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <TouchableOpacity disabled={!onPress} onPress={onPress}>
-            {photoUrl ? (
+            {photoURL ? (
                 <Image
-                    source={{ uri: photoUrl }}
+                    source={{ uri: photoURL }}
                     style={[
                         {
                             width: size ?? 60,
@@ -51,9 +81,10 @@ const AvatarComponent = (props: Props) => {
                         },
                     ]}>
                     <TextComponent
-                        size={size ? size / 2 : 30}
-                        text={name.substring(0, 1).toLocaleUpperCase()}
-                        font={fontFamilies.semiBold}
+                        text={profile.name ? profile.name.substring(0, 1).toLocaleUpperCase() : ''}
+                        font={fontFamilies.bold}
+                        color={appColors.white}
+                        size={size ? size / 3 : 14}
                     />
                 </View>
             )}

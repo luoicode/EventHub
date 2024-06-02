@@ -83,14 +83,15 @@ const ModalSelectCategories = (props: Props) => {
                                             padding: 12,
                                             marginRight: 8,
                                             marginBottom: 8,
-                                            backgroundColor: appColors.primary7,
+                                            backgroundColor: catsSelected?.includes(category._id)
+                                                ? appColors.primary : appColors.primary7,
                                             borderRadius: 12,
                                             minWidth: 60,
                                             borderWidth: catsSelected?.includes(category._id)
                                                 ? 2
                                                 : 0,
                                             borderColor: catsSelected?.includes(category._id)
-                                                ? appColors.primary5
+                                                ? appColors.primary
                                                 : appColors.gray2,
 
                                         },

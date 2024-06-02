@@ -53,6 +53,9 @@ const EventSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    joined: {
+        type: [String],
+    },
     date: {
         type: Number,
         required: true,

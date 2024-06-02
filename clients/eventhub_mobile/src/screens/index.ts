@@ -15,8 +15,14 @@ import NotFound from './NotFound';
 import ExploreEvents from './events/ExploreEvents';
 import HomeScreen from './home/HomeScreen';
 import CategoryDetail from './events/CategoryDetail';
-import PaymentScreen from './events/PaymentScreen';
 import NearbyScreen from './events/NearbyScreen';
+import Review from './profiles/components/Review';
+import NotificationScreen from './NotificationScreen';
+import HelpAndFAQsScreen from './Drawer/HelpAndFAQsScreen';
+import PaymentScreen from './events/PaymentScreen';
+import ContactScreen from './Drawer/ContactScreen';
+import Privacy from './Drawer/Privacy';
+import CalendarScreen from './Drawer/CalendarScreen';
 
 export {
   SignInScreen,
@@ -38,4 +44,10 @@ export {
   CategoryDetail,
   PaymentScreen,
   NearbyScreen,
+  Review,
+  NotificationScreen,
+  HelpAndFAQsScreen,
+  ContactScreen,
+  Privacy,
+  CalendarScreen,
 };

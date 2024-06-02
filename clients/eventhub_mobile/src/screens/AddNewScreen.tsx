@@ -27,6 +27,7 @@ import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { Validate } from '../utils/validate';
+import { dateTime } from '../utils/dateTime';
 
 const initValues = {
   title: '',
@@ -146,29 +147,31 @@ const AddNewScreen = ({ navigation }: any) => {
             .then(url => {
               eventData.photoUrl = url;
 
-              handlePustEvent(eventData);
+              handlerPushEvent(eventData);
             });
         },
       );
     } else {
-      handlePustEvent(eventData);
+      handlerPushEvent(eventData);
     }
   };
 
-  const handlePustEvent = async (event: EventModel) => {
+  const handlerPushEvent = async (event: EventModel) => {
     const api = `/add-new`;
 
-    setIsCreating(true)
+    setIsCreating(true);
     try {
-      const res = await eventAPI.HandlerEvent(api, event, 'post');
-      setIsCreating(false)
+      event.startAt = dateTime.getEventTime(event.date, event.startAt)
+      event.endAt = dateTime.getEventTime(event.date, event.endAt)
 
-      navigation.navigate('Explore', {
+      const res = await eventAPI.HandlerEvent(api, event, 'post');
+
+      setIsCreating(false);
+      navigation.navigate('Home', {
         screen: 'HomeScreen',
       });
     } catch (error) {
-      setIsCreating(false)
-
+      setIsCreating(false);
       console.log(error);
     }
   };
@@ -187,12 +190,8 @@ const AddNewScreen = ({ navigation }: any) => {
   };
 
   return (
-    <ContainerComponent isScroll>
+    <ContainerComponent back isScroll title="Create New Event">
       <SectionComponent>
-        <TextComponent text="Create New Event" title />
-      </SectionComponent>
-      <SectionComponent>
-
         <InputAddNewScreen
           styles={{}}
           placeholder="Add title"
@@ -249,14 +248,13 @@ const AddNewScreen = ({ navigation }: any) => {
         <SpaceComponent height={20} />
         <RowComponent>
           <DateTimePicker
-            label='Time start:'
             type="time"
             onSelect={val => handlerChangeValue('startAt', val)}
             selected={eventData.startAt}
           />
-          <SpaceComponent width={20} />
+          <TextComponent text='to' />
+          <SpaceComponent width={70} />
           <DateTimePicker
-            label='Time end:'
             type="time"
             onSelect={val => handlerChangeValue('endAt', val)}
             selected={eventData.endAt}

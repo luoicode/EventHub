@@ -77,24 +77,58 @@ const getEventById = asyncHandler(async (req, res) => {
         data: item,
     });
 });
-const searchEvents = asyncHandler(async (req, res) => {
-    const { title } = req.query;
 
-    const events = await EventModel.find({});
 
-    const items = events.filter((element) =>
-        element.title.toLowerCase().includes(title.toLocaleLowerCase())
-    );
 
-    res.status(200).json({
-        message: "get events ok",
-        data: items,
-    });
-});
 const getEvents = asyncHandler(async (req, res) => {
-    const { lat, long, distance, limit, date } = req.query;
+    const { lat, long, distance, limit, date, categoryId, startAt, endAt, isUpcoming, isPastEvents, title, minPrice, maxPrice } = req.query;
+    const filter = {};
+    if (categoryId) {
+        if (categoryId.includes(',')) {
 
-    const events = await EventModel.find({})
+            const values = []
+
+
+            categoryId.split(',').forEach(id => values.push({
+                categories: { $eq: id }
+            }))
+
+        } else {
+
+            filter.categories = { $eq: categoryId }
+        }
+    }
+    if (startAt && endAt) {
+        filter.startAt = { $gt: new Date(startAt).getTime() }
+        filter.endAt = { $lt: new Date(endAt).getTime() }
+    }
+
+
+
+    if (isUpcoming) {
+        filter.startAt = { $gt: Date.now() }
+    }
+    if (isPastEvents) {
+        filter.endAt = { $lt: Date.now() }
+    }
+
+    if (title) {
+        filter.title = { $regex: title }
+    }
+
+    if (maxPrice && minPrice) {
+        filter.price = { $lte: parseInt(maxPrice), $gte: parseFloat(minPrice) }
+    }
+
+    if (date) {
+        const selectedDate = new Date(date);
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1);
+
+        filter.startAt = { $gte: selectedDate, $lt: nextDay };
+    }
+
+    const events = await EventModel.find(filter)
         .sort({ createAt: -1 })
         .limit(limit ?? 0);
 
@@ -109,7 +143,7 @@ const getEvents = asyncHandler(async (req, res) => {
                     addressLong: event.position.long,
                 });
 
-                if (eventDistance < distance) {
+                if (eventDistance < parseFloat(distance)) {
                     items.push(event);
                 }
             });
@@ -117,9 +151,7 @@ const getEvents = asyncHandler(async (req, res) => {
 
         res.status(200).json({
             message: "get events ok",
-            data: date
-                ? items.filter((element) => element.date > new Date(date))
-                : items,
+            data: items,
         });
     } else {
         res.status(200).json({
@@ -183,10 +215,33 @@ const getCategories = asyncHandler(async (req, res) => {
     });
 });
 
+const joinEvent = asyncHandler(async (req, res) => {
+    const { uid, eventId } = req.query
+
+    const itemEvent = await EventModel.findById(eventId)
+
+    const joined = itemEvent.joined ? itemEvent.joined : []
+
+    if (joined.includes(uid)) {
+        const index = joined.findIndex(element => element === uid)
+        joined.splice(index, 1)
+    } else {
+        joined.push(uid)
+    }
+
+    await EventModel.findByIdAndUpdate(eventId, {
+        joined
+    })
+
+    res.status(200).json({
+        message: "uasc!",
+        data: [],
+    });
+})
+
 const updateEvent = asyncHandler(async (req, res) => {
     const data = req.body;
     const { id } = req.query;
-
     const item = await EventModel.findByIdAndUpdate(id, data);
     res.status(200).json({
         message: "update events successfully!",
@@ -205,9 +260,6 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
 
 const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
     const data = req.body;
-
-    data.price = parseFloat(data.price);
-
     const bill = new BillModel(data);
     bill.save();
 
@@ -218,17 +270,21 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
 });
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
-    const { billId } = req.query;
-    await BillModel.findByIdAndUpdate(billId, {
+    const { eventId, email } = req.body;
+    await BillModel.findByIdAndUpdate(eventId, {
         status: 'success',
     });
 
     const data = {
-        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
-        to: 'huyhn045@gmail.com',
-        subject: 'Verification email code',
-        text: 'Your code to verification email',
-        html: `<h1>Your ticket</h1>`,
+        from: `"Support EventHub Application" <${process.env.USERNAME_EMAIL}>`,
+        to: "huyhn045@gmail.com",
+        subject: 'Payment Confirmation for Your Event Ticket',
+        text: 'Your ticket purchase has been confirmed.',
+        html: `
+            <h1>Payment Confirmation</h1>
+            <p>Your ticket purchase has been successfully confirmed.</p>
+            <p>Thank you for choosing EventHub!</p>
+        `,
     };
 
     await handlerSendMail(data);
@@ -239,6 +295,26 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
     });
 });
 
+const updateCategory = asyncHandler(async (req, res) => {
+    const data = req.body;
+    const { id } = req.query;
+    const item = await CategoryModel.findByIdAndUpdate(id, data);
+    res.status(200).json({
+        message: "update category successfully!",
+        data: item,
+    });
+})
+
+const getCategoryDetail = asyncHandler(async (req, res) => {
+    const { id } = req.query;
+    const item = await CategoryModel.findById(id);
+    res.status(200).json({
+        message: "get category successfully!",
+        data: item,
+    });
+})
+
+
 module.exports = {
     updateEvent,
     addNewEvent,
@@ -248,8 +324,10 @@ module.exports = {
     createCategory,
     getCategories,
     getEventById,
-    searchEvents,
     getEventsByCategoryId,
     handlerAddNewBillDetail,
-    handlerUpdatePaymentSuccess
+    handlerUpdatePaymentSuccess,
+    updateCategory,
+    getCategoryDetail,
+    joinEvent,
 };

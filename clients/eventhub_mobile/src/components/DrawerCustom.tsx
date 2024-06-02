@@ -3,6 +3,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
     Bookmark2,
     Calendar,
+    Heart,
+    Lock1,
     Logout,
     Message2,
     MessageQuestion,
@@ -51,9 +53,9 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <Calendar size={size} color={color} />,
         },
         {
-            key: 'Bookmark',
-            title: 'Bookmark',
-            icon: <Bookmark2 size={size} color={color} />,
+            key: 'Favourite',
+            title: 'Favourite',
+            icon: <Heart size={size} color={color} />,
         },
         {
             key: 'ContactUs',
@@ -61,9 +63,9 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <Sms size={size} color={color} />,
         },
         {
-            key: 'Settings',
-            title: 'Settings',
-            icon: <Setting2 size={size} color={color} />,
+            key: 'Privacy',
+            title: 'Privacy',
+            icon: <Lock1 size={size} color={color} />,
         },
         {
             key: 'HelpAndFAQs',
@@ -90,12 +92,23 @@ const DrawerCustom = ({ navigation }: any) => {
         }
         await GoogleSignin.signOut();
         LoginManager.logOut();
-        // clear local storage
         await AsyncStorage.removeItem('auth');
         dispatch(removeAuth({}));
     };
     const handlerNavigation = (key: string) => {
         switch (key) {
+            case 'HelpAndFAQs':
+                navigation.navigate('HelpAndFAQsScreen')
+                break;
+            case 'ContactUs':
+                navigation.navigate('ContactScreen')
+                break;
+            case 'Privacy':
+                navigation.navigate('Privacy')
+                break;
+            case 'Calendar':
+                navigation.navigate('Calendar')
+                break;
             case 'SignOut':
                 handlerLogout();
                 break;
@@ -117,9 +130,11 @@ const DrawerCustom = ({ navigation }: any) => {
         <View style={[localStyles.container, { backgroundColor: appColors.primary7, marginTop: 30 }]}>
             <AvatarComponent
                 onPress={() => handlerNavigation('MyProfile')}
-                photoUrl={auth.photo}
+                photoURL={auth.photo}
                 name={auth.name ? auth.name : auth.email}
             />
+            <SpaceComponent height={16} />
+            <TextComponent text={auth.name} title size={22} />
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={profileMenu}
@@ -140,7 +155,7 @@ const DrawerCustom = ({ navigation }: any) => {
                 <TouchableOpacity
                     style={[
                         globalStyles.button,
-                        { backgroundColor: appColors.primary5, height: 'auto' },
+                        { backgroundColor: appColors.primary3, height: 'auto' },
                     ]}>
                     <MaterialCommunityIcons name="crown" size={22} color="yellow" />
                     <SpaceComponent width={8} />

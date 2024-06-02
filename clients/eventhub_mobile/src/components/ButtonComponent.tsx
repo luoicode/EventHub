@@ -4,7 +4,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
 
 import { TextComponent } from '.';
@@ -60,8 +60,7 @@ const ButtonComponent = (props: Props) => {
           styles,
         ]}>
         {icon && iconFlex === 'left' && icon}
-        {
-          text &&
+        {text && (
           <TextComponent
             text={text}
             color={textColor ?? appColors.primary7}
@@ -76,22 +75,20 @@ const ButtonComponent = (props: Props) => {
             flex={icon && iconFlex === 'right' ? 1 : 0}
             font={textFont ?? fontFamilies.medium}
           />
-        }
+        )}
         {icon && iconFlex === 'right' && icon}
       </TouchableOpacity>
     </View>
   ) : (
     <TouchableOpacity onPress={onPress}>
-      {
-        icon && icon
-      }
-      {text &&
+      {icon && icon}
+      {text && (
         <TextComponent
           flex={0}
           text={text}
           color={type === 'link' ? appColors.link : appColors.text5}
         />
-      }
+      )}
     </TouchableOpacity>
   );
 };
