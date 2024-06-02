@@ -30,6 +30,7 @@ import { fontFamilies } from '../constants/fontFamilies';
 import { authSelector, removeAuth } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
 import { HandlerNotification } from '../utils/handlerNotification';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const DrawerCustom = ({ navigation }: any) => {
     const auth = useSelector(authSelector);
@@ -43,9 +44,9 @@ const DrawerCustom = ({ navigation }: any) => {
             icon: <User size={size} color={color} />,
         },
         {
-            key: 'Message',
-            title: 'Message',
-            icon: <Message2 size={size} color={color} />,
+            key: 'Chatbot',
+            title: 'EventHub Bot',
+            icon: <MaterialCommunityIcons name="robot-confused-outline" size={size} color={color} />,
         },
         {
             key: 'Calendar',
@@ -108,6 +109,9 @@ const DrawerCustom = ({ navigation }: any) => {
                 break;
             case 'Calendar':
                 navigation.navigate('Calendar')
+                break;
+            case 'Chatbot':
+                navigation.navigate('ChatBot')
                 break;
             case 'SignOut':
                 handlerLogout();
