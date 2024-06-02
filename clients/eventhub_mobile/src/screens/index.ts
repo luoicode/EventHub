@@ -23,6 +23,7 @@ import PaymentScreen from './events/PaymentScreen';
 import ContactScreen from './Drawer/ContactScreen';
 import Privacy from './Drawer/Privacy';
 import CalendarScreen from './Drawer/CalendarScreen';
+import ChatBot from './Drawer/ChatBot';
 
 export {
   SignInScreen,
@@ -50,4 +51,5 @@ export {
   ContactScreen,
   Privacy,
   CalendarScreen,
+  ChatBot
 };
