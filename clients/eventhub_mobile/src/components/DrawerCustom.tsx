@@ -1,21 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
-    Bookmark2,
     Calendar,
     Heart,
     Lock1,
     Logout,
-    Message2,
     MessageQuestion,
-    Setting2,
     Sms,
-    User,
+    User
 } from 'iconsax-react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
     FlatList,
     Image,
+    Modal,
     StatusBar,
     StyleSheet,
     TouchableOpacity,
@@ -30,13 +28,14 @@ import { fontFamilies } from '../constants/fontFamilies';
 import { authSelector, removeAuth } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
 import { HandlerNotification } from '../utils/handlerNotification';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const DrawerCustom = ({ navigation }: any) => {
     const auth = useSelector(authSelector);
     const dispatch = useDispatch();
     const size = 32;
     const color = appColors.primary5;
+    const [upgradeModalVisible, setUpgradeModalVisible] = useState(false);
+
     const profileMenu = [
         {
             key: 'MyProfile',
@@ -160,13 +159,41 @@ const DrawerCustom = ({ navigation }: any) => {
                     style={[
                         globalStyles.button,
                         { backgroundColor: appColors.primary3, height: 'auto' },
-                    ]}>
+                    ]}
+                    onPress={() => setUpgradeModalVisible(true)} // Mở modal khi ấn vào nút
+                >
                     <MaterialCommunityIcons name="crown" size={22} color="yellow" />
                     <SpaceComponent width={8} />
                     <TextComponent color={appColors.primary7} font={fontFamilies.medium} text="Upgrade Pro" />
                 </TouchableOpacity>
             </RowComponent>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={upgradeModalVisible}
+                onRequestClose={() => {
+                    setUpgradeModalVisible(!upgradeModalVisible);
+                }}
+            >
+                <View style={localStyles.centeredView}>
+                    <View style={[globalStyles.shadow, localStyles.modalView]}>
+                        <Image
+                            source={require('../assets/images/maintenance.png')}
+                            style={localStyles.image}
+                        />
+                        <TextComponent styles={localStyles.modalText} text='The system is under upgrade!' />
+
+                        <TouchableOpacity
+                            style={[localStyles.button, localStyles.buttonClose]}
+                            onPress={() => setUpgradeModalVisible(!upgradeModalVisible)}
+                        >
+                            <TextComponent styles={localStyles.textStyle} text='Close' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
+
     );
 };
 
@@ -195,5 +222,40 @@ const localStyles = StyleSheet.create({
 
     listItemText: {
         paddingLeft: 12,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: appColors.primary7,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonClose: {
+        backgroundColor: appColors.primary5,
+    },
+    textStyle: {
+        color: appColors.primary7,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    image: {
+        width: 100,
+        height: 100,
+        marginBottom: 15,
     },
 });

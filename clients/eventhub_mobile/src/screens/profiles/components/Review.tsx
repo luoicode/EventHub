@@ -61,7 +61,7 @@ const Review = () => {
                             source={require('../../../assets/images/thankYouRating.png')}
                             style={styles.image}
                         />
-                        <TextComponent styles={styles.modalText} text='Thank you for review' />
+                        <TextComponent styles={styles.modalText} text='Thank you for review!' />
 
                         <TouchableOpacity
                             style={[styles.button, styles.buttonClose]}
