@@ -31,7 +31,7 @@ const ChatBot = ({ navigation }: any) => {
     const [inputMessage, setInputMessage] = useState('');
     const [outputMessage, setOutputMessage] = useState('Results to be shown here:');
 
-    const apiKey = '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';
+    const apiKey = 'sk-proj-VTTOwOOHAW2HDlQSCt8QT3BlbkFJWTpUuxP7KMhQUU4YSYrK';
     useEffect(() => {
         const welcomeMessage = {
             _id: Math.random().toString(36).substring(7),
@@ -55,7 +55,7 @@ const ChatBot = ({ navigation }: any) => {
         const isAllowedEvent = allowedEvents.some(event => userMessage.includes(event));
 
         if (!isAllowedEvent) {
-            const errorMessage = "Sorry, I can only answer about events like 'sport', 'game', 'art', 'food', 'music'.";
+            const errorMessage = "Sorry, I can only answer about events like Sport, Game, Art, Food, Music.";
             const errorMessageObj = {
                 _id: Math.random().toString(36).substring(7),
                 text: errorMessage,
@@ -104,19 +104,27 @@ const ChatBot = ({ navigation }: any) => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data.choices[0].message.content);
-                setInputMessage('');
-                setOutputMessage(data.choices[0].message.content.trim());
-                const message = {
-                    _id: Math.random().toString(36).substring(7),
-                    text: data.choices[0].message.content.trim(),
-                    createdAt: new Date(),
-                    user: { _id: 2, name: 'Event' },
-                };
-                setMessages(previousMessages => {
-                    return GiftedChat.append(previousMessages, [message]);
-                });
+                if (data.choices && data.choices.length > 0 && data.choices[0].message) {
+                    console.log(data.choices[0].message.content);
+                    setInputMessage('');
+                    setOutputMessage(data.choices[0].message.content.trim());
+                    const message = {
+                        _id: Math.random().toString(36).substring(7),
+                        text: data.choices[0].message.content.trim(),
+                        createdAt: new Date(),
+                        user: { _id: 2, name: 'Event' },
+                    };
+                    setMessages(previousMessages => {
+                        return GiftedChat.append(previousMessages, [message]);
+                    });
+                } else {
+                    console.error("Invalid response format:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
+
     };
 
     const handleTextInput = (text: string) => {

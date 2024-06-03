@@ -313,6 +313,21 @@ const getCategoryDetail = asyncHandler(async (req, res) => {
         data: item,
     });
 })
+const deleteEvent = async (req, res) => {
+    const { id } = req.query; // Lấy id của sự kiện từ query params
+
+    // Kiểm tra xem sự kiện có tồn tại không
+    const event = await EventModel.findById(id);
+
+    if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Xóa sự kiện
+    await EventModel.deleteOne({ _id: id });
+
+    return res.status(200).json({ message: "Event deleted successfully" });
+};
 
 
 module.exports = {
@@ -330,4 +345,5 @@ module.exports = {
     updateCategory,
     getCategoryDetail,
     joinEvent,
+    deleteEvent
 };

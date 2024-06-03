@@ -1,7 +1,8 @@
-import { ArrowLeft, Calendar, Location } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Location, Trash } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -156,6 +157,35 @@ const EventDetail = ({ navigation, route }: any) => {
       console.log(error);
     }
   };
+  const deleteEventById = async () => {
+    setIsLoading(true);
+    try {
+      Alert.alert(
+        'Confirm Delete',
+        'Are you sure you want to delete this event?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => setIsLoading(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            onPress: async () => {
+              await eventAPI.deleteEvent(id);
+              setIsLoading(false);
+              navigation.navigate('Home');
+            },
+            style: 'destructive',
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.log(`Error deleting event: ${error}`);
+      setIsLoading(false);
+    }
+  };
 
   const handlerCreateBillPayment = async () => {
     const data = {
@@ -201,6 +231,7 @@ const EventDetail = ({ navigation, route }: any) => {
           left: 0,
           zIndex: 3,
         }}>
+
         <LinearGradient colors={['rgba(0,0,0,0.8)', 'rgba(0,0,0,0)']}>
           <RowComponent
             styles={{
@@ -230,7 +261,12 @@ const EventDetail = ({ navigation, route }: any) => {
                 id,
 
               })} icon={<AntDesign name='sharealt' size={28} color='white' />} />
-              <SpaceComponent width={12} />
+              <SpaceComponent width={16} />
+              {auth.id === item.authorId && (
+                <TouchableOpacity onPress={deleteEventById}>
+                  <Trash size={28} color={appColors.primary7} variant='Bold' />
+                </TouchableOpacity>
+              )}
               {/* <CardComponent
                 onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
@@ -463,21 +499,23 @@ const EventDetail = ({ navigation, route }: any) => {
         <SpaceComponent height={80} />
       </ScrollView>
       {
-        !isEventOver && item && auth.id !== item.authorId ? (<LinearGradient
-          colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            padding: 12,
-          }}>
-          <ButtonComponent
-            onPress={handlerCreateBillPayment}
-            text="BUY TICKET "
-            type="primary"
-          />
-        </LinearGradient>) : <></>
+        !isEventOver && item && auth.id !== item.authorId ? (
+          <LinearGradient
+            colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,1)']}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: 12,
+            }}>
+            <ButtonComponent
+              onPress={handlerCreateBillPayment}
+              text="BUY TICKET "
+              type="primary"
+            />
+          </LinearGradient>
+        ) : <></>
       }
 
 

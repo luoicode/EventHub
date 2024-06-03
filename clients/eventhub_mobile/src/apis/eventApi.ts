@@ -11,6 +11,10 @@ class EventAPI {
       data,
     });
   };
+
+  deleteEvent = async (id: string) => {
+    return await this.HandlerEvent(`/delete-event?id=${id}`, null, 'delete');
+  };
 }
 
 const eventAPI = new EventAPI();
