@@ -24,6 +24,7 @@ import ContactScreen from './Drawer/ContactScreen';
 import Privacy from './Drawer/Privacy';
 import CalendarScreen from './Drawer/CalendarScreen';
 import ChatBot from './Drawer/ChatBot';
+import Interest from './profiles/components/Interest';
 
 export {
   SignInScreen,
@@ -51,5 +52,6 @@ export {
   ContactScreen,
   Privacy,
   CalendarScreen,
-  ChatBot
+  ChatBot,
+  Interest,
 };

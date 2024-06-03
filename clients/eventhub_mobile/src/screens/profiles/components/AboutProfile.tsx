@@ -27,6 +27,7 @@ import { LoadingModal } from '../../../modals';
 import eventAPI from '../../../apis/eventApi';
 import { EventModel } from '../../../models/EventModel';
 import Review from './Review';
+import Interest from './Interest';
 
 interface Props {
   profile: ProfileModel;
@@ -73,6 +74,7 @@ const AboutProfile = (props: Props) => {
         content = (
           <>
             <TextComponent text={profile.bio} />
+            <Interest profile={profile || {}} />
           </>
         );
         break;

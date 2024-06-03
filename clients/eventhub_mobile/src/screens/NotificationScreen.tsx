@@ -58,7 +58,6 @@ const NotificationScreen = () => {
                 setIsLoading(false);
             });
 
-        // Cleanup subscription on unmount
         return () => unsubscribe();
     }, [user.id]);
 
