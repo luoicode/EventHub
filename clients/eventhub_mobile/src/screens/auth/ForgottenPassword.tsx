@@ -14,7 +14,7 @@ import { appColors } from '../../constants/appColors';
 import { LoadingModal } from '../../modals';
 import { Validate } from '../../utils/validate';
 
-const ForgottenPassword = () => {
+const ForgottenPassword = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [isDissble, setIsDissable] = useState(true);
   const [isLoading, setiIsLoading] = useState(false);
@@ -39,6 +39,7 @@ const ForgottenPassword = () => {
       Alert.alert('Send mail', 'We sended a email includes new password');
 
       setiIsLoading(false);
+      navigation.navigate('SignInScreen');
     } catch (error) {
       setiIsLoading(false);
       console.log(`We couln't find your accoun, ${error}`);

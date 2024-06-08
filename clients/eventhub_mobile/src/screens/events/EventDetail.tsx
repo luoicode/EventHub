@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Location, Trash } from 'iconsax-react-native';
+import { ArrowLeft, Calendar, Heart, Location, Trash } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -16,6 +16,7 @@ import userAPI from '../../apis/userApi';
 import {
   AvatarGroup,
   ButtonComponent,
+  CardComponent,
   RowComponent,
   SectionComponent,
   SpaceComponent,
@@ -79,16 +80,18 @@ const EventDetail = ({ navigation, route }: any) => {
     const items = [...followers];
 
     if (items.includes(auth.id)) {
+      // User is already a follower, remove them from the list
       const index = items.findIndex(element => element === auth.id);
-
       if (index !== -1) {
         items.splice(index, 1);
       }
     } else {
+      // User is not a follower, add them to the list
       items.push(auth.id);
-      handlerUpdateFollowers(items);
     }
+
     setFollowers(items);
+    handlerUpdateFollowers(items);
   };
 
   const handlerUpdateFollowers = async (data: string[]) => {
@@ -106,9 +109,10 @@ const EventDetail = ({ navigation, route }: any) => {
         'post',
       );
     } catch (error) {
-      console.log(`Can not update followers in Event detail line 63, ${error}`);
+      console.log(`Cannot update followers in Event detail line 63, ${error}`);
     }
   };
+
   const getProfile = async (id: string) => {
     const api = `/get-profile?uid=${id}`;
 
@@ -262,12 +266,7 @@ const EventDetail = ({ navigation, route }: any) => {
 
               })} icon={<AntDesign name='sharealt' size={28} color='white' />} />
               <SpaceComponent width={16} />
-              {auth.id === item.authorId && (
-                <TouchableOpacity onPress={deleteEventById}>
-                  <Trash size={28} color={appColors.primary7} variant='Bold' />
-                </TouchableOpacity>
-              )}
-              {/* <CardComponent
+              <CardComponent
                 onPress={handlerFollower}
                 styles={[globalStyles.noSpaceCard, { width: 36, height: 36 }]}
                 color={
@@ -284,8 +283,12 @@ const EventDetail = ({ navigation, route }: any) => {
                   }
                   variant="Bold"
                 />
-
-              </CardComponent> */}
+              </CardComponent>
+              {auth.id === item.authorId && (
+                <TouchableOpacity style={{ marginLeft: 16 }} onPress={deleteEventById}>
+                  <Trash size={28} color={appColors.primary7} variant='Bold' />
+                </TouchableOpacity>
+              )}
             </RowComponent>
           </RowComponent>
         </LinearGradient>

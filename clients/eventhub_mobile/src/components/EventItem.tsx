@@ -64,7 +64,7 @@ const EventItem = (props: Props) => {
                                     text={appInfo.monthNames[new Date(item.date).getMonth()].substring(0, 3)}
                                 />
                             </CardComponent>
-                            {/* {
+                            {
                                 auth.follow_events && auth.follow_events.includes(item._id) &&
                                 (<CardComponent
                                     styles={[globalStyles.noSpaceCard]}
@@ -75,7 +75,7 @@ const EventItem = (props: Props) => {
                                         variant='Bold'
                                     />
                                 </CardComponent>)
-                            } */}
+                            }
                         </RowComponent>
                     </ImageBackground>
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
@@ -118,7 +118,16 @@ const EventItem = (props: Props) => {
                                     size={12}
                                     color={appColors.primary5}
                                 />
+                                {auth.follow_events && auth.follow_events.includes(item._id) &&
+
+                                    <Heart
+                                        color={appColors.danger2}
+                                        size='28'
+                                        variant='Bold'
+                                    />
+                                }
                             </RowComponent>
+
                         </View>
                     </RowComponent>
                 </>

@@ -15,6 +15,7 @@ const {
     getCategoryDetail,
     joinEvent,
     deleteEvent,
+    getEventsWithFollowers
 } = require("../controllers/eventController");
 
 const eventRouter = Router();
@@ -34,5 +35,6 @@ eventRouter.put("/update-category", updateCategory);
 eventRouter.get("/get-category-detail", getCategoryDetail);
 eventRouter.get("/join-event", joinEvent);
 eventRouter.delete("/delete-event", deleteEvent);
+eventRouter.get("/events-with-followers", getEventsWithFollowers);
 
 module.exports = eventRouter;

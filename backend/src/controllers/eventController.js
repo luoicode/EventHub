@@ -3,8 +3,11 @@ const EventModel = require("../models/eventModel");
 const CategoryModel = require("../models/categoryModel");
 const { request } = require("express");
 const BillModel = require("../models/billModel");
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId; // Import ObjectId from mongoose
 
 const nodemailer = require("nodemailer");
+const UserModel = require("../models/userModel");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -169,8 +172,6 @@ const updateFollowers = asyncHandler(async (req, res) => {
 
     await EventModel.findByIdAndUpdate(id, { followers, updatedAt: Date.now() });
 
-    console.log(followers);
-
     res.status(200).json({
         mess: "Update followers successfully! ",
         data: [],
@@ -192,6 +193,25 @@ const getFollowers = asyncHandler(async (req, res) => {
         throw new Error("Event not found");
     }
 });
+
+const getEventsWithFollowers = asyncHandler(async (req, res) => {
+    const { userId } = req.query;
+
+    const user = await UserModel.findById(userId);
+
+    if (user) {
+        const followerEvents = await EventModel.find({ followers: userId });
+
+        res.status(200).json({
+            message: "Events with followers retrieved successfully",
+            data: followerEvents,
+        });
+    } else {
+        res.status(401).json({ message: "User not found" });
+    }
+});
+
+
 
 const createCategory = asyncHandler(async (req, res) => {
     const data = req.body;
@@ -345,5 +365,6 @@ module.exports = {
     updateCategory,
     getCategoryDetail,
     joinEvent,
-    deleteEvent
+    deleteEvent,
+    getEventsWithFollowers
 };

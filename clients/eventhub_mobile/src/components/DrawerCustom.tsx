@@ -112,6 +112,9 @@ const DrawerCustom = ({ navigation }: any) => {
             case 'Chatbot':
                 navigation.navigate('ChatBot')
                 break;
+            case 'Favourite':
+                navigation.navigate('FavouriteScreen')
+                break;
             case 'SignOut':
                 handlerLogout();
                 break;
