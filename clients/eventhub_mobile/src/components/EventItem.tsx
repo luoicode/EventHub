@@ -23,11 +23,13 @@ import { numberToString } from '../utils/numberToString';
 interface Props {
     item: EventModel;
     type: 'card' | 'list';
-    styles?: StyleProp<ViewStyle>
+    styles?: StyleProp<ViewStyle>;
+    disabled?: boolean;
+
 }
 
 const EventItem = (props: Props) => {
-    const { item, type, styles } = props;
+    const { item, type, styles, disabled } = props;
     const navigation: any = useNavigation();
     const auth: AuthState = useSelector(authSelector);
 
@@ -37,6 +39,7 @@ const EventItem = (props: Props) => {
             isShadows
             styles={[{ width: appInfo.sizes.WIDTH * 0.7, backgroundColor: appColors.primary7 }, styles]}
             onPress={() => navigation.navigate('EventDetail', { id: item._id })}
+            disabled={disabled}
         >
             {type === 'card' ? (
                 <>

@@ -1,7 +1,7 @@
 import storage from '@react-native-firebase/storage';
 import { BrushSquare, Category, People } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Alert, Image } from 'react-native';
 import { ImageOrVideo } from 'react-native-image-crop-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -126,8 +126,7 @@ const AddNewScreen = ({ navigation }: any) => {
   };
   const handlerAddEvent = async () => {
     if (fileSelected) {
-      const filename = `${fileSelected.filename ?? `image-${Date.now()}`}.${fileSelected.path.split('.')[1]
-        }`;
+      const filename = `${fileSelected.filename ?? `image-${Date.now()}`}.${fileSelected.path.split('.')[1]}`;
       const path = `images/${filename}`;
 
       const res = storage().ref(path).putFile(fileSelected.path);
@@ -148,13 +147,28 @@ const AddNewScreen = ({ navigation }: any) => {
               eventData.photoUrl = url;
 
               handlerPushEvent(eventData);
+
+              // Hiển thị thông báo khi sự kiện được thêm thành công
+              Alert.alert(
+                'Success',
+                'Event has been successfully added.',
+                [{ text: 'OK', onPress: () => navigation.navigate("HomeScreen") }]
+              );
             });
         },
       );
     } else {
       handlerPushEvent(eventData);
+
+      // Hiển thị thông báo khi sự kiện được thêm thành công
+      Alert.alert(
+        'Success',
+        'Event has been successfully added.',
+        [{ text: 'OK', onPress: () => navigation.navigate("HomeScreen") }]
+      );
     }
   };
+
 
   const handlerPushEvent = async (event: EventModel) => {
     const api = `/add-new`;

@@ -1,3 +1,5 @@
+import React from 'react';
+import { Alert, Image } from 'react-native';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -11,28 +13,24 @@ import { fontFamilies } from '../../constants/fontFamilies';
 import { dateTime } from '../../utils/dateTime';
 import { appColors } from '../../constants/appColors';
 import eventAPI from '../../apis/eventApi';
-import { Alert, Image } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const { billDetail } = route.params;
 
+
   const handlerPaySuccessfully = async () => {
-    const api = `/update-payment-success?eventId=${billDetail._id}`;
+    const api = `/update-payment-success?billId=${billDetail._id}`;
 
     try {
-      const res = await eventAPI.HandlerEvent(api);
-      console.log(res);
-
-      // Hiển thị thông báo mua vé thành công
+      await eventAPI.HandlerEvent(api);
       Alert.alert(
-        "Payment Successful",
-        "Your ticket has been purchased successfully!",
+        'Payment Successful',
+        'Your ticket has been purchased successfully!',
         [
           {
-            text: "OK",
+            text: 'OK',
             onPress: () => {
-              // Sau khi người dùng nhấn OK, quay trở lại màn hình trước đó
               navigation.goBack();
             },
           },
@@ -43,28 +41,22 @@ const PaymentScreen = ({ navigation, route }: any) => {
       console.log(error);
     }
   };
-
   return (
-    <ContainerComponent back title='Payment'>
-      <RowComponent justify='center'>
-        <Entypo name='paypal' size={50} color={appColors.primary5} />
-
+    <ContainerComponent back title="Payment">
+      <RowComponent justify="center">
+        <Entypo name="paypal" size={50} color={appColors.primary5} />
       </RowComponent>
       <SectionComponent>
-        <RowComponent justify='center' >
+        <RowComponent justify="center">
           <TextComponent
             text={` ${billDetail._id}`}
             size={18}
             color={appColors.primary3}
             font={fontFamilies.medium}
           />
-
         </RowComponent>
-        <RowComponent justify='flex-end'>
-          <TagComponent
-            label={billDetail.status === 'success' ? 'Success' : 'Unpaid'}
-
-          />
+        <RowComponent justify="flex-end">
+          <TagComponent label={billDetail.status === 'success' ? 'Success' : 'Unpaid'} />
         </RowComponent>
       </SectionComponent>
       <Image
@@ -75,13 +67,11 @@ const PaymentScreen = ({ navigation, route }: any) => {
           resizeMode: 'cover',
           margin: 10,
           borderRadius: 40,
-
         }}
       />
-      <SectionComponent >
-
-        <RowComponent justify='space-between' >
-          <TextComponent text='Event Name:   ' title font={fontFamilies.medium} />
+      <SectionComponent>
+        <RowComponent justify="space-between">
+          <TextComponent text="Event Name:   " title font={fontFamilies.medium} />
           <TextComponent
             text={` ${billDetail.title}`}
             size={18}
@@ -89,13 +79,12 @@ const PaymentScreen = ({ navigation, route }: any) => {
             color={appColors.gray}
             font={fontFamilies.medium}
             numberOfLine={2}
-            ellipsizeMode='tail'
+            ellipsizeMode="tail"
           />
         </RowComponent>
         <SpaceComponent height={16} />
-
-        <RowComponent justify='space-between' >
-          <TextComponent text='Time:' title font={fontFamilies.medium} />
+        <RowComponent justify="space-between">
+          <TextComponent text="Time:" title font={fontFamilies.medium} />
           <TextComponent
             text={` ${dateTime.GetTime(billDetail.startAt)}`}
             size={18}
@@ -104,20 +93,18 @@ const PaymentScreen = ({ navigation, route }: any) => {
           />
         </RowComponent>
         <SpaceComponent height={16} />
-
-        <RowComponent justify='space-between' >
-          <TextComponent text='Date:' title font={fontFamilies.medium} />
+        <RowComponent justify="space-between">
+          <TextComponent text="Date:" title font={fontFamilies.medium} />
           <TextComponent
-            text={` ${dateTime.GetDayString(billDetail.createdAt)}`}
+            text={` ${dateTime.GetDayString(billDetail.startAt)}`}
             size={18}
             color={appColors.gray}
             font={fontFamilies.medium}
           />
         </RowComponent>
         <SpaceComponent height={16} />
-
-        <RowComponent justify='space-between' >
-          <TextComponent text='Location:' title font={fontFamilies.medium} />
+        <RowComponent justify="space-between">
+          <TextComponent text="Location:" title font={fontFamilies.medium} />
           <TextComponent
             text={`${billDetail.locationTitle}`}
             size={18}
@@ -126,8 +113,8 @@ const PaymentScreen = ({ navigation, route }: any) => {
           />
         </RowComponent>
         <SpaceComponent height={16} />
-        <RowComponent justify='space-between' >
-          <TextComponent text='Quantity:' title font={fontFamilies.medium} />
+        <RowComponent justify="space-between">
+          <TextComponent text="Quantity:" title font={fontFamilies.medium} />
           <TextComponent
             text="01"
             size={18}
@@ -136,8 +123,8 @@ const PaymentScreen = ({ navigation, route }: any) => {
           />
         </RowComponent>
         <SpaceComponent height={16} />
-        <RowComponent justify='space-between' >
-          <TextComponent text='Price:' title font={fontFamilies.medium} />
+        <RowComponent justify="space-between">
+          <TextComponent text="Price:" title font={fontFamilies.medium} />
           <TextComponent
             text={`$${parseFloat(billDetail.price).toLocaleString()}`}
             font={fontFamilies.bold}
@@ -146,13 +133,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           />
         </RowComponent>
         <SpaceComponent height={16} />
-
       </SectionComponent>
-
-
-
-
-
       <SectionComponent
         styles={{
           position: 'absolute',

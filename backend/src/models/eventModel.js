@@ -71,6 +71,7 @@ const EventSchema = new mongoose.Schema({
     followers: {
         type: [String],
     },
+
 });
 
 

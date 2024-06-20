@@ -3,7 +3,8 @@ const { default: mongoose } = require('mongoose');
 const BillSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
+        get: (createdAt) => createdAt || new Date()
     },
     createdBy: {
         type: String,
@@ -26,7 +27,8 @@ const BillSchema = new mongoose.Schema({
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
+        get: (updatedAt) => updatedAt || new Date()
     },
     title: {
         type: String,

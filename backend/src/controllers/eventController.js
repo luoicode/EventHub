@@ -280,6 +280,7 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
 
 const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
     const data = req.body;
+    data.price = parseFloat(data.price)
     const bill = new BillModel(data);
     bill.save();
 
@@ -290,21 +291,17 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
 });
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
-    const { eventId, email } = req.body;
-    await BillModel.findByIdAndUpdate(eventId, {
+    const { billId } = req.query;
+    await BillModel.findByIdAndUpdate(billId, {
         status: 'success',
     });
 
     const data = {
-        from: `"Support EventHub Application" <${process.env.USERNAME_EMAIL}>`,
-        to: "huyhn045@gmail.com",
-        subject: 'Payment Confirmation for Your Event Ticket',
-        text: 'Your ticket purchase has been confirmed.',
-        html: `
-            <h1>Payment Confirmation</h1>
-            <p>Your ticket purchase has been successfully confirmed.</p>
-            <p>Thank you for choosing EventHub!</p>
-        `,
+        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
+        to: 'huyhn045@gmail.com',
+        subject: 'Verification email code',
+        text: 'Your code to verification email',
+        html: `<h1>Your ticket</h1>`,
     };
 
     await handlerSendMail(data);
@@ -314,6 +311,33 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
         data: [],
     });
 });
+
+const getSuccessBills = asyncHandler(async (req, res) => {
+    try {
+        const successBills = await BillModel.find({ status: 'success' });
+
+        if (!successBills) {
+            return res.status(404).json({
+                message: 'No successful bills found',
+                data: [],
+            });
+        }
+
+        res.status(200).json({
+            message: 'Successfully fetched successful bills',
+            data: successBills,
+        });
+    } catch (err) {
+        console.error('Error fetching successful bills:', err);
+        res.status(500).json({
+            message: 'Error fetching successful bills',
+            error: err.message,
+        });
+    }
+});
+
+
+
 
 const updateCategory = asyncHandler(async (req, res) => {
     const data = req.body;
@@ -366,5 +390,6 @@ module.exports = {
     getCategoryDetail,
     joinEvent,
     deleteEvent,
-    getEventsWithFollowers
+    getEventsWithFollowers,
+    getSuccessBills
 };

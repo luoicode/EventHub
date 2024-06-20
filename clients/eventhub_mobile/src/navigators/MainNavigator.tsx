@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import DrawerNavigator from './DrawerNavigator';
-import { AddNewScreen, CalendarScreen, ChatBot, ContactScreen, EventDetail, EventsScreen, ExploreEvents, FavouriteScreen, HelpAndFAQsScreen, NearbyScreen, NotFound, NotificationScreen, PaymentScreen, Privacy, ProfileScreen, SearchEvents } from '../screens';
+import { AddNewScreen, CalendarScreen, ChatBot, ContactScreen, EventDetail, EventsScreen, ExploreEvents, FavouriteScreen, HelpAndFAQsScreen, MyTicket, NearbyScreen, NotFound, NotificationScreen, PaymentScreen, Privacy, ProfileScreen, SearchEvents } from '../screens';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -24,6 +24,7 @@ const MainNavigator = () => {
       <Stack.Screen name="ChatBot" component={ChatBot} />
       <Stack.Screen name="EventsScreen" component={EventsScreen} />
       <Stack.Screen name="FavouriteScreen" component={FavouriteScreen} />
+      <Stack.Screen name="MyTicket" component={MyTicket} />
 
 
 

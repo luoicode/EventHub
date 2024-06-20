@@ -211,6 +211,7 @@ const EventDetail = ({ navigation, route }: any) => {
     try {
       const res = await eventAPI.HandlerEvent(api, data, 'post');
       navigation.navigate('PaymentScreen', { billDetail: res.data });
+
       setIsUpdating(false)
 
     } catch (error) {

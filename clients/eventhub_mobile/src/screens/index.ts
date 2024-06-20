@@ -26,6 +26,7 @@ import CalendarScreen from './Drawer/CalendarScreen';
 import ChatBot from './Drawer/ChatBot';
 import Interest from './profiles/components/Interest';
 import FavouriteScreen from './Drawer/FavouriteScreen';
+import MyTicket from './Drawer/MyTicket';
 
 export {
   SignInScreen,
@@ -56,4 +57,5 @@ export {
   ChatBot,
   Interest,
   FavouriteScreen,
+  MyTicket,
 };

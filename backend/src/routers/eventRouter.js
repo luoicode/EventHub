@@ -15,7 +15,8 @@ const {
     getCategoryDetail,
     joinEvent,
     deleteEvent,
-    getEventsWithFollowers
+    getEventsWithFollowers,
+    getSuccessBills
 } = require("../controllers/eventController");
 
 const eventRouter = Router();
@@ -36,5 +37,6 @@ eventRouter.get("/get-category-detail", getCategoryDetail);
 eventRouter.get("/join-event", joinEvent);
 eventRouter.delete("/delete-event", deleteEvent);
 eventRouter.get("/events-with-followers", getEventsWithFollowers);
+eventRouter.get('/success-bills', getSuccessBills);
 
 module.exports = eventRouter;

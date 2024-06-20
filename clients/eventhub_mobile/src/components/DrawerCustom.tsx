@@ -7,6 +7,7 @@ import {
     Logout,
     MessageQuestion,
     Sms,
+    Ticket,
     User
 } from 'iconsax-react-native';
 import React, { useState } from 'react';
@@ -41,6 +42,14 @@ const DrawerCustom = ({ navigation }: any) => {
             key: 'MyProfile',
             title: 'My Profile',
             icon: <User size={size} color={color} />,
+        },
+        {
+            key: 'MyTicket',
+            title: 'My Ticket',
+            icon: <Ticket
+                size={size}
+                color={color}
+            />,
         },
         {
             key: 'Chatbot',
@@ -114,6 +123,9 @@ const DrawerCustom = ({ navigation }: any) => {
                 break;
             case 'Favourite':
                 navigation.navigate('FavouriteScreen')
+                break;
+            case 'MyTicket':
+                navigation.navigate('MyTicket')
                 break;
             case 'SignOut':
                 handlerLogout();

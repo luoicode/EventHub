@@ -59,7 +59,17 @@ const SignInScreen = ({ navigation }: any) => {
         setIsLoading(false);
       }
     } else {
-      Alert.alert('Email is incorrect');
+      Alert.alert('Incorrect login information.', 'Do you want to register an account?', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => navigation.navigate('SignUpScreen'),
+        },
+      ]);
+      setIsLoading(false);
     }
   };
 
