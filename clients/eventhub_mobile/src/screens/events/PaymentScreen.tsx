@@ -31,7 +31,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           {
             text: 'OK',
             onPress: () => {
-              navigation.goBack();
+              navigation.navigate("MyTicket");
             },
           },
         ],

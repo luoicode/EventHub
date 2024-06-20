@@ -12,6 +12,7 @@ import {
 } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import {
+    Alert,
     FlatList,
     Image,
     Modal,
@@ -88,22 +89,44 @@ const DrawerCustom = ({ navigation }: any) => {
         },
     ];
     const handlerLogout = async () => {
-        const fcmtoken = await AsyncStorage.getItem('fcmtoken');
-        if (fcmtoken) {
-            if (auth.fcmTokens && auth.fcmTokens.length > 0) {
-                const items = [...auth.fcmTokens];
-                const index = items.findIndex(element => element === fcmtoken);
-                if (index !== -1) {
-                    items.splice(index, 1);
+        // Hiển thị thông báo xác nhận trước khi đăng xuất
+        Alert.alert(
+            "Xác nhận đăng xuất",
+            "Bạn có chắc chắn muốn đăng xuất?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: async () => {
+                        // Lấy fcmtoken từ AsyncStorage
+                        const fcmtoken = await AsyncStorage.getItem('fcmtoken');
+                        if (fcmtoken) {
+                            if (auth.fcmTokens && auth.fcmTokens.length > 0) {
+                                const items = [...auth.fcmTokens];
+                                const index = items.findIndex(element => element === fcmtoken);
+                                if (index !== -1) {
+                                    items.splice(index, 1);
+                                }
+                                await HandlerNotification.Update(auth.id, items);
+                            }
+                        }
+                        // Đăng xuất khỏi Google và Facebook
+                        await GoogleSignin.signOut();
+                        LoginManager.logOut();
+                        // Xóa thông tin auth từ AsyncStorage
+                        await AsyncStorage.removeItem('auth');
+                        // Gọi dispatch để xóa thông tin auth khỏi Redux store
+                        dispatch(removeAuth({}));
+                    }
                 }
-                await HandlerNotification.Update(auth.id, items);
-            }
-        }
-        await GoogleSignin.signOut();
-        LoginManager.logOut();
-        await AsyncStorage.removeItem('auth');
-        dispatch(removeAuth({}));
+            ],
+            { cancelable: false }
+        );
     };
+
     const handlerNavigation = (key: string) => {
         switch (key) {
             case 'HelpAndFAQs':
