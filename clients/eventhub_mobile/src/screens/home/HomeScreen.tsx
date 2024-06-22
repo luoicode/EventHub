@@ -1,4 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
+import NetInfo from '@react-native-community/netinfo';
+import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
@@ -14,12 +16,13 @@ import {
     Text,
     TouchableOpacity,
     View,
+    RefreshControl
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
 import {
-    ButtonComponent,
     CategoriesList,
     CircleComponent,
     EventItem,
@@ -28,20 +31,16 @@ import {
     SectionComponent,
     SpaceComponent,
     TabBarComponent,
-    TextComponent,
+    TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
+import { appInfo } from '../../constants/appInfos';
 import { fontFamilies } from '../../constants/fontFamilies';
 import { AddressModel } from '../../models/AddressModel';
 import { EventModel } from '../../models/EventModel';
+import { authSelector } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
 import { handlerLinking } from '../../utils/handlerLinking';
-import { ModalFilterEvents } from '../../modals';
-import NetInfo from '@react-native-community/netinfo';
-import firestore from '@react-native-firebase/firestore';
-import { useSelector } from 'react-redux';
-import { authSelector } from '../../redux/reducers/authReducer';
-import { appInfo } from '../../constants/appInfos';
 import { ShareApp } from '../../utils/shareApp';
 
 const HomeScreen = ({ navigation }: any) => {
@@ -54,6 +53,8 @@ const HomeScreen = ({ navigation }: any) => {
     const [AllEvents, setAllEvents] = useState<EventModel[]>([]);
     const [isOnline, setIsOnline] = useState<boolean>();
     const [unReadNotification, setUnReadNotification] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+
 
 
     const isFocused = useIsFocused();
@@ -131,11 +132,26 @@ const HomeScreen = ({ navigation }: any) => {
             getNearByEvents();
         }
     }, [isFocused]);
+
+    useEffect(() => {
+        if (isFocused) {
+            getAllEvents();
+        }
+    }, [isFocused]);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
     const checkNetWork = () => {
         NetInfo.addEventListener(state => {
             setIsOnline(state.isConnected ?? false);
         });
     };
+
     const getNearByEvents = () => {
         currentLocation &&
             currentLocation.postion &&
@@ -155,11 +171,8 @@ const HomeScreen = ({ navigation }: any) => {
             console.log(error);
         }
     };
-    useEffect(() => {
-        if (isFocused) {
-            getAllEvents();
-        }
-    }, [isFocused]);
+
+
     const getAllEvents = async (
         lat?: number,
         long?: number,
@@ -341,7 +354,10 @@ const HomeScreen = ({ navigation }: any) => {
                         flex: 1,
                         marginTop: 18,
                     },
-                ]}>
+                ]}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
                 <SectionComponent styles={{ paddingHorizontal: 16, paddingTop: 20 }}>
                     <TabBarComponent
                         title="Upcoming Events"
@@ -433,6 +449,7 @@ const HomeScreen = ({ navigation }: any) => {
                             navigation.navigate('ExploreEvents', {
                                 key: 'nearby',
                                 title: 'Nearby You',
+                                events: nearbyEvents,
                             })
                         }
                     />

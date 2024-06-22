@@ -1,13 +1,12 @@
+import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import {
-    View,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
     FlatList,
     Linking,
+    StyleSheet,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import { globalStyles } from '../../styles/globalStyles';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -17,9 +16,9 @@ import {
     SpaceComponent,
     TextComponent,
 } from '../../components';
-import { SearchNormal1 } from 'iconsax-react-native';
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
+import { globalStyles } from '../../styles/globalStyles';
 
 interface FAQ {
     question: string;

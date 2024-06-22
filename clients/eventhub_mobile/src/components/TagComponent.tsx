@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { TextComponent } from '.';
-import { globalStyles } from '../styles/globalStyles';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     onPress?: () => void;

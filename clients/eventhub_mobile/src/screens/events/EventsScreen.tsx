@@ -1,25 +1,20 @@
-import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
+import { Image, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import eventAPI from '../../apis/eventApi';
 import {
   ButtonComponent,
   ContainerComponent,
   EventItem,
-  ListEventComponent,
-  LoadingComponent,
   RadioButton,
-  RowComponent,
   SectionComponent,
-  SpaceComponent,
   TextComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
-import { EventModel } from '../../models/EventModel';
-import { FlatList } from 'react-native-gesture-handler';
-import { globalStyles } from '../../styles/globalStyles';
-import { Image, View } from 'react-native';
 import { LoadingModal } from '../../modals';
+import { EventModel } from '../../models/EventModel';
+import { globalStyles } from '../../styles/globalStyles';
 
 const EventsScreen = ({ navigation }: any) => {
   const [events, setEvents] = useState<EventModel[]>([]);

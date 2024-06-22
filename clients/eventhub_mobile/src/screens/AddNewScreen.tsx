@@ -26,8 +26,8 @@ import { LoadingModal } from '../modals';
 import { EventModel } from '../models/EventModel';
 import { SelectModel } from '../models/SelectModel';
 import { authSelector } from '../redux/reducers/authReducer';
-import { Validate } from '../utils/validate';
 import { dateTime } from '../utils/dateTime';
+import { Validate } from '../utils/validate';
 
 const initValues = {
   title: '',

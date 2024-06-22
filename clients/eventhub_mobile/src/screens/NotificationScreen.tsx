@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import React, { memo, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ListRenderItem } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import {
@@ -17,7 +17,6 @@ import { LoadingModal } from '../modals';
 import { NotificationModel } from '../models/NotificationModel';
 import { authSelector } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
-import { ListRenderItem } from 'react-native';
 
 const NotificationScreen = () => {
     const [notifications, setNotification] = useState<NotificationModel[]>([]);

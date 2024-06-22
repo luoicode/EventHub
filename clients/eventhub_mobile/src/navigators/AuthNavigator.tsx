@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   ForgottenPassword,
   OnboardingScreen,
@@ -7,7 +7,6 @@ import {
   SignUpScreen,
   Verification,
 } from '../screens';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 const AuthNavigator = () => {
   const Stack = createNativeStackNavigator();
 

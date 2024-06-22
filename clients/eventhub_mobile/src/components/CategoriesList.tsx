@@ -1,15 +1,12 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { ButtonComponent, TagComponent } from '.';
+import { useNavigation } from '@react-navigation/native';
+import { TagComponent } from '.';
+import eventAPI from '../apis/eventApi';
 import { appColors } from '../constants/appColors';
 import { Category } from '../models/Category';
-import eventAPI from '../apis/eventApi';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
 interface Props {
     isFill?: boolean;
     onFilter?: (id: string) => void;

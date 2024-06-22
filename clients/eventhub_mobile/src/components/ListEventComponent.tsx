@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native';
 import React from 'react';
-import { EventModel } from '../models/EventModel';
 import { FlatList } from 'react-native-gesture-handler';
-import EventItem from './EventItem';
 import { appColors } from '../constants/appColors';
+import { EventModel } from '../models/EventModel';
+import EventItem from './EventItem';
 
 interface Props {
   items: EventModel[];

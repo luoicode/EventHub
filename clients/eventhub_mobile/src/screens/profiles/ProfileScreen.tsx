@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import userAPI from '../../apis/userApi';
 import {
@@ -11,18 +12,15 @@ import {
   SpaceComponent,
   TextComponent,
 } from '../../components';
+import { appColors } from '../../constants/appColors';
 import { ProfileModel } from '../../models/ProfileModel';
 import {
   AuthState,
-  addAuth,
-  authSelector,
+  authSelector
 } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
 import AboutProfile from './components/AboutProfile';
 import EditProfile from './components/EditProfile';
-import { More } from 'iconsax-react-native';
-import { appColors } from '../../constants/appColors';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(false);

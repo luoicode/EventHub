@@ -1,6 +1,9 @@
-import { View, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import storage from '@react-native-firebase/storage';
 import React, { useState } from 'react';
-import { ProfileModel } from '../../models/ProfileModel';
+import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { useDispatch, useSelector } from 'react-redux';
+import userAPI from '../../apis/userApi';
 import {
     AvatarComponent,
     ButtonComponent,
@@ -11,13 +14,9 @@ import {
     SpaceComponent,
     UploadImagePicker,
 } from '../../components';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
 import { LoadingModal } from '../../modals';
-import userAPI from '../../apis/userApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { ProfileModel } from '../../models/ProfileModel';
 import { addAuth, authSelector } from '../../redux/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfileScreen = ({ navigation, route }: any) => {
     const { profile }: { profile: ProfileModel } = route.params;

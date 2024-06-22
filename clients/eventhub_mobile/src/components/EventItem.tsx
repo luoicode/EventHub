@@ -1,7 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import { Heart, Location } from 'iconsax-react-native';
 import React from 'react';
 import { Image, ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 import {
     AvatarGroup,
     CardComponent,
@@ -13,11 +14,9 @@ import { appColors } from '../constants/appColors';
 import { appInfo } from '../constants/appInfos';
 import { fontFamilies } from '../constants/fontFamilies';
 import { EventModel } from '../models/EventModel';
-import { globalStyles } from '../styles/globalStyles';
-import { useNavigation } from '@react-navigation/native';
-import { dateTime } from '../utils/dateTime';
 import { AuthState, authSelector } from '../redux/reducers/authReducer';
-import { useSelector } from 'react-redux';
+import { globalStyles } from '../styles/globalStyles';
+import { dateTime } from '../utils/dateTime';
 import { numberToString } from '../utils/numberToString';
 
 interface Props {

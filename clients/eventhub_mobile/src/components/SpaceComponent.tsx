@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
 import React from 'react';
+import { View } from 'react-native';
 
 interface Props {
   width?: number;
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const SpaceComponent = (props: Props) => {
-  const {width, height} = props;
+  const { width, height } = props;
 
   return (
     <View

@@ -1,3 +1,4 @@
+import Geolocation from '@react-native-community/geolocation';
 import { SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -8,17 +9,12 @@ import {
     ListEventComponent,
     LoadingComponent,
     RowComponent,
-    SpaceComponent,
-    TextComponent
+    SpaceComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { EventModel } from '../../models/EventModel';
-import Geolocation from '@react-native-community/geolocation';
 
 const ExploreEvents = ({ navigation, route }: any) => {
-
-
-
     const [events, setEvents] = useState<EventModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [filterCondition, setFilterCondition] = useState<{
@@ -30,36 +26,19 @@ const ExploreEvents = ({ navigation, route }: any) => {
 
     useEffect(() => {
         if (route.params) {
-            setFilterCondition(route.params)
-            const { key } = route.params
+            setFilterCondition(route.params);
 
-            if (key === 'upcoming') {
-
-                getEvents(`/get-events?isUpcoming=true`)
-            } else if (key === 'allevents') {
+            if (route.params.key === 'nearby' && route.params.events) {
+                setEvents(route.params.events);
+            } else if (route.params.key === 'upcoming') {
+                getEvents(`/get-events?isUpcoming=true`);
+            } else if (route.params.key === 'allevents') {
                 getEvents(`/get-events`);
-            } else {
-                Geolocation.getCurrentPosition(
-                    (position: any) => {
-                        if (position.coords) {
-                            const lat = position.coords.latitude
-                            const long = position.coords.longitude
-
-                            const api = `/get-events?lat=${lat}&long=${long}&distance=5&limit=5&isUpcoming=true`;
-
-                            getEvents(api)
-
-                        }
-                    },
-                    (error: any) => {
-                        console.log(error);
-                    },
-                );
             }
         } else {
-            getEvents(`/get-events`)
+            getEvents(`/get-events`);
         }
-    }, [route])
+    }, [route]);
 
     const getEvents = async (api: string) => {
 
@@ -70,6 +49,8 @@ const ExploreEvents = ({ navigation, route }: any) => {
 
             if (res.data) {
                 setEvents(res.data);
+                // console.log('Fetched Events:', res.data); 
+
             }
             setIsLoading(false);
         } catch (error) {

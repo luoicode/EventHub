@@ -1,21 +1,19 @@
+import { DirectRight } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import {
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
-    KeyboardAvoidingView,
     ImageBackground,
     Keyboard,
-    Platform,
+    KeyboardAvoidingView,
     StatusBar,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { globalStyles, giftedChatStyles } from '../../styles/globalStyles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ContainerComponent, RowComponent } from '../../components';
 import { appColors } from '../../constants/appColors';
-import { DirectRight } from 'iconsax-react-native';
+import { giftedChatStyles, globalStyles } from '../../styles/globalStyles';
 
 interface Message {
     _id: string;

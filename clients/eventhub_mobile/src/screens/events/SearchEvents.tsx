@@ -1,4 +1,3 @@
-import { useIsFocused } from '@react-navigation/native';
 import { SearchNormal1 } from 'iconsax-react-native';
 import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -9,14 +8,13 @@ import eventAPI from '../../apis/eventApi';
 import {
   ContainerComponent,
   ListEventComponent,
-  LoadingComponent,
   RowComponent,
   SectionComponent
 } from '../../components';
 import { appColors } from '../../constants/appColors';
+import { LoadingModal, ModalFilterEvents } from '../../modals';
 import { EventModel } from '../../models/EventModel';
 import { globalStyles } from '../../styles/globalStyles';
-import { LoadingModal, ModalFilterEvents } from '../../modals';
 
 const eventBaseUrl = '/get-events';
 

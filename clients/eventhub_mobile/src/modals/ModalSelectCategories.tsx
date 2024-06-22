@@ -3,7 +3,6 @@ import { TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
-import eventAPI from '../apis/eventApi';
 import userAPI from '../apis/userApi';
 import {
     ButtonComponent,
@@ -12,10 +11,10 @@ import {
     TextComponent,
 } from '../components';
 import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
 import { Category } from '../models/Category';
 import { authSelector } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
-import { fontFamilies } from '../constants/fontFamilies';
 
 interface Props {
     visible: boolean;

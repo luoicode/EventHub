@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import DrawerNavigator from './DrawerNavigator';
 import { AddNewScreen, CalendarScreen, ChatBot, ContactScreen, EventDetail, EventsScreen, ExploreEvents, FavouriteScreen, HelpAndFAQsScreen, MyTicket, NearbyScreen, NotFound, NotificationScreen, PaymentScreen, Privacy, ProfileScreen, SearchEvents } from '../screens';
+import DrawerNavigator from './DrawerNavigator';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();

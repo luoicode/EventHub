@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
 import { ButtonComponent, ContainerComponent, EventItem, SectionComponent, TextComponent } from '../../components';
-import { EventModel } from '../../models/EventModel';
-import { LoadingModal } from '../../modals';
-import { globalStyles } from '../../styles/globalStyles';
 import { appColors } from '../../constants/appColors';
+import { LoadingModal } from '../../modals';
+import { EventModel } from '../../models/EventModel';
 import { AuthState, authSelector } from '../../redux/reducers/authReducer';
-import { useSelector } from 'react-redux';
+import { globalStyles } from '../../styles/globalStyles';
 
 const FavouriteScreen = ({ navigation }: any) => {
     const [events, setEvents] = useState<EventModel[]>([]);

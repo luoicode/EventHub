@@ -1,5 +1,7 @@
 import React from 'react';
 import { Alert, Image } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
+import eventAPI from '../../apis/eventApi';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -9,37 +11,50 @@ import {
   TagComponent,
   TextComponent,
 } from '../../components';
+import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import { dateTime } from '../../utils/dateTime';
-import { appColors } from '../../constants/appColors';
-import eventAPI from '../../apis/eventApi';
-import Entypo from 'react-native-vector-icons/Entypo';
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const { billDetail } = route.params;
 
 
   const handlerPaySuccessfully = async () => {
-    const api = `/update-payment-success?billId=${billDetail._id}`;
-
-    try {
-      await eventAPI.HandlerEvent(api);
-      Alert.alert(
-        'Payment Successful',
-        'Your ticket has been purchased successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              navigation.navigate("MyTicket");
-            },
+    Alert.alert(
+      'Confirm Payment',
+      'Are you sure you want to proceed with the payment?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            const api = `/update-payment-success?billId=${billDetail._id}`;
+            try {
+              await eventAPI.HandlerEvent(api);
+              Alert.alert(
+                'Payment Successful',
+                'Your ticket has been purchased successfully!',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      navigation.navigate("MyTicket");
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
+            } catch (error) {
+              console.log(error);
+            }
           },
-        ],
-        { cancelable: false }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+        },
+      ],
+      { cancelable: false }
+    );
   };
   return (
     <ContainerComponent back title="Payment">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { AvatarComponent, RowComponent, SpaceComponent, TextComponent } from '.';
+import { RowComponent, SpaceComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 

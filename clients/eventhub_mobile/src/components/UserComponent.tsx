@@ -1,13 +1,12 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import RowComponent from './RowComponent';
-import TextComponent from './TextComponent';
+import { Image, TouchableOpacity, View } from 'react-native';
 import userAPI from '../apis/userApi';
-import { ProfileModel } from '../models/ProfileModel';
-import SpaceComponent from './SpaceComponent';
-import { fontFamilies } from '../constants/fontFamilies';
 import { appColors } from '../constants/appColors';
-import TagComponent from './TagComponent';
+import { fontFamilies } from '../constants/fontFamilies';
+import { ProfileModel } from '../models/ProfileModel';
+import RowComponent from './RowComponent';
+import SpaceComponent from './SpaceComponent';
+import TextComponent from './TextComponent';
 
 interface Props {
     userId: string;

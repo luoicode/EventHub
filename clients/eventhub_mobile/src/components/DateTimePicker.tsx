@@ -5,7 +5,6 @@ import DatePicker from 'react-native-date-picker';
 import { RowComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
-import { globalStyles } from '../styles/globalStyles';
 import { dateTime } from '../utils/dateTime';
 
 interface Props {

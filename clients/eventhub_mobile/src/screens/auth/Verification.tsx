@@ -1,5 +1,9 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ArrowCircleRight2 } from 'iconsax-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import authenticationAPI from '../../apis/authApi';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -8,18 +12,14 @@ import {
   SpaceComponent,
   TextComponent,
 } from '../../components';
-import {ArrowCircleRight2} from 'iconsax-react-native';
-import {appColors} from '../../constants/appColors';
-import {fontFamilies} from '../../constants/fontFamilies';
-import {globalStyles} from '../../styles/globalStyles';
-import authenticationAPI from '../../apis/authApi';
-import {LoadingModal} from '../../modals';
-import {useDispatch} from 'react-redux';
-import {addAuth} from '../../redux/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { appColors } from '../../constants/appColors';
+import { fontFamilies } from '../../constants/fontFamilies';
+import { LoadingModal } from '../../modals';
+import { addAuth } from '../../redux/reducers/authReducer';
+import { globalStyles } from '../../styles/globalStyles';
 
-const Verification = ({navigation, route}: any) => {
-  const {code, email, password, username} = route.params;
+const Verification = ({ navigation, route }: any) => {
+  const { code, email, password, username } = route.params;
 
   const [currentCode, setCurrentCode] = useState<string>(code);
   const [codeValues, setCodeValues] = useState<string[]>([]);
@@ -72,7 +72,7 @@ const Verification = ({navigation, route}: any) => {
     try {
       const res: any = await authenticationAPI.HandlerAuthentication(
         api,
-        {email},
+        { email },
         'post',
       );
 
@@ -181,7 +181,7 @@ const Verification = ({navigation, route}: any) => {
           />
         </RowComponent>
       </SectionComponent>
-      <SectionComponent styles={{marginTop: 40}}>
+      <SectionComponent styles={{ marginTop: 40 }}>
         <ButtonComponent
           disabled={newCode.length !== 4}
           onPress={handlerVerification}
@@ -205,7 +205,7 @@ const Verification = ({navigation, route}: any) => {
       {errorMessage && (
         <SectionComponent>
           <TextComponent
-            styles={{textAlign: 'center'}}
+            styles={{ textAlign: 'center' }}
             text={errorMessage}
             color={appColors.danger}
           />
@@ -216,9 +216,8 @@ const Verification = ({navigation, route}: any) => {
           <RowComponent justify="center">
             <TextComponent text="Re-send code in" flex={0} />
             <TextComponent
-              text={`${(limit - (limit % 60)) / 60} : ${
-                limit - (limit - (limit % 60))
-              }`}
+              text={`${(limit - (limit % 60)) / 60} : ${limit - (limit - (limit % 60))
+                }`}
               flex={0}
               color={appColors.link}
             />

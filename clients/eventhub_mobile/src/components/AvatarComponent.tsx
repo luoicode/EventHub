@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
     Image,
+    ImageStyle,
     StyleProp,
     TouchableOpacity,
     View,
-    ImageStyle,
 } from 'react-native';
-import { appColors } from '../constants/appColors';
-import TextComponent from './TextComponent';
-import { globalStyles } from '../styles/globalStyles';
-import { fontFamilies } from '../constants/fontFamilies';
 import userAPI from '../apis/userApi';
+import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
+import { globalStyles } from '../styles/globalStyles';
+import TextComponent from './TextComponent';
 
 interface Props {
     photoURL?: string;

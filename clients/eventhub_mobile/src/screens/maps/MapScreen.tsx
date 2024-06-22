@@ -1,8 +1,8 @@
 import Geolocation from '@react-native-community/geolocation';
-import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import GeoCoder from 'react-native-geocoding';
 import MapView, { Marker } from 'react-native-maps';
 import Foundation from 'react-native-vector-icons/Foundation';

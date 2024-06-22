@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AddSquare, Calendar, Home2, Location, User } from 'iconsax-react-native';
 import React, { ReactNode } from 'react';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CircleComponent, TextComponent } from '../components';
 import { appColors } from '../constants/appColors';
 import { AddNewScreen } from '../screens';

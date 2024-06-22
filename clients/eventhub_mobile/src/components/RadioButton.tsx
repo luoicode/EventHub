@@ -1,12 +1,11 @@
-import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { SelectModel } from '../models/SelectModel';
-import SectionComponent from './SectionComponent';
-import RowComponent from './RowComponent';
-import ButtonComponent from './ButtonComponent';
+import { TouchableOpacity } from 'react-native';
 import { appColors } from '../constants/appColors';
-import { globalStyles } from '../styles/globalStyles';
 import { fontFamilies } from '../constants/fontFamilies';
+import { SelectModel } from '../models/SelectModel';
+import { globalStyles } from '../styles/globalStyles';
+import RowComponent from './RowComponent';
+import SectionComponent from './SectionComponent';
 import TextComponent from './TextComponent';
 
 interface Props {

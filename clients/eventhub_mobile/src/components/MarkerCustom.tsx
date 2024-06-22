@@ -1,19 +1,12 @@
-import {
-    View,
-    Text,
-    ImageBackground,
-    TouchableOpacity,
-    Image,
-} from 'react-native';
 import React, { useEffect, useState } from 'react';
-import TextComponent from './TextComponent';
-import { globalStyles } from '../styles/globalStyles';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { appColors } from '../constants/appColors';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+    Image,
+    ImageBackground,
+    View
+} from 'react-native';
 import eventAPI from '../apis/eventApi';
 import { Category } from '../models/Category';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     categoryId: string;

@@ -1,7 +1,11 @@
 import { Lock1, Sms, User } from 'iconsax-react-native';
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import authenticationAPI from '../../apis/authApi';
 import { appColors } from '../../constants/appColors';
+import { LoadingModal } from '../../modals';
+import { Validate } from '../../utils/validate';
 import {
     ButtonComponent,
     ContainerComponent,
@@ -12,12 +16,6 @@ import {
     TextComponent,
 } from './../../components/';
 import SocialLogin from './components/SocialLogin';
-import { LoadingModal } from '../../modals';
-import authenticationAPI from '../../apis/authApi';
-import { Validate } from '../../utils/validate';
-import { useDispatch } from 'react-redux';
-import { addAuth } from '../../redux/reducers/authReducer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ErrorMessages {
     username: string;

@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ArrowCircleRight2, Sms } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
+import { LoginManager } from 'react-native-fbsdk-next';
+import { useDispatch, useSelector } from 'react-redux';
 import authenticationAPI from '../../apis/authApi';
 import {
     ButtonComponent,
@@ -13,12 +16,9 @@ import {
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { LoadingModal } from '../../modals';
-import { Validate } from '../../utils/validate';
-import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, removeAuth } from '../../redux/reducers/authReducer';
 import { HandlerNotification } from '../../utils/handlerNotification';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { LoginManager } from 'react-native-fbsdk-next';
+import { Validate } from '../../utils/validate';
 
 const Privacy = () => {
     const [email, setEmail] = useState('');

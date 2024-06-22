@@ -1,6 +1,7 @@
+import firestore from '@react-native-firebase/firestore';
 import { SearchNormal1, TickCircle } from 'iconsax-react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Share, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
@@ -16,7 +17,6 @@ import {
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 import { authSelector } from '../redux/reducers/authReducer';
-import firestore from '@react-native-firebase/firestore';
 
 interface Props {
   visible: boolean;

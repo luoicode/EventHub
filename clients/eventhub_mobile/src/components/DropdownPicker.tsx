@@ -1,4 +1,3 @@
-import { ArrowDown2, Category, SearchNormal1 } from 'iconsax-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -7,15 +6,13 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
     ButtonComponent,
-    InputComponent,
     RowComponent,
     SpaceComponent,
-    TextComponent,
+    TextComponent
 } from '.';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 import { SelectModel } from '../models/SelectModel';
-import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     label?: string;

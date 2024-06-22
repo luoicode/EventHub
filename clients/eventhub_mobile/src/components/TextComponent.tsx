@@ -1,5 +1,5 @@
-import { View, Text, StyleProp, TextStyle, Platform } from 'react-native';
 import React from 'react';
+import { StyleProp, Text, TextStyle } from 'react-native';
 import { appColors } from '../constants/appColors';
 import { fontFamilies } from '../constants/fontFamilies';
 import { globalStyles } from '../styles/globalStyles';

@@ -26,30 +26,6 @@ import UploadImagePicker from './UploadImagePicker';
 import UserComponent from './UserComponent';
 
 export {
-  SpaceComponent,
-  TextComponent,
-  ButtonComponent,
-  InputComponent,
-  SectionComponent,
-  ContainerComponent,
-  RowComponent,
-  CircleComponent,
-  TagComponent,
-  CategoriesList,
-  TabBarComponent,
-  EventItem,
-  CardComponent,
-  AvatarGroup,
-  ChoiceLocation,
-  DateTimePicker,
-  DropdownPicker,
-  UploadImagePicker,
-  MarkerCustom,
-  LoadingComponent,
-  AvatarComponent,
-  UserComponent,
-  ListEventComponent,
-  InputAddNewScreen,
-  RadioButton,
-  NotificationItem,
+  AvatarComponent, AvatarGroup, ButtonComponent, CardComponent, CategoriesList, ChoiceLocation, CircleComponent, ContainerComponent, DateTimePicker,
+  DropdownPicker, EventItem, InputAddNewScreen, InputComponent, ListEventComponent, LoadingComponent, MarkerCustom, NotificationItem, RadioButton, RowComponent, SectionComponent, SpaceComponent, TabBarComponent, TagComponent, TextComponent, UploadImagePicker, UserComponent
 };

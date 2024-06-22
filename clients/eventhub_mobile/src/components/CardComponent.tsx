@@ -1,8 +1,8 @@
 // CardComponent.tsx
-import { View, Text, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
 import React, { ReactNode } from 'react';
-import { globalStyles } from '../styles/globalStyles';
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { appColors } from '../constants/appColors';
+import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     onPress?: () => void;

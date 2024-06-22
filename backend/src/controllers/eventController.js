@@ -313,10 +313,11 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
 });
 
 const getSuccessBills = asyncHandler(async (req, res) => {
-    try {
-        const successBills = await BillModel.find({ status: 'success' });
+    const { userId } = req.query;
 
-        if (!successBills) {
+    try {
+        const successBills = await BillModel.find({ status: 'success', createdBy: userId });
+        if (!successBills || successBills.length === 0) {
             return res.status(404).json({
                 message: 'No successful bills found',
                 data: [],

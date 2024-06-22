@@ -1,9 +1,13 @@
+import { ArrowRight, Calendar } from 'iconsax-react-native';
+import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import { FlatList } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
+import RnRangeSlider from 'rn-range-slider';
 import eventAPI from '../apis/eventApi';
 import {
   ButtonComponent,
@@ -14,16 +18,11 @@ import {
   TextComponent,
 } from '../components';
 import { appColors } from '../constants/appColors';
+import { fontFamilies } from '../constants/fontFamilies';
 import { Category } from '../models/Category';
 import { authSelector } from '../redux/reducers/authReducer';
 import { globalStyles } from '../styles/globalStyles';
-import { fontFamilies } from '../constants/fontFamilies';
-import { ArrowRight, Calendar } from 'iconsax-react-native';
-import DatePicker from 'react-native-date-picker';
-import { dateTime } from '../utils/dateTime';
 import { numberToString } from '../utils/numberToString';
-import moment from 'moment';
-import RnRangeSlider from 'rn-range-slider';
 interface Props {
   visible: boolean;
   onClose: () => void;
