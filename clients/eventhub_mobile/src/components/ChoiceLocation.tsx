@@ -1,9 +1,8 @@
 import { Location } from 'iconsax-react-native';
 import React, { useState } from 'react';
-import { CardComponent, RowComponent, SpaceComponent, TextComponent } from '.';
+import { RowComponent, SpaceComponent, TextComponent } from '.';
 import { appColors } from '../constants/appColors';
 import { ModalLocation } from '../modals';
-import { globalStyles } from '../styles/globalStyles';
 
 interface Props {
     onSelect: (val: any) => void;
