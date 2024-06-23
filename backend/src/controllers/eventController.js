@@ -4,8 +4,9 @@ const CategoryModel = require("../models/categoryModel");
 const { request } = require("express");
 const BillModel = require("../models/billModel");
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId; // Import ObjectId from mongoose
-
+const ObjectId = mongoose.Types.ObjectId;
+const { v4: uuidv4 } = require('uuid');
+const QRCode = require('qrcode');
 const nodemailer = require("nodemailer");
 const UserModel = require("../models/userModel");
 require("dotenv").config();
@@ -292,25 +293,51 @@ const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
 
 const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
     const { billId } = req.query;
-    await BillModel.findByIdAndUpdate(billId, {
-        status: 'success',
-    });
 
-    const data = {
-        from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
-        to: 'huyhn045@gmail.com',
-        subject: 'Verification email code',
-        text: 'Your code to verification email',
-        html: `<h1>Your ticket</h1>`,
-    };
+    try {
+        // Cập nhật trạng thái hóa đơn thành công
+        await BillModel.findByIdAndUpdate(billId, {
+            status: 'success',
+        });
 
-    await handlerSendMail(data);
+        // Tạo mã QR code ngẫu nhiên
+        const qrCode = uuidv4();
 
-    res.status(200).json({
-        message: 'Update bill successfully',
-        data: [],
-    });
+        // Lưu mã QR code vào hóa đơn
+        const updatedBill = await BillModel.findByIdAndUpdate(billId, {
+            qrCode: qrCode,
+        }, { new: true });
+
+        // Tạo hình ảnh QR code dưới dạng base64
+        const qrCodeBase64 = await QRCode.toDataURL(qrCode);
+
+        // Gửi email chứa mã QR code đến người dùng
+        const data = {
+            from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
+            to: 'huyhn045@gmail.com', // Thay bằng email người dùng
+            subject: 'Your Ticket QR Code',
+            html: `
+                <h1>Your ticket QR code</h1>
+                <p>Thank you for your payment. Below is your ticket QR code:</p>
+                <img src="${qrCodeBase64}" alt="QR Code" />
+            `,
+        };
+
+        await handlerSendMail(data);
+
+        res.status(200).json({
+            message: 'Update bill successfully and sent email with QR code',
+            data: updatedBill,
+        });
+    } catch (error) {
+        console.error('Error updating bill and sending email:', error);
+        res.status(500).json({
+            message: 'Error updating bill and sending email',
+            error: error.message,
+        });
+    }
 });
+
 
 const getSuccessBills = asyncHandler(async (req, res) => {
     const { userId } = req.query;

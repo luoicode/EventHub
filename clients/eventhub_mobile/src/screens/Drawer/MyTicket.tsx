@@ -76,9 +76,12 @@ const MyTicket = ({ navigation }: any) => {
                         <EventItem
                             item={item}
                             key={item._id}
-                            type="list"
+                            type="card"
                             styles={{ flex: 1, width: undefined }}
                             disabled={true}
+                            hideLocationAddress={true}
+                            ticketCount={1}
+                            isMyTicket={true}
                         />
                     )}
                 />

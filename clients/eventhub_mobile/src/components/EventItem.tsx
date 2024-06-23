@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Heart, Location } from 'iconsax-react-native';
+import { Heart, Location, Ticket } from 'iconsax-react-native';
 import React from 'react';
 import { Image, ImageBackground, StyleProp, View, ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -24,14 +24,15 @@ interface Props {
     type: 'card' | 'list';
     styles?: StyleProp<ViewStyle>;
     disabled?: boolean;
-
+    hideLocationAddress?: boolean;
+    isMyTicket?: boolean;
+    ticketCount?: number;
 }
 
 const EventItem = (props: Props) => {
-    const { item, type, styles, disabled } = props;
+    const { item, type, styles, disabled, hideLocationAddress, isMyTicket, ticketCount } = props;
     const navigation: any = useNavigation();
     const auth: AuthState = useSelector(authSelector);
-
 
     return (
         <CardComponent
@@ -66,7 +67,19 @@ const EventItem = (props: Props) => {
                                     text={appInfo.monthNames[new Date(item.date).getMonth()].substring(0, 3)}
                                 />
                             </CardComponent>
-                            {
+                            {isMyTicket && (
+                                <RowComponent >
+                                    <Ticket
+                                        color='red'
+                                        size='28'
+                                        variant='Bold'
+                                    />
+                                    <SpaceComponent width={12} />
+                                    <TextComponent title text={ticketCount ? ticketCount.toString() : '1'} size={28} color='red'
+                                    />
+                                </RowComponent>
+                            )}
+                            {!isMyTicket && (
                                 auth.follow_events && auth.follow_events.includes(item._id) &&
                                 (<CardComponent
                                     styles={[globalStyles.noSpaceCard]}
@@ -77,21 +90,23 @@ const EventItem = (props: Props) => {
                                         variant='Bold'
                                     />
                                 </CardComponent>)
-                            }
+                            )}
                         </RowComponent>
                     </ImageBackground>
                     <TextComponent numberOfLine={1} text={item.title} title size={18} />
-                    <RowComponent>
-                        <Location size={18} color={appColors.primary5} variant="Bold" />
-                        <SpaceComponent width={8} />
-                        <TextComponent
-                            flex={1}
-                            numberOfLine={1}
-                            text={item.locationAddress}
-                            size={16}
-                            color={appColors.primary5}
-                        />
-                    </RowComponent>
+                    {!hideLocationAddress && (
+                        <RowComponent>
+                            <Location size={18} color={appColors.primary5} variant="Bold" />
+                            <SpaceComponent width={8} />
+                            <TextComponent
+                                flex={1}
+                                numberOfLine={1}
+                                text={item.locationAddress}
+                                size={16}
+                                color={appColors.primary5}
+                            />
+                        </RowComponent>
+                    )}
                 </>
             ) : (
                 <>
@@ -109,26 +124,43 @@ const EventItem = (props: Props) => {
                         <View style={{ flex: 1, alignItems: 'stretch' }}>
                             <TextComponent color={appColors.primary5} text={`${dateTime.GetDayString(item.date)} • ${dateTime.GetTime(new Date(item.startAt))} `} />
                             <TextComponent text={item.title} title size={18} numberOfLine={2} />
-                            <RowComponent>
-                                <Location size={18} color={appColors.primary5} variant="Bold" />
-                                <SpaceComponent width={8} />
-                                <TextComponent
-                                    flex={1}
-                                    numberOfLine={1}
-                                    text={item.locationAddress}
-                                    size={12}
-                                    color={appColors.primary5}
-                                />
-                                {auth.follow_events && auth.follow_events.includes(item._id) &&
-
-                                    <Heart
-                                        color={appColors.danger2}
-                                        size='28'
-                                        variant='Bold'
+                            {!hideLocationAddress && (
+                                <RowComponent>
+                                    <Location size={18} color={appColors.primary5} variant="Bold" />
+                                    <SpaceComponent width={8} />
+                                    <TextComponent
+                                        flex={1}
+                                        numberOfLine={1}
+                                        text={item.locationAddress}
+                                        size={12}
+                                        color={appColors.primary5}
                                     />
-                                }
-                            </RowComponent>
+                                    {isMyTicket && (
+                                        <View>
 
+                                            <Ticket
+                                                color={appColors.danger2}
+                                                size='28'
+                                                variant='Bold'
+                                            />
+                                        </View>
+
+                                    )}
+                                    {!isMyTicket && (
+                                        auth.follow_events && auth.follow_events.includes(item._id) &&
+                                        <Heart
+                                            color={appColors.danger2}
+                                            size='28'
+                                            variant='Bold'
+                                        />
+                                    )}
+                                </RowComponent>
+                            )}
+                            {isMyTicket && (
+                                <RowComponent>
+                                    <TextComponent text={ticketCount ? ticketCount.toString() : '1'} size={18} color={appColors.primary5} />
+                                </RowComponent>
+                            )}
                         </View>
                     </RowComponent>
                 </>
