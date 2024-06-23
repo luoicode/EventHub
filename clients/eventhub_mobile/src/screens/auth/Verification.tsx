@@ -193,7 +193,7 @@ const Verification = ({ navigation, route }: any) => {
                 globalStyles.iconContainer,
                 {
                   backgroundColor:
-                    newCode.length !== 4 ? appColors.gray : appColors.primary,
+                    newCode.length !== 4 ? appColors.gray : appColors.primary5,
                 },
               ]}>
               <ArrowCircleRight2 size={30} color={appColors.white} />

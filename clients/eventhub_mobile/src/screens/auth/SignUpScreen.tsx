@@ -18,14 +18,14 @@ import {
 import SocialLogin from './components/SocialLogin';
 
 interface ErrorMessages {
-    username: string;
+    name: string;
     email: string;
     password: string;
     confirmPassword: string;
 }
 
 const initValue = {
-    username: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -43,11 +43,11 @@ const SignUpScreen = ({ navigation }: any) => {
         if (
             !errorMessage ||
             (errorMessage &&
-                (errorMessage.username ||
+                (errorMessage.name ||
                     errorMessage.email ||
                     errorMessage.password ||
                     errorMessage.confirmPassword)) ||
-            !values.username ||
+            !values.name ||
             !values.email ||
             !values.password ||
             !values.confirmPassword
@@ -69,8 +69,8 @@ const SignUpScreen = ({ navigation }: any) => {
         let messgae = ``;
 
         switch (key) {
-            case 'username':
-                if (!values.username) {
+            case 'name':
+                if (!values.name) {
                     messgae = `Username is required`;
                 } else {
                     messgae = '';
@@ -146,12 +146,12 @@ const SignUpScreen = ({ navigation }: any) => {
                     <TextComponent text="Sign Up" size={24} title />
                     <SpaceComponent height={21} />
                     <InputComponent
-                        value={values.username}
+                        value={values.name}
                         placeholder="Full name"
-                        onChange={val => handlerChangeValue('username', val)}
+                        onChange={val => handlerChangeValue('name', val)}
                         allowClear
                         affix={<User size={22} color={appColors.gray} />}
-                        onEnd={() => formValidator('username')}
+                        onEnd={() => formValidator('name')}
                     />
                     <InputComponent
                         value={values.email}
