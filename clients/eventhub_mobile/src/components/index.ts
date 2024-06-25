@@ -1,5 +1,6 @@
 import AvatarComponent from './AvatarComponent';
 import AvatarGroup from './AvatarGroup';
+import BillItem from './BIllItem';
 import ButtonComponent from './ButtonComponent';
 import CardComponent from './CardComponent';
 import CategoriesList from './CategoriesList';
@@ -26,6 +27,31 @@ import UploadImagePicker from './UploadImagePicker';
 import UserComponent from './UserComponent';
 
 export {
-  AvatarComponent, AvatarGroup, ButtonComponent, CardComponent, CategoriesList, ChoiceLocation, CircleComponent, ContainerComponent, DateTimePicker,
-  DropdownPicker, EventItem, InputAddNewScreen, InputComponent, ListEventComponent, LoadingComponent, MarkerCustom, NotificationItem, RadioButton, RowComponent, SectionComponent, SpaceComponent, TabBarComponent, TagComponent, TextComponent, UploadImagePicker, UserComponent
+  AvatarComponent,
+  AvatarGroup,
+  ButtonComponent,
+  CardComponent,
+  CategoriesList,
+  ChoiceLocation,
+  CircleComponent,
+  ContainerComponent,
+  DateTimePicker,
+  DropdownPicker,
+  EventItem,
+  InputAddNewScreen,
+  InputComponent,
+  ListEventComponent,
+  LoadingComponent,
+  MarkerCustom,
+  NotificationItem,
+  RadioButton,
+  RowComponent,
+  SectionComponent,
+  SpaceComponent,
+  TabBarComponent,
+  TagComponent,
+  TextComponent,
+  UploadImagePicker,
+  UserComponent,
+  BillItem,
 };

@@ -281,12 +281,36 @@ const getEventsByCategoryId = asyncHandler(async (req, res) => {
 
 const handlerAddNewBillDetail = asyncHandler(async (req, res) => {
     const data = req.body;
-    data.price = parseFloat(data.price)
+    data.price = parseFloat(data.price);
+    data.quantity = parseInt(data.quantity, 10);
+
+    if (isNaN(data.quantity)) {
+        return res.status(400).json({ message: 'Invalid quantity' });
+    }
+
     const bill = new BillModel(data);
-    bill.save();
+
+    await bill.save();
 
     res.status(200).json({
         message: 'Add new bill info successfully',
+        data: bill,
+    });
+});
+
+const handlerUpdateBillQuantity = asyncHandler(async (req, res) => {
+    const { billId, quantity } = req.body;
+
+    const bill = await BillModel.findById(billId);
+    if (!bill) {
+        return res.status(404).json({ message: 'Bill not found' });
+    }
+
+    bill.quantity = quantity;
+    await bill.save();
+
+    res.status(200).json({
+        message: 'Updated bill quantity successfully',
         data: bill,
     });
 });
@@ -295,26 +319,21 @@ const handlerUpdatePaymentSuccess = asyncHandler(async (req, res) => {
     const { billId } = req.query;
 
     try {
-        // Cập nhật trạng thái hóa đơn thành công
         await BillModel.findByIdAndUpdate(billId, {
             status: 'success',
         });
 
-        // Tạo mã QR code ngẫu nhiên
         const qrCode = uuidv4();
 
-        // Lưu mã QR code vào hóa đơn
         const updatedBill = await BillModel.findByIdAndUpdate(billId, {
             qrCode: qrCode,
         }, { new: true });
 
-        // Tạo hình ảnh QR code dưới dạng base64
         const qrCodeBase64 = await QRCode.toDataURL(qrCode);
 
-        // Gửi email chứa mã QR code đến người dùng
         const data = {
             from: `"Support EventHub Appplication" <${process.env.USERNAME_EMAIL}>`,
-            to: 'huyhn045@gmail.com', // Thay bằng email người dùng
+            to: 'huyhn045@gmail.com',
             subject: 'Your Ticket QR Code',
             html: `
                 <h1>Your ticket QR code</h1>
@@ -363,6 +382,8 @@ const getSuccessBills = asyncHandler(async (req, res) => {
         });
     }
 });
+
+
 
 
 
@@ -419,5 +440,6 @@ module.exports = {
     joinEvent,
     deleteEvent,
     getEventsWithFollowers,
-    getSuccessBills
+    getSuccessBills,
+    handlerUpdateBillQuantity
 };

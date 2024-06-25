@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Image, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import eventAPI from '../../apis/eventApi';
-import { ButtonComponent, ContainerComponent, EventItem, SectionComponent, TextComponent } from '../../components';
+import { BillItem, ButtonComponent, ContainerComponent, SectionComponent, TextComponent } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { LoadingModal } from '../../modals';
-import { EventModel } from '../../models/EventModel';
+import { BillModel } from '../../models/BillModel';
 import { authSelector } from '../../redux/reducers/authReducer';
 import { globalStyles } from '../../styles/globalStyles';
 
 const MyTicket = ({ navigation }: any) => {
-    const [bills, setBills] = useState<EventModel[]>([]);
+    const [bills, setBills] = useState<BillModel[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const auth = useSelector(authSelector);
 
@@ -73,14 +73,13 @@ const MyTicket = ({ navigation }: any) => {
                 <FlatList
                     data={bills}
                     renderItem={({ item }) => (
-                        <EventItem
+                        <BillItem
                             item={item}
                             key={item._id}
                             type="card"
                             styles={{ flex: 1, width: undefined }}
                             disabled={true}
                             hideLocationAddress={true}
-                            ticketCount={1}
                             isMyTicket={true}
                         />
                     )}

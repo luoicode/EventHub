@@ -16,7 +16,8 @@ const {
     joinEvent,
     deleteEvent,
     getEventsWithFollowers,
-    getSuccessBills
+    getSuccessBills,
+    handlerUpdateBillQuantity
 } = require("../controllers/eventController");
 
 const eventRouter = Router();
@@ -38,5 +39,6 @@ eventRouter.get("/join-event", joinEvent);
 eventRouter.delete("/delete-event", deleteEvent);
 eventRouter.get("/events-with-followers", getEventsWithFollowers);
 eventRouter.get('/success-bills', getSuccessBills);
+eventRouter.post('/update-quantity', handlerUpdateBillQuantity);
 
 module.exports = eventRouter;

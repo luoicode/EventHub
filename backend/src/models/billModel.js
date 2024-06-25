@@ -8,15 +8,15 @@ const BillSchema = new mongoose.Schema({
     },
     createdBy: {
         type: String,
-        require: true,
+        required: true,
     },
     eventId: {
         type: String,
-        require: true,
+        required: true,
     },
     price: {
         type: Number,
-        require: true,
+        required: true,
     },
     status: {
         type: String,
@@ -49,6 +49,11 @@ const BillSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    quantity: {
+        type: Number,
+        required: true,
+        default: 1,
+    }
 });
 
 const BillModel = mongoose.model('bills', BillSchema);

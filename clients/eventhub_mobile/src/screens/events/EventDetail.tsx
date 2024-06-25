@@ -202,7 +202,8 @@ const EventDetail = ({ navigation, route }: any) => {
       title: item?.title,
       locationTitle: item?.locationTitle,
       startAt: item?.startAt,
-      date: item?.date
+      date: item?.date,
+      quantity: 1,
     };
 
     const api = `/buy-ticket`;

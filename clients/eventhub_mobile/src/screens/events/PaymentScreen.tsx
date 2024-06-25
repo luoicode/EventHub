@@ -1,5 +1,5 @@
-import React from 'react';
-import { Alert, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Image, TouchableOpacity, View } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import eventAPI from '../../apis/eventApi';
 import {
@@ -14,10 +14,11 @@ import {
 import { appColors } from '../../constants/appColors';
 import { fontFamilies } from '../../constants/fontFamilies';
 import { dateTime } from '../../utils/dateTime';
+import { Add, Minus } from 'iconsax-react-native';
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const { billDetail } = route.params;
-
+  const [quantity, setQuantity] = useState(1);
 
   const handlerPaySuccessfully = async () => {
     Alert.alert(
@@ -31,9 +32,18 @@ const PaymentScreen = ({ navigation, route }: any) => {
         {
           text: 'OK',
           onPress: async () => {
-            const api = `/update-payment-success?billId=${billDetail._id}`;
+            const updateQuantityApi = `/update-quantity`;
+            const updateQuantityData = {
+              billId: billDetail._id,
+              quantity: quantity,
+            };
+
             try {
-              await eventAPI.HandlerEvent(api);
+              await eventAPI.HandlerEvent(updateQuantityApi, updateQuantityData, 'post');
+
+              const paymentApi = `/update-payment-success?billId=${billDetail._id}`;
+              await eventAPI.HandlerEvent(paymentApi);
+
               Alert.alert(
                 'Payment Successful',
                 'Your ticket has been purchased successfully!',
@@ -56,6 +66,18 @@ const PaymentScreen = ({ navigation, route }: any) => {
       { cancelable: false }
     );
   };
+
+
+  const increaseQuantity = () => {
+    setQuantity(prevQuantity => prevQuantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
+
   return (
     <ContainerComponent back title="Payment">
       <RowComponent justify="center">
@@ -130,12 +152,20 @@ const PaymentScreen = ({ navigation, route }: any) => {
         <SpaceComponent height={16} />
         <RowComponent justify="space-between">
           <TextComponent text="Quantity:" title font={fontFamilies.medium} />
-          <TextComponent
-            text="01"
-            size={18}
-            color={appColors.gray}
-            font={fontFamilies.medium}
-          />
+          <RowComponent styles={{ backgroundColor: appColors.gray3, borderRadius: 100 }}>
+            <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={increaseQuantity}>
+              <Add scale={24} color={appColors.primary5} />
+            </TouchableOpacity>
+            <TextComponent
+              text={`${quantity}`}
+              size={24}
+              color={appColors.primary3}
+              font={fontFamilies.medium}
+            />
+            <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={decreaseQuantity}>
+              <Minus size={24} color={appColors.primary5} />
+            </TouchableOpacity>
+          </RowComponent>
         </RowComponent>
         <SpaceComponent height={16} />
         <RowComponent justify="space-between">
@@ -162,7 +192,7 @@ const PaymentScreen = ({ navigation, route }: any) => {
           <TextComponent
             font={fontFamilies.medium}
             color={appColors.primary3}
-            text={`$${billDetail.price}`}
+            text={`$${billDetail.price * quantity}`}
           />
         </RowComponent>
         <ButtonComponent
