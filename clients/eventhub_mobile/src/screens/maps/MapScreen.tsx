@@ -2,7 +2,14 @@ import Geolocation from '@react-native-community/geolocation';
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StatusBar,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import GeoCoder from 'react-native-geocoding';
 import MapView, { Marker } from 'react-native-maps';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -15,7 +22,7 @@ import {
   MarkerCustom,
   RowComponent,
   SpaceComponent,
-  TextComponent
+  TextComponent,
 } from '../../components';
 import { appColors } from '../../constants/appColors';
 import { appInfo } from '../../constants/appInfos';
@@ -32,7 +39,10 @@ interface LocationItem {
 }
 
 const MapScreen = ({ navigation }: any) => {
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; long: number } | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<{
+    lat: number;
+    long: number;
+  } | null>(null);
   const [events, setEvents] = useState<EventModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchKey, setSearchKey] = useState('');
@@ -67,7 +77,8 @@ const MapScreen = ({ navigation }: any) => {
   const getNearbyEvents = async (categoryId?: string) => {
     if (!currentLocation) return;
     setIsLoading(true);
-    const api = `/get-events?isUpcoming=true&lat=${currentLocation?.lat}&long=${currentLocation?.long}&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
+    const api = `/get-events?isUpcoming=true&lat=${currentLocation?.lat}&long=${currentLocation?.long
+      }&distance=${5}${categoryId ? `&categoryId=${categoryId}` : ''}`;
     try {
       const res = await eventAPI.HandlerEvent(api);
       setEvents(res.data);
@@ -86,7 +97,7 @@ const MapScreen = ({ navigation }: any) => {
 
       if (res && res.data && res.status === 200) {
         setLocations(res.data.items);
-        setIsAddressListVisible(true);  // Show the address list
+        setIsAddressListVisible(true);
       }
       setIsLoading(false);
     } catch (error) {
@@ -97,14 +108,16 @@ const MapScreen = ({ navigation }: any) => {
   const handleLocationSelect = (item: LocationItem) => {
     setAddressSelected(item.address.label);
     setSearchKey('');
-    setIsAddressListVisible(false);  // Hide the address list
-    GeoCoder.from(item.address.label).then(res => {
-      const position = res.results[0].geometry.location;
-      setCurrentLocation({
-        lat: position.lat,
-        long: position.lng,
-      });
-    }).catch(error => console.log(error));
+    setIsAddressListVisible(false);
+    GeoCoder.from(item.address.label)
+      .then(res => {
+        const position = res.results[0].geometry.location;
+        setCurrentLocation({
+          lat: position.lat,
+          long: position.lng,
+        });
+      })
+      .catch(error => console.log(error));
   };
 
   return (
@@ -126,7 +139,10 @@ const MapScreen = ({ navigation }: any) => {
             <RowComponent>
               <View style={{ flex: 1 }}>
                 <InputComponent
-                  styles={{ marginBottom: 0, backgroundColor: appColors.primary7 }}
+                  styles={{
+                    marginBottom: 0,
+                    backgroundColor: appColors.primary7,
+                  }}
                   placeholder="Search place"
                   value={searchKey}
                   onChange={val => setSearchKey(val)}
@@ -225,7 +241,6 @@ const MapScreen = ({ navigation }: any) => {
         </View>
       </View>
     </TouchableWithoutFeedback>
-
   );
 };
 

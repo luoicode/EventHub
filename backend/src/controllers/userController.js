@@ -324,22 +324,7 @@ const pushInviteNotification = asyncHandler(async (req, res) => {
     });
 });
 
-const pushNotification = asyncHandler(async (req, res) => {
-    const { title, body, data } = req.body;
 
-    // await handlerSendNotification({
-    //     token:
-    //         "cuY-FnV-RjiDcejQhyZXBw:APA91bEBKU0H7DO3mD-Em7IFUsKUOfDfCNl2D3oBAJhSKPIgABuggUVqMqfTaCjGRIapvnyF0B1IYPH0cNK_PoACaXnE6eLpmWBVPjpVXOiyYRu5Ph8UgkwZebmjDeMkXFErMDagdN9C",
-    //     data,
-    //     title,
-    //     body,
-    // });
-
-    res.status(200).json({
-        message: "asdasd",
-        data: [],
-    });
-});
 module.exports = {
     getAllUsers,
     getEventsFollowed,
@@ -351,5 +336,4 @@ module.exports = {
     toggleFollowing,
     getFollowing,
     pushInviteNotification,
-    pushNotification,
 };

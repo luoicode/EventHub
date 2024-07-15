@@ -89,10 +89,9 @@ const DrawerCustom = ({ navigation }: any) => {
         },
     ];
     const handlerLogout = async () => {
-        // Hiển thị thông báo xác nhận trước khi đăng xuất
         Alert.alert(
-            "Xác nhận đăng xuất",
-            "Bạn có chắc chắn muốn đăng xuất?",
+            "Confirm logout",
+            "Are you sure you want to sign in?",
             [
                 {
                     text: "Cancel",
