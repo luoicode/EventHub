@@ -17,7 +17,9 @@ const {
     deleteEvent,
     getEventsWithFollowers,
     getSuccessBills,
-    handlerUpdateBillQuantity
+    handlerUpdateBillQuantity,
+    // addCategory,
+    sendMailReview,
 } = require("../controllers/eventController");
 
 const eventRouter = Router();
@@ -40,5 +42,7 @@ eventRouter.delete("/delete-event", deleteEvent);
 eventRouter.get("/events-with-followers", getEventsWithFollowers);
 eventRouter.get('/success-bills', getSuccessBills);
 eventRouter.post('/update-quantity', handlerUpdateBillQuantity);
+eventRouter.post('/send-mail-review', sendMailReview);
+// eventRouter.post('/add-category-new', addCategory);
 
 module.exports = eventRouter;

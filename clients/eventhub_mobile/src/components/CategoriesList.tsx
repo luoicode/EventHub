@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image } from 'react-native';
-
-
+import { FlatList, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TagComponent } from '.';
+import { ButtonComponent, TagComponent } from '.';
 import eventAPI from '../apis/eventApi';
 import { appColors } from '../constants/appColors';
 import { Category } from '../models/Category';
+
 interface Props {
     isFill?: boolean;
     onFilter?: (id: string) => void;
@@ -22,11 +21,13 @@ const CategoriesList = (props: Props) => {
     useEffect(() => {
         getCategories();
     }, []);
+
     useEffect(() => {
         if (categoriesSelected && onFilter) {
-            onFilter(categoriesSelected)
-        };
+            onFilter(categoriesSelected);
+        }
     }, [categoriesSelected]);
+
     const getCategories = async () => {
         const api = `/get-categories`;
 
@@ -38,18 +39,32 @@ const CategoriesList = (props: Props) => {
         }
     };
 
-
-
-    const handlerSelecCategory = async (item: Category) => {
-        if (!onFilter) {
-            navigation.navigate('CategoryDetail', {
-                id: item._id,
-                title: item.title,
-            });
-        } else {
-            setCategoriesSelected(item._id);
-        }
+    const handlerSelecCategory = (item: Category) => {
+        Alert.alert(
+            "Category: ",
+            `This is the ${item.title} category.`,
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        if (!onFilter) {
+                            navigation.navigate('CategoryDetail', {
+                                id: item._id,
+                                title: item.title,
+                            });
+                        } else {
+                            setCategoriesSelected(item._id);
+                        }
+                    },
+                },
+            ]
+        );
     };
+
 
     return categories.length > 0 ? (
         <FlatList

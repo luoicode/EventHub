@@ -12,7 +12,12 @@
           "package_name": "com.eventhub_mobile"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "394364326885-5bf1pchjqao8daqfbvv9fcditbdqv3km.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC3WX3nCgEG52Mw2-DUFKfalZl9SDstX24"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394364326885-5bf1pchjqao8daqfbvv9fcditbdqv3km.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

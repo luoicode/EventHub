@@ -4,6 +4,7 @@ import { AirbnbRating } from 'react-native-ratings';
 import { appColors } from '../../../constants/appColors';
 import { ButtonComponent, InputAddNewScreen, InputComponent, RowComponent, SpaceComponent, TextComponent } from '../../../components';
 import { globalStyles } from '../../../styles/globalStyles';
+import eventAPI from '../../../apis/eventApi';
 
 const Review = () => {
     const [rating, setRating] = useState(0);
@@ -14,9 +15,16 @@ const Review = () => {
         setRating(rating);
     };
 
-    const handleSubmit = () => {
-        setModalVisible(true);
-        setReviewText('');
+    const handleSubmit = async () => {
+        const api = `/send-mail-review`; // Ensure this is the correct endpoint
+        try {
+            const res = await eventAPI.HandlerEvent(api, 'post', { rating, reviewText });
+
+            setModalVisible(true);
+            setReviewText('');
+        } catch (error) {
+            console.error('Error sending email:', error);
+        }
     };
 
     return (

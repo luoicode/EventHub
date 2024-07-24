@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { AddNewScreen, CalendarScreen, ChatBot, ContactScreen, EventDetail, EventsScreen, ExploreEvents, FavouriteScreen, HelpAndFAQsScreen, MyTicket, NearbyScreen, NotFound, NotificationScreen, PaymentScreen, Privacy, ProfileScreen, SearchEvents } from '../screens';
+import { AddCategoryScreen, AddNewScreen, CalendarScreen, ChatBot, ContactScreen, EventDetail, EventsScreen, ExploreEvents, FavouriteScreen, HelpAndFAQsScreen, MyTicket, NearbyScreen, NotFound, NotificationScreen, PaymentScreen, Privacy, ProfileScreen, SearchEvents } from '../screens';
 import DrawerNavigator from './DrawerNavigator';
 
 const MainNavigator = () => {
@@ -25,7 +25,7 @@ const MainNavigator = () => {
       <Stack.Screen name="EventsScreen" component={EventsScreen} />
       <Stack.Screen name="FavouriteScreen" component={FavouriteScreen} />
       <Stack.Screen name="MyTicket" component={MyTicket} />
-
+      {/* <Stack.Screen name="AddCategoryScreen" component={AddCategoryScreen} /> */}
 
 
 

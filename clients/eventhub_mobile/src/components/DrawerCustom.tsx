@@ -87,6 +87,11 @@ const DrawerCustom = ({ navigation }: any) => {
             title: 'Sign Out',
             icon: <Logout size={size} color={color} />,
         },
+        {
+            key: 'AddNewCategory',
+            title: 'Add New Category',
+            icon: <Logout size={size} color={color} />,
+        },
     ];
     const handlerLogout = async () => {
         Alert.alert(
@@ -151,6 +156,9 @@ const DrawerCustom = ({ navigation }: any) => {
                 break;
             case 'SignOut':
                 handlerLogout();
+                break;
+            case 'AddNewCategory':
+                navigation.navigate('AddCategoryScreen')
                 break;
             case 'MyProfile':
                 navigation.navigate('Profile', {

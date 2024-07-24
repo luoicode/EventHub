@@ -3,17 +3,17 @@ import axiosClient from './axiosClient';
 class EventAPI {
   HandlerEvent = async (
     url: string,
+    method: 'get' | 'post' | 'put' | 'delete' = 'get',
     data?: any,
-    method?: 'get' | 'post' | 'put' | 'delete',
   ) => {
     return await axiosClient(`/events${url}`, {
-      method: method ?? 'get',
+      method,
       data,
     });
   };
 
   deleteEvent = async (id: string) => {
-    return await this.HandlerEvent(`/delete-event?id=${id}`, null, 'delete');
+    return await this.HandlerEvent(`/delete-event?id=${id}`, 'delete');
   };
 }
 

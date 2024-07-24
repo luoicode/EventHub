@@ -29,7 +29,7 @@ const ChatBot = ({ navigation }: any) => {
     const [inputMessage, setInputMessage] = useState('');
     const [outputMessage, setOutputMessage] = useState('Results to be shown here:');
 
-    const apiKey = 'sk-proj-ogkUJwWdQ2Hc5ct4Ra6iT3BlbkFJUUBAvonBKUkVwYux6CbK';
+    const apiKey = 'sk-proj-T8atQiI99ucSeGUrujaFT3BlbkFJrLSjC8cxUKCqEoLJMnKX';
     useEffect(() => {
         const welcomeMessage = {
             _id: Math.random().toString(36).substring(7),

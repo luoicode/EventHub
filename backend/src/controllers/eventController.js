@@ -178,6 +178,49 @@ const updateFollowers = asyncHandler(async (req, res) => {
         data: [],
     });
 });
+const updateCategory = asyncHandler(async (req, res) => {
+    const { id, title, color, label, key, iconWhite, iconColor } = req.body;
+
+    try {
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(
+            id,
+            { title, color, label, key, iconWhite, iconColor },
+            { new: true }
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json(updatedCategory);
+    } catch (error) {
+        console.error('Error updating category:', error);
+        res.status(500).json({ message: 'Error updating category', error: error.message });
+    }
+});
+const sendMailReview = asyncHandler(async (req, res) => {
+    const { rating, reviewText } = req.body;
+
+    const mailOptions = {
+        from: `"Support EventHub Application" <${process.env.USERNAME_EMAIL}>`,
+        to: 'huyhn045@gmail.com',
+        subject: 'New Event Review',
+        html: `
+            <h1>New Event Review</h1>
+            <p><strong>Rating:</strong> ${rating}</p>
+            <p><strong>Review:</strong> ${reviewText}</p>
+        `,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Error sending email', error: error.message });
+    }
+});
+
 
 const getFollowers = asyncHandler(async (req, res) => {
     const { id } = req.query;
@@ -384,19 +427,34 @@ const getSuccessBills = asyncHandler(async (req, res) => {
 });
 
 
+// const addCategory = asyncHandler(async (req, res) => {
+//     const { title, color, label, key, iconWhite, iconColor } = req.body;
+
+//     try {
+//         if (!title || !color || !label || !key || !iconWhite || !iconColor) {
+//             return res.status(400).json({ message: 'Missing required fields' });
+//         }
+
+//         const newCategory = new CategoryModel({
+//             title,
+//             color,
+//             label,
+//             key,
+//             iconWhite,
+//             iconColor,
+//         });
+
+//         const savedCategory = await newCategory.save();
+
+//         res.status(201).json(savedCategory);
+//     } catch (error) {
+//         console.error('Error adding category:', error);
+//         res.status(500).json({ message: 'Error adding category', error: error.message });
+//     }
+// });
 
 
 
-
-const updateCategory = asyncHandler(async (req, res) => {
-    const data = req.body;
-    const { id } = req.query;
-    const item = await CategoryModel.findByIdAndUpdate(id, data);
-    res.status(200).json({
-        message: "update category successfully!",
-        data: item,
-    });
-})
 
 const getCategoryDetail = asyncHandler(async (req, res) => {
     const { id } = req.query;
@@ -441,5 +499,7 @@ module.exports = {
     deleteEvent,
     getEventsWithFollowers,
     getSuccessBills,
-    handlerUpdateBillQuantity
+    handlerUpdateBillQuantity,
+    sendMailReview,
+    // addCategory
 };

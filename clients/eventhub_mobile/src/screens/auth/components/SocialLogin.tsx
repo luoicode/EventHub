@@ -23,7 +23,7 @@ import { addAuth } from '../../../redux/reducers/authReducer';
 
 GoogleSignin.configure({
   webClientId:
-    '212993360539-blc5b6o1v0ddqtuv8c6qrujmhu9gtvbp.apps.googleusercontent.com',
+    '394364326885-3h7ef2bjvosm4inav05r7s3rok8nu9q6.apps.googleusercontent.com',
 });
 
 Settings.setAppID('3832591553635448');
